@@ -1,5 +1,5 @@
 //Andrew V Butt Sr. - Pryme8@gmail.com
-//Complication of Standard Noises for Javascript version 1.1.0;
+//Compilation of Standard Noises for Javascript version 1.1.0;
 //Pryme8.github.io
 
 function WorleyNoise2D(numPoints, seed, width, height, targetPoint, style){
