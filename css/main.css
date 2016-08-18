@@ -57,7 +57,7 @@ html, html *, body, body *, *::before, *::after{
 	border:1px solid #333;
 	padding:0.8em 0.5em;
 	text-align: left;
-	min-height:340px;
+	min-height:260px;
 	vertical-align:top;
 	margin-bottom:0.2em;
 }
