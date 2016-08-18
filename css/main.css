@@ -22,4 +22,69 @@ html, html *, body, body *, *::before, *::after{
 	right:0;
 	bottom:0;
 	z-index:0;
+	overflow-y:auto;
+}
+
+.page-wrap{
+	display:block;
+	position:absolute;
+	width:100%;
+	max-width:800px;
+	height:auto;
+	top:0;
+	left:50%;
+	transform:translateX(-50%);	
+}
+
+.content{
+	display: block;
+	position: relative;	
+}
+
+.content > div{
+	padding-bottom: 0.5em;
+}
+
+.col-4{
+	text-align: center;
+	white-space: nowrap;
+}
+.col-4 > div {
+	font-size:14px;
+	position: relative;
+	width:calc(25% - 1em);
+	display: inline-block;
+	border:1px solid #333;
+	padding:0.8em 0.5em;
+	text-align: left;
+}
+
+.c-wrap {
+text-align: center;
+}
+
+.col-4 > div h6 {
+font-size:1em;
+margin-top: 0.2em;
+margin-bottom: 0.2em;
+	text-decoration: underline;
+	font-variant-caps: petite-caps;
+}
+
+div > div > div{
+	font-size: 1em;
+	white-space: normal;
+}
+
+.label{
+	display: inline-block;
+	width:4em;
+  text-align: right;
+	padding-right:0.5em;
+}
+
+.code{
+	color:darkolivegreen;
+	font-style: italic;
+	font-size: 0.8em;
 }

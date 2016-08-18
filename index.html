@@ -2,24 +2,111 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Pryme8's Noise Functions/title>
+<title>Pryme8's Noise Functions</title>
 
 
 <link href="./css/main.css" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript" src="./js/jquery.js"></script>
 <script type="text/javascript" src="./js/main.js"></script>
+<script type="text/javascript" src="./js/teriable-noise.js"></script>
 
 </head>
 <body>
 <div class='wrap-fix'>
-I cant seem to get Perlin2-3 to work right for right now... Ill end up reworking them later.<br />
-<br />
-The Script is redudent and I will clean it up and make correct constructors all wrapped under a single object here soon.
-You must have a way to pass vectors to the function, so some other library or custom definitions.<br />
-<br />
-Once I finish up some more, it wont matter if you pass a vector of floats but for right now I wanted vectors.  Examples coming soon.
-Look in the JS folder for the scripts.
+<div class='page-wrap'>
+<h2>Pryme8's Noise</h2>
+<div class='content'>
+<div class='content-item'>This is a project to get all the fancy noises out there under one roof...  I was getting super annoyed having to call different noises with differnt constructors, so I figured lets make this conform to my head.  Most are based off of others public examples I'll make sure to credit them, but for the most part this is a whole new reworking.</div>
+<div class='content-item'>Quite a few bugs for right now, and im pretty sure the way im doing the seed calculations are prtty hacky...  Umm a few of the calculations are my own so my bad if they syck?</div>
+<div class='content-item'>Look at the examples for how to work these buggers.</div>
+</div>
+<h4>Examples</h4>
+
+<div class='content col-4'>
+	<div class='content-item'>
+    	<div class='c-wrap'>
+        <canvas id="Simple2" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
+        <div>
+        <h6>Simple2</h6>
+        <div class='code'>('Simple2','SeedMe', {})</div>
+        </div>
+    </div>
+    
+    <div class='content-item'>
+    	<div class='c-wrap'>
+        <canvas id="Simple2b" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
+        <div>
+        <h6>Simple2</h6>
+        <div class='code'>('Simple2','@#$%@K#$N', {})</div>
+        </div>
+    </div>
+    
+	<div class='content-item'>
+    	<div class='c-wrap'>
+        <canvas id="Simple2c" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
+        <div>
+        <h6>Simple2</h6>
+        <div class='code'>('Simple2','SeedMe', {scale:10})</div>
+        </div>
+    </div>
+    
+</div>
+    
+</div>
+<script>
+//DEMO SCRIPTS
+//WORLY2_1
+setTimeout(function(){
+var noise = new Teriable.Noise('Simple2','SeedMe', {});
+
+var c = document.getElementById('Simple2');
+var ctx = c.getContext('2d');
+var imageData = ctx.getImageData(0,0,c.width, c.height);
+var data = imageData.data;
+var i=0;
+for (var y = 0; y <  c.height; y++) {
+	for (var x = 0; x <  c.width; x++) {
+	var v = Math.floor(255 * noise.getValue({x:x,y:y}));
+ctx.fillStyle = "rgb("+v+","+v+","+v+")";
+ctx.fillRect(x,y,1,1);
+	}
+}},0);
+
+setTimeout(function(){
+var noise = new Teriable.Noise('Simple2','@#$%@K#$N', {});
+
+var c = document.getElementById('Simple2b');
+var ctx = c.getContext('2d');
+var imageData = ctx.getImageData(0,0,c.width, c.height);
+var data = imageData.data;
+var i=0;
+for (var y = 0; y <  c.height; y++) {
+	for (var x = 0; x <  c.width; x++) {
+	var v = Math.floor(255 * noise.getValue({x:x,y:y}));
+ctx.fillStyle = "rgb("+v+","+v+","+v+")";
+ctx.fillRect(x,y,1,1);
+	}
+}},0);
+
+setTimeout(function(){
+var noise = new Teriable.Noise('Simple2','SeedMe', {scale:10});
+
+var c = document.getElementById('Simple2c');
+var ctx = c.getContext('2d');
+var imageData = ctx.getImageData(0,0,c.width, c.height);
+var data = imageData.data;
+var i=0;
+for (var y = 0; y <  c.height; y++) {
+	for (var x = 0; x <  c.width; x++) {
+	var v = Math.floor(255 * noise.getValue({x:x,y:y}));
+ctx.fillStyle = "rgb("+v+","+v+","+v+")";
+ctx.fillRect(x,y,1,1);
+	}
+}},0);
+
+</script>
+</div>
 </div>
 </body>
 </html>
