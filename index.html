@@ -750,6 +750,31 @@ ctx.fillRect(x,y,1,1);
 				}
 			}},0);</script>
 </div>
+
+<div class='content-item'>
+    	<div class='c-wrap'>
+        <canvas id="MultiMix" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
+        <div>
+        <h6>MultiMix</h6>
+        <div class='code'>noiseA = Noise('Simple2','SeedMe', {scale:20}) <BR />noiseB = Noise('Perlin2','SeedMe2', {scale:20})<BR />noiseC = Noise('Poorly2','SeedMe3', {scale:20}) <BR />Mix(Divide(noiseB, noiseC), 0.65)</div>
+        </div><script>
+		setTimeout(function(){
+		var noiseA = new Teriable.Noise('Simple2','SeedMe', {scale:20});
+		var noiseB = new Teriable.Noise('Perlin2','SeedMe2', {scale:20});
+		var noiseC = new Teriable.Noise('Poorly2','SeedMe3', {scale:20});
+			var c = document.getElementById('MultiMix');
+			var ctx = c.getContext('2d');
+			var imageData = ctx.getImageData(0,0,c.width, c.height);
+			var data = imageData.data;
+			var i=0;
+			for (var y = 0; y <  c.height; y++) {
+				for (var x = 0; x <  c.width; x++) {
+				var v = Math.floor(255 * Teriable.Mix(noiseA.getValue({x:x,y:y}) ,Teriable.Divide(noiseB.getValue({x:x,y:y}), noiseC.getValue({x:x,y:y})), 0.65));
+				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
+				ctx.fillRect(x,y,1,1);
+				}
+			}},0);</script>
+</div>
  </div>   
 </div>
 
