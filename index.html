@@ -53,6 +53,15 @@
     
     <div class='content-item'>
     	<div class='c-wrap'>
+        <canvas id="Simple2c2" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
+        <div>
+        <h6>Simple2</h6>
+        <div class='code'>('Simple2','SeedMe', {scale:10, scaleFloor:true})</div>
+        </div>
+    </div>
+     <BR />
+    <div class='content-item'>
+    	<div class='c-wrap'>
         <canvas id="Simple3" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
         <div>
         <h6>Simple3</h6>
@@ -60,6 +69,37 @@
         <div class='code'>('Simple3','SeedMe', {})</div>
         </div>
     </div>
+   
+    <div class='content-item'>
+    	<div class='c-wrap'>
+        <canvas id="Perlin2" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
+        <div>
+        <h6>Perlin2</h6>
+        <div>Not sure the difference betweem this and Simple</div>
+        <div class='code'>('Perlin2','SeedMe', {})</div>
+        </div>
+    </div>
+    
+    <div class='content-item'>
+    	<div class='c-wrap'>
+        <canvas id="Perlin2b" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
+        <div>
+        <h6>Perlin2</h6>
+        <div>Not sure the difference betweem this and Simple</div>
+        <div class='code'>('Perlin2','SeedMe', {scale:10})</div>
+        </div>
+    </div>
+    
+    <div class='content-item'>
+    	<div class='c-wrap'>
+        <canvas id="Perlin3" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
+        <div>
+        <h6>Perlin3</h6>
+        <div>Not sure the difference betweem this and Simple</div>
+        <div class='code'>('Perlin3','SeedMe', {})</div>
+        </div>
+    </div>
+    
     
 </div>
     
@@ -116,6 +156,22 @@ ctx.fillRect(x,y,1,1);
 }},0);
 
 setTimeout(function(){
+var noise = new Teriable.Noise('Simple2','SeedMe', {scale:10, scaleFloor:true});
+
+var c = document.getElementById('Simple2c2');
+var ctx = c.getContext('2d');
+var imageData = ctx.getImageData(0,0,c.width, c.height);
+var data = imageData.data;
+var i=0;
+for (var y = 0; y <  c.height; y++) {
+	for (var x = 0; x <  c.width; x++) {
+	var v = Math.floor(255 * noise.getValue({x:x,y:y}));
+ctx.fillStyle = "rgb("+v+","+v+","+v+")";
+ctx.fillRect(x,y,1,1);
+	}
+}},0);
+
+setTimeout(function(){
 var noise = new Teriable.Noise('Simple3','SeedMe', {});
 
 var c = document.getElementById('Simple3');
@@ -130,6 +186,56 @@ ctx.fillStyle = "rgb("+v+","+v+","+v+")";
 ctx.fillRect(x,y,1,1);
 	}
 }},0);
+
+setTimeout(function(){
+var noise = new Teriable.Noise('Perlin2','SeedMe', {});
+
+var c = document.getElementById('Perlin2');
+var ctx = c.getContext('2d');
+var imageData = ctx.getImageData(0,0,c.width, c.height);
+var data = imageData.data;
+var i=0;
+for (var y = 0; y <  c.height; y++) {
+	for (var x = 0; x <  c.width; x++) {
+	var v = Math.floor(255 * noise.getValue({x:x,y:y}));
+ctx.fillStyle = "rgb("+v+","+v+","+v+")";
+ctx.fillRect(x,y,1,1);
+	}
+}},0);
+
+setTimeout(function(){
+var noise = new Teriable.Noise('Perlin2','SeedMe', {scale:10});
+
+var c = document.getElementById('Perlin2b');
+var ctx = c.getContext('2d');
+var imageData = ctx.getImageData(0,0,c.width, c.height);
+var data = imageData.data;
+var i=0;
+for (var y = 0; y <  c.height; y++) {
+	for (var x = 0; x <  c.width; x++) {
+	var v = Math.floor(255 * noise.getValue({x:x,y:y}));
+ctx.fillStyle = "rgb("+v+","+v+","+v+")";
+ctx.fillRect(x,y,1,1);
+	}
+}},0);
+
+setTimeout(function(){
+var noise = new Teriable.Noise('Perlin3','SeedMe', {});
+
+var c = document.getElementById('Perlin3');
+var ctx = c.getContext('2d');
+var imageData = ctx.getImageData(0,0,c.width, c.height);
+var data = imageData.data;
+var i=0;
+for (var y = 0; y <  c.height; y++) {
+	for (var x = 0; x <  c.width; x++) {
+	var v = Math.floor(255 * noise.getValue({x:x,y:y,z:0}));
+ctx.fillStyle = "rgb("+v+","+v+","+v+")";
+ctx.fillRect(x,y,1,1);
+	}
+}},0);
+
+
 
 </script>
 </div>

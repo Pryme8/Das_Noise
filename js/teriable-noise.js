@@ -1,6 +1,15 @@
 //Andrew V Butt Sr. - Pryme8@gmail.com
 //Compilation of Standard Noises for Javascript version 1.1.0;
+//Some of these were for other langues, and some of them I made
+//up so yeah...
 //Pryme8.github.io
+//Special Thanks to Stefan Gustavson (stegu@itn.liu.se),
+//and Peter Eastman (peastman@drizzle.stanford.edu)
+/* Some of this code was placed in the public domain by its original author,
+ * Stefan Gustavson. You may use it as you see fit, but
+ * attribution is appreciated.*/
+//******************************************************//
+
 Teriable = {} || Teriable;
 Teriable.Noise = function(type,seed,args){
 	if(this._type){this._type = type}else{this._type = "Simple2"};
@@ -10,8 +19,9 @@ Teriable.Noise = function(type,seed,args){
 	console.log("New "+type+" Init: seed._initial-"+this._seed._initial+", seed._clean-"+this._seed._clean);
 	
 	switch (this._type) {
-	case "Simple2": this.Simple2(); break;
-	case "Simple3": this.Simple3(); break;
+	case "Simple2": this.sP(); break;
+	case "Simple3": this.sP(); break;
+	case "Perlin3": this.sP(); break;
 	}
 }
 
@@ -56,10 +66,14 @@ Teriable.Noise.prototype.getValue = function(args){
 	if(typeof args.x == 'undefined' && typeof args.y == 'undefined' && typeof args.z == 'undefined'){return "Error Please input {x:?,y:?,z:?}"}
 	return this.Simple3_Get(args.x, args.y, args.z); 
 	break;
+	case "Perlin2": 
+	if(typeof args.x == 'undefined' && typeof args.y == 'undefined'){return "Error Please input {x:?,y:?}"}
+	return this.Perlin2_Get(args.x, args.y); 
+	break;
 	}
 };
 
-Teriable.Noise.prototype.Simple2 = function(){
+Teriable.Noise.prototype.sP = function(){
 this.grad3 = new Teriable.Noise._CreateGrad();
 this.p = new Teriable.Noise.Const._p();
 var temp = new Teriable.Noise.gradPerm(this._seed._clean,new Array(512),new Array(512), this.p, this.grad3);
@@ -70,10 +84,14 @@ this.gradP = temp.gradP;
 
 Teriable.Noise.prototype.Simple2_Get = function(xin, yin){
 	if(typeof this.args.scale !== 'undefined' && this.args.scale != 0){
-		xin = Math.floor(xin/this.args.scale);
-		yin = Math.floor(yin/this.args.scale);
+		xin = xin/this.args.scale;
+		yin = yin/this.args.scale;
+		if(this.args.scaleFloor == true){
+			xin = Math.floor(xin);	
+			yin = Math.floor(yin);	
+		}
 	}
-
+	
 	var F2 = Teriable.Noise.Const._F2,
 	    G2 = Teriable.Noise.Const._G2,
 		F3 = Teriable.Noise.Const._F3,
@@ -159,19 +177,16 @@ Teriable.Noise.prototype.Simple2_Get = function(xin, yin){
     return value;
 }
 
-Teriable.Noise.prototype.Simple3 = function(){
-this.grad3 = new Teriable.Noise._CreateGrad();
-this.p = new Teriable.Noise.Const._p();
-var temp = new Teriable.Noise.gradPerm(this._seed._clean,new Array(512),new Array(512), this.p, this.grad3);
-this.perm = temp.perm;
-this.gradP = temp.gradP;
-};
-
 Teriable.Noise.prototype.Simple3_Get = function(xin, yin, zin) {
 		if(typeof this.args.scale !== 'undefined' && this.args.scale != 0){
-		xin = Math.floor(xin/this.args.scale);
-		yin = Math.floor(yin/this.args.scale);
-		zin = Math.floor(zin/this.args.scale);
+		xin = xin/this.args.scale;
+		yin = yin/this.args.scale;
+		zin = zin/this.args.scale;
+			if(this.args.scaleFloor == true){
+			xin = Math.floor(xin);	
+			yin = Math.floor(yin);
+			zin = Math.floor(zin);
+			}
 		}
     var n0, n1, n2, n3; // Noise contributions from the four corners
 
@@ -259,6 +274,90 @@ Teriable.Noise.prototype.Simple3_Get = function(xin, yin, zin) {
   return value;
   };
 
+Teriable.Noise.prototype.Perlin2_Get = function(x, y) {
+	if(typeof this.args.scale !== 'undefined' && this.args.scale != 0){
+		x = x/this.args.scale;
+		y = y/this.args.scale;
+		if(this.args.scaleFloor == true){
+			x = Math.floor(x);	
+			y = Math.floor(y);
+			
+			}
+	}
+    var X = Math.floor(x), Y = Math.floor(y);
+    // Get relative xy coordinates of point within that cell
+    x = x - X; y = y - Y;
+    X = X & 255; Y = Y & 255;
+
+    var n00 = this.gradP[X+this.perm[Y]].dot2(x, y);
+    var n01 = this.gradP[X+this.perm[Y+1]].dot2(x, y-1);
+    var n10 = this.gradP[X+1+this.perm[Y]].dot2(x-1, y);
+    var n11 = this.gradP[X+1+this.perm[Y+1]].dot2(x-1, y-1);
+
+    // Compute the fade curve value for x
+    var u = this.fade(x);
+
+    // Interpolate the four results
+    return this.lerp(
+        this.lerp(n00, n10, u),
+        this.lerp(n01, n11, u),
+       this.fade(y));
+  };
+
+Teriable.Noise.prototype.Perlin3_Get = function(x, y, z) {
+	if(typeof this.args.scale !== 'undefined' && this.args.scale != 0){
+		x = x/this.args.scale;
+		y = y/this.args.scale;
+		z = z/this.args.scale;
+		if(this.args.scaleFloor == true){
+			x = Math.floor(x);	
+			y = Math.floor(y);
+			z = Math.floor(z);
+			}
+	}
+    // Find unit grid cell containing point
+    var X = Math.floor(x), Y = Math.floor(y), Z = Math.floor(z);
+    // Get relative xyz coordinates of point within that cell
+    x = x - X; y = y - Y; z = z - Z;
+    // Wrap the integer cells at 255 (smaller integer period can be introduced here)
+    X = X & 255; Y = Y & 255; Z = Z & 255;
+
+    // Calculate noise contributions from each of the eight corners
+    var n000 = this.gradP[X+  this.perm[Y+  this.perm[Z  ]]].dot3(x,   y,     z);
+    var n001 = this.gradP[X+  this.perm[Y+  this.perm[Z+1]]].dot3(x,   y,   z-1);
+    var n010 = this.gradP[X+  this.perm[Y+1+this.perm[Z  ]]].dot3(x,   y-1,   z);
+    var n011 = this.gradP[X+  this.perm[Y+1+this.perm[Z+1]]].dot3(x,   y-1, z-1);
+    var n100 = this.gradP[X+1+this.perm[Y+  this.perm[Z  ]]].dot3(x-1,   y,   z);
+    var n101 = this.gradP[X+1+this.perm[Y+  this.perm[Z+1]]].dot3(x-1,   y, z-1);
+    var n110 = this.gradP[X+1+this.perm[Y+1+this.perm[Z  ]]].dot3(x-1, y-1,   z);
+    var n111 = this.gradP[X+1+this.perm[Y+1+this.perm[Z+1]]].dot3(x-1, y-1, z-1);
+
+    // Compute the fade curve value for x, y, z
+    var u = this.fade(x);
+    var v = this.fade(y);
+    var w = this.fade(z);
+
+    // Interpolate
+    return this.lerp(
+        this.lerp(
+          this.lerp(n000, n100, u),
+          this.lerp(n001, n101, u), w),
+        this.lerp(
+          this.lerp(n010, n110, u),
+          this.lerp(n011, n111, u), w),
+       v);
+  };
+  
+  
+  
+ Teriable.Noise.fade = function(t) {
+    return t*t*t*(t*(t*6-15)+10);
+  }
+
+ Teriable.Noise.lerp = function(a, b, t) {
+    return (1-t)*a + t*b;
+  }
+
 
 Teriable.Noise.gradPerm = function(seed, gradP, perm, p, grad3){
 	if(seed > 0 && seed < 1) {
@@ -285,9 +384,6 @@ Teriable.Noise.gradPerm = function(seed, gradP, perm, p, grad3){
 	
 	this.perm = perm;
 	this.gradP = gradP;	
-	
-	
-	
 };
 
 Teriable.Noise.Const= {};
