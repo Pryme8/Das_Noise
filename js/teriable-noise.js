@@ -57,18 +57,60 @@ Teriable.Noise._CreateGrad = function(){
 
 
 Teriable.Noise.prototype.getValue = function(args){
+	//this.args is the Core Object, args is just this Get value constructors
+	if(typeof this.args.frequency == 'undefined' || this.args.frequency == 0){this.args.frequency = 1;}
+	if(typeof this.args.amplitude == 'undefined' || this.args.amplitude == 0){this.args.amplitude = 1;}
+	if(typeof this.args.octives == 'undefined' || this.args.octives == 0){this.args.octives = 1;}
+	if(typeof this.args.persistence == 'undefined' || this.args.persistence == 0){this.args.persistence = 1;}
+	var maxValue = 0;
+	var value = 0;
+	var freq = this.args.frequency, amp = this.args.amplitude, oct = this.args.octives, pers = this.args.persistence;
+	
+
 	switch (this._type) {
 	case "Simple2": 
 	if(typeof args.x == 'undefined' && typeof args.y == 'undefined'){return "Error Please input {x:?,y:?}"}
-	return this.Simple2_Get(args.x, args.y); 
+		 	for(var i=0;i < oct;i++) {
+        			value += this.Simple2_Get(args.x * freq, args.y * freq) * amp;
+        			 maxValue += amp;
+        
+        			amp *= pers;
+       		 		freq *= 2;
+    			}
+				return value;
 	break;
 	case "Simple3": 
 	if(typeof args.x == 'undefined' && typeof args.y == 'undefined' && typeof args.z == 'undefined'){return "Error Please input {x:?,y:?,z:?}"}
-	return this.Simple3_Get(args.x, args.y, args.z); 
+		 	for(var i=0;i < oct;i++) {
+        			value += this.Simple3_Get(args.x * freq, args.y * freq, args.z * freq) * amp;
+        			 maxValue += amp;
+        
+        			amp *= pers;
+       		 		freq *= 2;
+    			}
+				return value; 
 	break;
 	case "Perlin2": 
 	if(typeof args.x == 'undefined' && typeof args.y == 'undefined'){return "Error Please input {x:?,y:?}"}
-	return this.Perlin2_Get(args.x, args.y); 
+	 	for(var i=0;i < oct;i++) {
+        			value += this.Perlin2_Get(args.x * freq, args.y * freq) * amp;
+        			 maxValue += amp;
+        
+        			amp *= pers;
+       		 		freq *= 2;
+    			}
+				return value;
+	break;
+	case "Perlin3": 
+	if(typeof args.x == 'undefined' && typeof args.y == 'undefined' && typeof args.z == 'undefined'){return "Error Please input {x:?,y:?,z:?}"}
+	 	for(var i=0;i < oct;i++) {
+        			value += this.Perlin3_Get(args.x * freq, args.y * freq, args.z * freq) * amp;
+        			 maxValue += amp;
+        
+        			amp *= pers;
+       		 		freq *= 2;
+    			}
+				return value;
 	break;
 	}
 };
@@ -91,6 +133,8 @@ Teriable.Noise.prototype.Simple2_Get = function(xin, yin){
 			yin = Math.floor(yin);	
 		}
 	}
+
+	
 	
 	var F2 = Teriable.Noise.Const._F2,
 	    G2 = Teriable.Noise.Const._G2,
