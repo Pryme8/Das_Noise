@@ -11,6 +11,7 @@ Teriable.Noise = function(type,seed,args){
 	
 	switch (this._type) {
 	case "Simple2": this.Simple2(); break;
+	case "Simple3": this.Simple3(); break;
 	}
 }
 
@@ -51,6 +52,10 @@ Teriable.Noise.prototype.getValue = function(args){
 	if(typeof args.x == 'undefined' && typeof args.y == 'undefined'){return "Error Please input {x:?,y:?}"}
 	return this.Simple2_Get(args.x, args.y); 
 	break;
+	case "Simple3": 
+	if(typeof args.x == 'undefined' && typeof args.y == 'undefined' && typeof args.z == 'undefined'){return "Error Please input {x:?,y:?,z:?}"}
+	return this.Simple3_Get(args.x, args.y, args.z); 
+	break;
 	}
 };
 
@@ -68,9 +73,7 @@ Teriable.Noise.prototype.Simple2_Get = function(xin, yin){
 		xin = Math.floor(xin/this.args.scale);
 		yin = Math.floor(yin/this.args.scale);
 	}
-	
-	
-	
+
 	var F2 = Teriable.Noise.Const._F2,
 	    G2 = Teriable.Noise.Const._G2,
 		F3 = Teriable.Noise.Const._F3,
@@ -155,6 +158,106 @@ Teriable.Noise.prototype.Simple2_Get = function(xin, yin){
 	
     return value;
 }
+
+Teriable.Noise.prototype.Simple3 = function(){
+this.grad3 = new Teriable.Noise._CreateGrad();
+this.p = new Teriable.Noise.Const._p();
+var temp = new Teriable.Noise.gradPerm(this._seed._clean,new Array(512),new Array(512), this.p, this.grad3);
+this.perm = temp.perm;
+this.gradP = temp.gradP;
+};
+
+Teriable.Noise.prototype.Simple3_Get = function(xin, yin, zin) {
+		if(typeof this.args.scale !== 'undefined' && this.args.scale != 0){
+		xin = Math.floor(xin/this.args.scale);
+		yin = Math.floor(yin/this.args.scale);
+		zin = Math.floor(zin/this.args.scale);
+		}
+    var n0, n1, n2, n3; // Noise contributions from the four corners
+
+    // Skew the input space to determine which simplex cell we're in
+    var s = (xin+yin+zin)*F3; // Hairy factor for 2D
+    var i = Math.floor(xin+s);
+    var j = Math.floor(yin+s);
+    var k = Math.floor(zin+s);
+
+    var t = (i+j+k)*G3;
+    var x0 = xin-i+t; // The x,y distances from the cell origin, unskewed.
+    var y0 = yin-j+t;
+    var z0 = zin-k+t;
+
+    // For the 3D case, the simplex shape is a slightly irregular tetrahedron.
+    // Determine which simplex we are in.
+    var i1, j1, k1; // Offsets for second corner of simplex in (i,j,k) coords
+    var i2, j2, k2; // Offsets for third corner of simplex in (i,j,k) coords
+    if(x0 >= y0) {
+      if(y0 >= z0)      { i1=1; j1=0; k1=0; i2=1; j2=1; k2=0; }
+      else if(x0 >= z0) { i1=1; j1=0; k1=0; i2=1; j2=0; k2=1; }
+      else              { i1=0; j1=0; k1=1; i2=1; j2=0; k2=1; }
+    } else {
+      if(y0 < z0)      { i1=0; j1=0; k1=1; i2=0; j2=1; k2=1; }
+      else if(x0 < z0) { i1=0; j1=1; k1=0; i2=0; j2=1; k2=1; }
+      else             { i1=0; j1=1; k1=0; i2=1; j2=1; k2=0; }
+    }
+    // A step of (1,0,0) in (i,j,k) means a step of (1-c,-c,-c) in (x,y,z),
+    // a step of (0,1,0) in (i,j,k) means a step of (-c,1-c,-c) in (x,y,z), and
+    // a step of (0,0,1) in (i,j,k) means a step of (-c,-c,1-c) in (x,y,z), where
+    // c = 1/6.
+    var x1 = x0 - i1 + G3; // Offsets for second corner
+    var y1 = y0 - j1 + G3;
+    var z1 = z0 - k1 + G3;
+
+    var x2 = x0 - i2 + 2 * G3; // Offsets for third corner
+    var y2 = y0 - j2 + 2 * G3;
+    var z2 = z0 - k2 + 2 * G3;
+
+    var x3 = x0 - 1 + 3 * G3; // Offsets for fourth corner
+    var y3 = y0 - 1 + 3 * G3;
+    var z3 = z0 - 1 + 3 * G3;
+
+    // Work out the hashed gradient indices of the four simplex corners
+    i &= 255;
+    j &= 255;
+    k &= 255;
+    var gi0 = this.gradP[i+   this.perm[j+   this.perm[k   ]]];
+    var gi1 = this.gradP[i+i1+this.perm[j+j1+this.perm[k+k1]]];
+    var gi2 = this.gradP[i+i2+this.perm[j+j2+this.perm[k+k2]]];
+    var gi3 = this.gradP[i+ 1+this.perm[j+ 1+this.perm[k+ 1]]];
+
+    // Calculate the contribution from the four corners
+    var t0 = 0.6 - x0*x0 - y0*y0 - z0*z0;
+    if(t0<0) {
+      n0 = 0;
+    } else {
+      t0 *= t0;
+      n0 = t0 * t0 * gi0.dot3(x0, y0, z0);  // (x,y) of grad3 used for 2D gradient
+    }
+    var t1 = 0.6 - x1*x1 - y1*y1 - z1*z1;
+    if(t1<0) {
+      n1 = 0;
+    } else {
+      t1 *= t1;
+      n1 = t1 * t1 * gi1.dot3(x1, y1, z1);
+    }
+    var t2 = 0.6 - x2*x2 - y2*y2 - z2*z2;
+    if(t2<0) {
+      n2 = 0;
+    } else {
+      t2 *= t2;
+      n2 = t2 * t2 * gi2.dot3(x2, y2, z2);
+    }
+    var t3 = 0.6 - x3*x3 - y3*y3 - z3*z3;
+    if(t3<0) {
+      n3 = 0;
+    } else {
+      t3 *= t3;
+      n3 = t3 * t3 * gi3.dot3(x3, y3, z3);
+    }
+   
+   var value = (32 * (n0 + n1 + n2 + n3)+1)/2;
+    
+  return value;
+  };
 
 
 Teriable.Noise.gradPerm = function(seed, gradP, perm, p, grad3){
