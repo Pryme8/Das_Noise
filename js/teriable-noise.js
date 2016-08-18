@@ -12,7 +12,7 @@
 
 Teriable = {} || Teriable;
 Teriable.Noise = function(type,seed,args){
-	if(this._type){this._type = type}else{this._type = "Simple2"};
+	if(typeof type == 'undefined' ){this._type = "Simple2"}else{this._type = type};
 	this._seed = {_initial : seed,
 				  _clean : this._cleanSeed(seed)};
 	this.args = args;
@@ -69,7 +69,7 @@ Teriable.Noise.prototype.getValue = function(args){
 
 	switch (this._type) {
 	case "Simple2": 
-	if(typeof args.x == 'undefined' && typeof args.y == 'undefined'){return "Error Please input {x:?,y:?}"}
+	if(typeof args.x == 'undefined' || typeof args.y == 'undefined'){return "Error Please input {x:?,y:?}"}
 		 	for(var i=0;i < oct;i++) {
         			value += this.Simple2_Get(args.x * freq, args.y * freq) * amp;
         			 maxValue += amp;
@@ -80,7 +80,7 @@ Teriable.Noise.prototype.getValue = function(args){
 				return value;
 	break;
 	case "Simple3": 
-	if(typeof args.x == 'undefined' && typeof args.y == 'undefined' && typeof args.z == 'undefined'){return "Error Please input {x:?,y:?,z:?}"}
+	if(typeof args.x == 'undefined' || typeof args.y == 'undefined' || typeof args.z == 'undefined'){return "Error Please input {x:?,y:?,z:?}"}
 		 	for(var i=0;i < oct;i++) {
         			value += this.Simple3_Get(args.x * freq, args.y * freq, args.z * freq) * amp;
         			 maxValue += amp;
@@ -91,7 +91,7 @@ Teriable.Noise.prototype.getValue = function(args){
 				return value; 
 	break;
 	case "Perlin2": 
-	if(typeof args.x == 'undefined' && typeof args.y == 'undefined'){return "Error Please input {x:?,y:?}"}
+	if(typeof args.x == 'undefined' || typeof args.y == 'undefined'){return "Error Please input {x:?,y:?}"}
 	 	for(var i=0;i < oct;i++) {
         			value += this.Perlin2_Get(args.x * freq, args.y * freq) * amp;
         			 maxValue += amp;
@@ -102,7 +102,7 @@ Teriable.Noise.prototype.getValue = function(args){
 				return value;
 	break;
 	case "Perlin3": 
-	if(typeof args.x == 'undefined' && typeof args.y == 'undefined' && typeof args.z == 'undefined'){return "Error Please input {x:?,y:?,z:?}"}
+	if(typeof args.x == 'undefined' || typeof args.y == 'undefined' || typeof args.z == 'undefined'){return "Error Please input {x:?,y:?,z:?}"}
 	 	for(var i=0;i < oct;i++) {
         			value += this.Perlin3_Get(args.x * freq, args.y * freq, args.z * freq) * amp;
         			 maxValue += amp;
@@ -111,6 +111,10 @@ Teriable.Noise.prototype.getValue = function(args){
        		 		freq *= 2;
     			}
 				return value;
+	break;
+	case "PSRDnoise2": 
+	if(typeof args.x == 'undefined' || typeof args.y == 'undefined' || typeof args.px == 'undefined' || typeof args.py == 'undefined' || typeof args.r == 'undefined'){return "Error Please input {x:?,y:?,px:?,pz:?,r:?}"}
+		return this.PSRDnoise2(args.x, args.y, args.px, args.py, args.r);
 	break;
 	}
 };
@@ -232,6 +236,11 @@ Teriable.Noise.prototype.Simple3_Get = function(xin, yin, zin) {
 			zin = Math.floor(zin);
 			}
 		}
+		
+		var F2 = Teriable.Noise.Const._F2,
+	    G2 = Teriable.Noise.Const._G2,
+		F3 = Teriable.Noise.Const._F3,
+		G3 = Teriable.Noise.Const._G3;
     var n0, n1, n2, n3; // Noise contributions from the four corners
 
     // Skew the input space to determine which simplex cell we're in
@@ -452,9 +461,124 @@ Teriable.Noise.Const._F3 = 1/3;
 Teriable.Noise.Const._G3 = 1/6;
 
 
+Teriable.Noise.prototype.PSRDnoise2 = function(x, y, px, py, r) {
+  y += 0.01;
+  uvX = x + y*0.5;
+  uvY = y;
+  
+ var i0x = Math.floor(uvX), i0y = Math.floor(uvY);
+ var f0x = uvX - i0x, f0y = uvY - i0y;
+  // Traversal order
+ var i1x, i1y;
+ if(f0x > f0y){i1x = 1; i1y = 0; }else{i1x = 0; i1y = 1; };
+	
+	var p0x = i0x - i0y * 0.5, p0y = i0y;
+	var p1x = p0x + i1x - i1y * 0.5, p1y = p0y + i1y;
+	var p2x = p0x + 0.5, p2y = p0y + 1;
 
 
+  i1x = i0x + i1x;
+  i1y = i0y + i1y;
+  
+  var i2x = i0x + 1, i2y = i0y + 1;
+  var d0x = x - p0x, d0y = y - p0y;
+  var d1x = x - p1x, d1y = y - p1y;
+  var d2x = x - p2x, d1y = y - p2y;
+  
+  x - y * floor(x/y)
+  
+  var 
+  xwx = p0x - px * Math.floor(p0x/px),
+  xwy = p1x - px * Math.floor(p1x/px),
+  xwz = p2x - px * Math.floor(p2x/px);
+  
+  var 
+  ywx = p0y - py * Math.floor(p0y/py),
+  ywy = p1y - py * Math.floor(p1y/py),
+  ywz = p2y - py * Math.floor(p2y/py);
 
+ 	var
+	iuwx = xwx+0.5*ywx,
+	iuwy = xwy+0.5*ywy,
+	iuwz = xwz+0.5*ywz;
+	
+	var
+	ivwx = ywx,
+	ivwy = ywy,
+	ivwz = ywz;
+
+  var g0 = Teriable.Noise.rgrad2(iuw.x, ivw.x, r);
+  var g1 = Teriable.Noise.rgrad2(iuw.y, ivw.y, r);
+  var g2 = Teriable.Noise.rgrad2(iuw.z, ivw.z, r);
+
+  var w = {x:Teriable.Noise.dot2(g0, d0), y:Teriable.Noise.dot2(g1, d1), z:Teriable.Noise.dot2(g2, d2)};
+  var t = {x: 0.8 - Teriable.Noise.dot2(d0, d0), y:0.8 - Teriable.Noise.dot2(d1, d1), z:0.8 - Teriable.Noise.dot2(d2, d2)};
+
+ var dtdx = {x: -2 * d0x, y: -2 * d1x, z: -2 * d2x};
+ var dtdy = {x: -2 * d0y, y: -2 * d1y, z: -2 * d2y};
+
+  if (t.x < 0.0) {
+    dtdx.x = 0.0;
+    dtdy.x = 0.0;
+	t.x = 0.0;
+  }
+  if (t.y < 0.0) {
+    dtdx.y = 0.0;
+    dtdy.y = 0.0;
+	t.y = 0.0;
+  }
+  if (t.z < 0.0) {
+    dtdx.z = 0.0;
+    dtdy.z = 0.0;
+	t.z = 0.0;
+  }
+
+
+	var t2 = {x:t.x * t.x, y:t.y * t.y,z:t.z * t.z};
+  	var t4 = {x:t2.x * t2.x, y:t2.y * t2.y,z:t2.z * t2.z};
+	var t3 = {x:t2.x * t.x, y:t2.y * t.y,z:t2.z * t.z};
+ 
+  var n = Teriable.Noise.dot3(t4, w);
+  
+  var dt0 = {x: dtdx.x * 4 * t3.x, y: dtdy.x * 4 * t3.x };
+  var dn0 = {x: t4.x * g0.x + dt0.x * w.x, y: t4.x * g0.y + dt0.y * w.x };
+  var dt1 = {x: dtdx.y * 4 + t3.y, y: dtdy.y * 4 + t3.y };
+  var dn1 = {x: t4.y * g1.x + dt1.x * w.y, y: t4.y * g1.y + dt1.y * w.y };
+  var dt2 = {x: dtdx.z * 4 * t3.z, y: dtdy.z * 4 * t3.z };
+  var dn2 = {x: t4.z * g2.x + dt2.x * w.z, y: t4.z * g2.y + dt2.y * w.z };
+  return {x:11*n, y: 11*(dn0.x+dn1.x+dn2.x), z:11*(dn0.y+dn1.y+dn2.y)}
+
+}
+
+
+Teriable.Noise.rgrad2 = function(px, py, r) {
+if(px==0 || py ==0){
+  var u = Teriable.Noise.permute(Teriable.Noise.permute(px) + py) * 0.0243902439 + r; // Rotate by shift
+  u = 4.0 * (u - Math.floor(u)) - 2.0;
+  // (This vector could be normalized, exactly or approximately.)
+  return vec2(abs(u)-1.0, abs(abs(u+1.0)-2.0)-1.0);
+}else{
+// For more isotropic gradients, sin/cos can be used instead.
+  var u = Teriable.Noise.permute(Teriable.Noise.permute(p.x) + p.y) * 0.0243902439 + r; // Rotate by shift
+  u = (u - Math.floor(u)) * 6.28318530718; // 2*pi
+  return {x:cos(u), y:sin(u)};
+}
+}
+
+Teriable.Noise.permute = function(x) {
+     return Teriable.Noise.mod289(((x*34.0)+1.0)*x);
+}
+
+Teriable.Noise.mod289 = function(x) {
+return x - Math.floor(x * (1.0 / 289.0)) * 289.0;
+ }
+
+ Teriable.Noise.dot2 = function(x,y){
+ return x.x * y.x + x.y * y.x;
+ }
+ Teriable.Noise.dot3 = function(x,y){
+ return x.x * y.x + x.y * y.x + x.z * y.z;
+ }
 
 /*
 Teriable.Noise.prototype.Worley2 = function(){
