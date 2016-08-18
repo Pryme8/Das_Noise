@@ -677,6 +677,415 @@ ctx.fillRect(x,y,1,1);
 			}},0);</script>
     </div>
     
+    <div class='content-item'>
+    	<div class='c-wrap'>
+        <canvas id="Worley2" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
+        <div>
+        <h6>Worley2</h6>
+        <div class='code'>('Worley2','SeedMe', {})</div>
+        </div><script>
+		setTimeout(function(){
+		var noise = new Teriable.Noise('Worley2','SeedMe', {});
+
+			var c = document.getElementById('Worley2');
+			var ctx = c.getContext('2d');
+			var imageData = ctx.getImageData(0,0,c.width, c.height);
+			var data = imageData.data;
+			var i=0;
+			for (var y = 0; y <  c.height; y++) {
+				for (var x = 0; x <  c.width; x++) {
+				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
+				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
+				ctx.fillRect(x,y,1,1);
+				}
+			}},0);</script>
+    </div>
+    
+            <div class='content-item'>
+    	<div class='c-wrap'>
+        <canvas id="Worley2b" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
+        <div>
+        <h6>Worley2</h6>
+        <div class='code'>('Worley2','', {style:'manhattan'})</div>
+        </div><script>
+		setTimeout(function(){
+		var noise = new Teriable.Noise('Worley2','SeedMe', {style:'manhattan'});
+
+			var c = document.getElementById('Worley2b');
+			var ctx = c.getContext('2d');
+			var imageData = ctx.getImageData(0,0,c.width, c.height);
+			var data = imageData.data;
+			var i=0;
+			for (var y = 0; y <  c.height; y++) {
+				for (var x = 0; x <  c.width; x++) {
+				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
+				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
+				ctx.fillRect(x,y,1,1);
+				}
+			}},0);</script>
+    </div>
+    <BR />
+    <div class='content-item'>
+    	<div class='c-wrap'>
+        <canvas id="Worley2c" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
+        <div>
+        <h6>Worley2</h6>
+        <div class='code'>('Worley2','', {style:'euclidean2'})</div>
+        </div><script>
+		setTimeout(function(){
+		var noise = new Teriable.Noise('Worley2','SeedMe', {style:'euclidean2'});
+
+			var c = document.getElementById('Worley2c');
+			var ctx = c.getContext('2d');
+			var imageData = ctx.getImageData(0,0,c.width, c.height);
+			var data = imageData.data;
+			var i=0;
+			for (var y = 0; y <  c.height; y++) {
+				for (var x = 0; x <  c.width; x++) {
+				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
+				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
+				ctx.fillRect(x,y,1,1);
+				}
+			}},0);</script>
+    </div>
+    
+   
+     <div class='content-item'>
+    	<div class='c-wrap'>
+        <canvas id="Worley2d" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
+        <div>
+        <h6>Worley2</h6>
+        <div class='code'>('Worley2','', {style:'manhattan2'})</div>
+        </div><script>
+		setTimeout(function(){
+		var noise = new Teriable.Noise('Worley2','SeedMe', {style:'manhattan2'});
+
+			var c = document.getElementById('Worley2d');
+			var ctx = c.getContext('2d');
+			var imageData = ctx.getImageData(0,0,c.width, c.height);
+			var data = imageData.data;
+			var i=0;
+			for (var y = 0; y <  c.height; y++) {
+				for (var x = 0; x <  c.width; x++) {
+				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
+				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
+				ctx.fillRect(x,y,1,1);
+				}
+			}},0);</script>
+    </div>
+    
+    <div class='content-item'>
+    	<div class='c-wrap'>
+        <canvas id="Worley2e" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
+        <div>
+        <h6>Worley2</h6>
+        <div class='code'>('Worley2','', {style:'chebyshevish'})</div>
+        </div><script>
+		setTimeout(function(){
+		var noise = new Teriable.Noise('Worley2','SeedMe', {style:'chebyshevish'});
+
+			var c = document.getElementById('Worley2e');
+			var ctx = c.getContext('2d');
+			var imageData = ctx.getImageData(0,0,c.width, c.height);
+			var data = imageData.data;
+			var i=0;
+			for (var y = 0; y <  c.height; y++) {
+				for (var x = 0; x <  c.width; x++) {
+				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
+				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
+				ctx.fillRect(x,y,1,1);
+				}
+			}},0);</script>
+    </div>
+    
+    <div class='content-item'>
+    	<div class='c-wrap'>
+        <canvas id="Worley2f" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
+        <div>
+        <h6>Worley2</h6>
+        <div class='code'>('Worley2','', {style:'chebyshevish2'})</div>
+        </div><script>
+		setTimeout(function(){
+		var noise = new Teriable.Noise('Worley2','SeedMe', {style:'chebyshevish2'});
+
+			var c = document.getElementById('Worley2f');
+			var ctx = c.getContext('2d');
+			var imageData = ctx.getImageData(0,0,c.width, c.height);
+			var data = imageData.data;
+			var i=0;
+			for (var y = 0; y <  c.height; y++) {
+				for (var x = 0; x <  c.width; x++) {
+				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
+				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
+				ctx.fillRect(x,y,1,1);
+				}
+			}},0);</script>
+    </div>
+    <BR />
+     <div class='content-item'>
+    	<div class='c-wrap'>
+        <canvas id="Worley2g" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
+        <div>
+        <h6>Worley2</h6>
+        <div class='code'>('Worley2','', {style:'chebyshevish3'})</div>
+        </div><script>
+		setTimeout(function(){
+		var noise = new Teriable.Noise('Worley2','SeedMe', {style:'chebyshevish3'});
+
+			var c = document.getElementById('Worley2g');
+			var ctx = c.getContext('2d');
+			var imageData = ctx.getImageData(0,0,c.width, c.height);
+			var data = imageData.data;
+			var i=0;
+			for (var y = 0; y <  c.height; y++) {
+				for (var x = 0; x <  c.width; x++) {
+				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
+				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
+				ctx.fillRect(x,y,1,1);
+				}
+			}},0);</script>
+    </div>
+    
+    <div class='content-item'>
+    	<div class='c-wrap'>
+        <canvas id="Worley2h" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
+        <div>
+        <h6>Worley2</h6>
+        <div class='code'>('Worley2','', {style:'chebyshevish4'})</div>
+        </div><script>
+		setTimeout(function(){
+		var noise = new Teriable.Noise('Worley2','SeedMe', {style:'chebyshevish4', nPoints:30});
+
+			var c = document.getElementById('Worley2h');
+			var ctx = c.getContext('2d');
+			var imageData = ctx.getImageData(0,0,c.width, c.height);
+			var data = imageData.data;
+			var i=0;
+			for (var y = 0; y <  c.height; y++) {
+				for (var x = 0; x <  c.width; x++) {
+				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
+				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
+				ctx.fillRect(x,y,1,1);
+				}
+			}},0);</script>
+    </div>
+    
+    <div class='content-item'>
+    	<div class='c-wrap'>
+        <canvas id="Worley2i" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
+        <div>
+        <h6>Worley2</h6>
+        <div class='code'>('Worley2','', {style:'valentine'})</div>
+        </div><script>
+		setTimeout(function(){
+		var noise = new Teriable.Noise('Worley2','SeedMe', {style:'valentine'});
+
+			var c = document.getElementById('Worley2i');
+			var ctx = c.getContext('2d');
+			var imageData = ctx.getImageData(0,0,c.width, c.height);
+			var data = imageData.data;
+			var i=0;
+			for (var y = 0; y <  c.height; y++) {
+				for (var x = 0; x <  c.width; x++) {
+				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
+				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
+				ctx.fillRect(x,y,1,1);
+				}
+			}},0);</script>
+    </div>
+    
+    <div class='content-item'>
+    	<div class='c-wrap'>
+        <canvas id="Worley2j" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
+        <div>
+        <h6>Worley2</h6>
+        <div class='code'>('Worley2','', {style:'valentine2'})</div>
+        </div><script>
+		setTimeout(function(){
+		var noise = new Teriable.Noise('Worley2','SeedMe', {style:'valentine2'});
+
+			var c = document.getElementById('Worley2j');
+			var ctx = c.getContext('2d');
+			var imageData = ctx.getImageData(0,0,c.width, c.height);
+			var data = imageData.data;
+			var i=0;
+			for (var y = 0; y <  c.height; y++) {
+				for (var x = 0; x <  c.width; x++) {
+				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
+				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
+				ctx.fillRect(x,y,1,1);
+				}
+			}},0);</script>
+    </div>
+    <BR />
+    <div class='content-item'>
+    	<div class='c-wrap'>
+        <canvas id="Worley2k" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
+        <div>
+        <h6>Worley2</h6>
+        <div class='code'>('Worley2','', {style:'valentine3'})</div>
+        </div><script>
+		setTimeout(function(){
+		var noise = new Teriable.Noise('Worley2','SeedMe', {style:'valentine3'});
+
+			var c = document.getElementById('Worley2k');
+			var ctx = c.getContext('2d');
+			var imageData = ctx.getImageData(0,0,c.width, c.height);
+			var data = imageData.data;
+			var i=0;
+			for (var y = 0; y <  c.height; y++) {
+				for (var x = 0; x <  c.width; x++) {
+				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
+				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
+				ctx.fillRect(x,y,1,1);
+				}
+			}},0);</script>
+    </div>
+ 
+    <div class='content-item'>
+    	<div class='c-wrap'>
+        <canvas id="Worley2l" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
+        <div>
+        <h6>Worley2</h6>
+        <div class='code'>('Worley2','', {style:'valentine4'})</div>
+        </div><script>
+		setTimeout(function(){
+		var noise = new Teriable.Noise('Worley2','SeedMe', {style:'valentine4'});
+
+			var c = document.getElementById('Worley2l');
+			var ctx = c.getContext('2d');
+			var imageData = ctx.getImageData(0,0,c.width, c.height);
+			var data = imageData.data;
+			var i=0;
+			for (var y = 0; y <  c.height; y++) {
+				for (var x = 0; x <  c.width; x++) {
+				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
+				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
+				ctx.fillRect(x,y,1,1);
+				}
+			}},0);</script>
+    </div>
+    
+        <div class='content-item'>
+    	<div class='c-wrap'>
+        <canvas id="Worley2m" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
+        <div>
+        <h6>Worley2</h6>
+        <div class='code'>('Worley2','', {style:'valentine5'})</div>
+        </div><script>
+		setTimeout(function(){
+		var noise = new Teriable.Noise('Worley2','SeedMe', {style:'valentine5'});
+
+			var c = document.getElementById('Worley2m');
+			var ctx = c.getContext('2d');
+			var imageData = ctx.getImageData(0,0,c.width, c.height);
+			var data = imageData.data;
+			var i=0;
+			for (var y = 0; y <  c.height; y++) {
+				for (var x = 0; x <  c.width; x++) {
+				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
+				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
+				ctx.fillRect(x,y,1,1);
+				}
+			}},0);</script>
+    </div>
+    
+     <div class='content-item'>
+    	<div class='c-wrap'>
+        <canvas id="Worley2o" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
+        <div>
+        <h6>Worley2</h6>
+        <div class='code'>('Worley2','', {style:'rachel'})</div>
+        </div><script>
+		setTimeout(function(){
+		var noise = new Teriable.Noise('Worley2','SeedMe', {style:'rachel'});
+
+			var c = document.getElementById('Worley2o');
+			var ctx = c.getContext('2d');
+			var imageData = ctx.getImageData(0,0,c.width, c.height);
+			var data = imageData.data;
+			var i=0;
+			for (var y = 0; y <  c.height; y++) {
+				for (var x = 0; x <  c.width; x++) {
+				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
+				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
+				ctx.fillRect(x,y,1,1);
+				}
+			}},0);</script>
+    </div>
+    <BR />
+       <div class='content-item'>
+    	<div class='c-wrap'>
+        <canvas id="pRachel" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
+        <div>
+        <h6>Poorly2</h6>
+        <div class='code'>('Poorly2','', {style:'rachel'})</div>
+        </div><script>
+		setTimeout(function(){
+		var noise = new Teriable.Noise('Poorly2','SeedMe', {style:'rachel'});
+
+			var c = document.getElementById('pRachel');
+			var ctx = c.getContext('2d');
+			var imageData = ctx.getImageData(0,0,c.width, c.height);
+			var data = imageData.data;
+			var i=0;
+			for (var y = 0; y <  c.height; y++) {
+				for (var x = 0; x <  c.width; x++) {
+				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
+				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
+				ctx.fillRect(x,y,1,1);
+				}
+			}},0);</script>
+    </div>
+    
+     <div class='content-item'>
+    	<div class='c-wrap'>
+        <canvas id="v2" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
+        <div>
+        <h6>Poorly2</h6>
+        <div class='code'>('Poorly2','', {style:'valentine2b'})</div>
+        </div><script>
+		setTimeout(function(){
+		var noise = new Teriable.Noise('Poorly2','SeedMe', {style:'valentine2b'});
+
+			var c = document.getElementById('v2');
+			var ctx = c.getContext('2d');
+			var imageData = ctx.getImageData(0,0,c.width, c.height);
+			var data = imageData.data;
+			var i=0;
+			for (var y = 0; y <  c.height; y++) {
+				for (var x = 0; x <  c.width; x++) {
+				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
+				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
+				ctx.fillRect(x,y,1,1);
+				}
+			}},0);</script>
+    </div>
+    
+    <div class='content-item'>
+    	<div class='c-wrap'>
+        <canvas id="v3" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
+        <div>
+        <h6>Worley2</h6>
+        <div class='code'>('Worley2','', {style:'valentine2b'})</div>
+        </div><script>
+		setTimeout(function(){
+		var noise = new Teriable.Noise('Worley2','SeedMe', {style:'valentine2b'});
+
+			var c = document.getElementById('v3');
+			var ctx = c.getContext('2d');
+			var imageData = ctx.getImageData(0,0,c.width, c.height);
+			var data = imageData.data;
+			var i=0;
+			for (var y = 0; y <  c.height; y++) {
+				for (var x = 0; x <  c.width; x++) {
+				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
+				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
+				ctx.fillRect(x,y,1,1);
+				}
+			}},0);</script>
+    </div>
+    
 </div>
 <h4>Mixing</h4>
 <div class='content col-4'>
@@ -822,6 +1231,12 @@ ctx.fillRect(x,y,1,1);
 				}
 			}},0);</script>
 </div>
+
+
+
+
+
+
  </div>   
 </div>
 

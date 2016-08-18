@@ -22,7 +22,9 @@ Teriable.Noise = function(type,seed,args){
 	if(this._type == "Simple2" || this._type == "Simple3" || this._type == "Perlin2" || this._type == "Perlin3")
 	{this.sP();}
 	else if(this._type == "Poorly2" || this._type == "Poorly2b" || this._type == "Poorly2c" ){
-		this.Poorly2();
+	this.Poorly2();
+	}else if(this._type == "Worley2"){
+	this.Worley2();
 	}
 }
 
@@ -144,6 +146,17 @@ Teriable.Noise.prototype.getValue = function(args){
 	if(typeof args.x == 'undefined' || typeof args.y == 'undefined'){return "Error Please input {x:?,y:?}"}
 	for(var i=0;i < oct;i++) {
         			value += this.Poorly2c_Get(args.x * freq, args.y * freq) * amp;
+        			 maxValue += amp;
+        
+        			amp *= pers;
+       		 		freq *= 2;
+    			}
+				return value;
+	break;
+	case "Worley2": 
+	if(typeof args.x == 'undefined' || typeof args.y == 'undefined'){return "Error Please input {x:?,y:?}"}
+	for(var i=0;i < oct;i++) {
+        			value += this.Worley2_Get(args.x * freq, args.y * freq) * amp;
         			 maxValue += amp;
         
         			amp *= pers;
@@ -451,6 +464,38 @@ Teriable.Noise.prototype.Perlin3_Get = function(x, y, z) {
  Teriable.Noise.lerp = function(a, b, t) {
     return (1-t)*a + t*b;
   }
+  
+ Teriable.Noise.cosinerp = function(v0, v1, t) {
+		var ft = t * 3.1415927 
+		f = (1 - Math.cos(ft)) * .5 
+		return v0*(1-f) + v1*f 
+	}
+	
+	 Teriable.Noise.cuberp = function (y0, y1,  y2, y3,  mu){ 
+ 		a0,a1,a2,a3,mu2; 
+ 		mu2 = mu*mu; 
+		a0 = y3 - y2 - y0 + y1; 
+ 		a1 = y0 - y1 - a0; 
+ 		a2 = y2 - y0; 
+ 		a3 = y1; 
+  		return(a0*mu*mu2+a1*mu2+a2*mu+a3); 
+ 	}
+	
+	Teriable.Noise.hermiterp = function(v0, v1, v2, v3, t, tension, bias){
+	var m0,m1,t2,t3;
+	var a0, a1, a2, a3;
+	t2 = t * t;
+ 	t3 = t2 * t;
+ 	m0  = (v1-v0)*(1+bias)*(1-tension)/2;
+	m0 += (v2-v1)*(1-bias)*(1-tension)/2;
+	m1  = (v2-v1)*(1+bias)*(1-tension)/2;
+    m1 += (v3-v2)*(1-bias)*(1-tension)/2;
+	a0 =  2*t3 - 3*t2 + 1;
+	a1 =    t3 - 2*t2 + t;
+ 	a2 =    t3 -   t2;
+ 	a3 = -2*t3 + 3*t2;
+	return(a0*y1+a1*m0+a2*m1+a3*y2);
+}
 
 
 Teriable.Noise.gradPerm = function(seed, gradP, perm, p, grad3){
@@ -587,7 +632,7 @@ Teriable.Noise.prototype.PSRDnoise2 = function(x, y, px, py, r) {
   var dn1 = {x: t4.y * g1.x + dt1.x * w.y, y: t4.y * g1.y + dt1.y * w.y };
   var dt2 = {x: dtdx.z * 4 * t3.z, y: dtdy.z * 4 * t3.z };
   var dn2 = {x: t4.z * g2.x + dt2.x * w.z, y: t4.z * g2.y + dt2.y * w.z };
-  return {x:11*n, y: 11*(dn0.x+dn1.x+dn2.x), z:11*(dn0.y+dn1.y+dn2.y)}
+  return 11*n;
 
 }
 
@@ -636,30 +681,67 @@ Teriable.Noise.prototype.Poorly2 = function(){
 	//console.log(this);
 };
 
+Teriable.Noise.prototype.Worley2 = function(){
+	if(typeof this.args.nPoints !== 'undefined'){this.args.nPoints = Math.floor(this.args.nPoints)}
+	if(typeof this.args.nPoints == 'undefined' || this.args.nPoints == 0){ this.args.nPoints = 10;}
+	if(typeof this.args.n !== 'undefined'){this.args.n = Math.floor(this.args.n)};
+	if(typeof this.args.n == 'undefined' || this.args.n == 0){ this.args.n = 2;}
+	if(typeof this.args.width !== 'undefined'){this.args.width = Math.floor(this.args.width)};
+	if(typeof this.args.width == 'undefined' || this.args.width == 0){ this.args.width = 100;}
+	if(typeof this.args.height !== 'undefined'){this.args.height = Math.floor(this.args.height)};
+	if(typeof this.args.height == 'undefined' || this.args.height == 0){ this.args.height = 100;}
+	if(typeof this.args.style == 'undefined'){ this.args.style = 'euclidean';}
+	//console.log(this.args);
+	this.data = {keyPoints : [{x:0,y:0}]};
+	
+	this._getKeyPoints();
+	this._ApplyKeyPointsToMap();
+	
+	//console.log(this);
+};
+
 Teriable.Noise.prototype._getKeyPoints = function(){
 	for(var i = 0; i < this.args.nPoints; i++){
 		this.data.keyPoints.push({x:this._cleanSeed((1+(i*(i*0.5)))*this._seed._clean),y:this._cleanSeed((1 + (i+i))*(this._seed._clean*0.95))});	
 	}
-	var min = Number.POSITIVE_INFINITY,
-	    max = Number.NEGATIVE_INFINITY;
+};
+
+Teriable.Noise.prototype._ApplyKeyPointsToMap = function(){
 	
-	/*for (i = 0; i < this.args.nPoints.length; ++i) {
-	        min = Math.min(min, this[this.args.style](this.data.keyPoints[i].x, this.data.keyPoints[i].y));
-	        max = Math.max(max, this[this.args.style](this.data.keyPoints[i].x, this.data.keyPoints[i].y));
-	    }
-
-	    scale = 1 / (max - min);
-
-	    for (i = 0; i < this.args.nPoints.length; ++i) {
-	        this.args.nPoints[i] = (this.args.nPoints[i] - min) * scale;
-	    }*/
-
+	 for(var i = 0; i < this.data.keyPoints.length; i++){
+		 this.data.keyPoints[i].x = (this.args.width*-0.5)+(this.args.width * this.data.keyPoints[i].x);
+		 this.data.keyPoints[i].y = (this.args.height*-0.5)+(this.args.height * this.data.keyPoints[i].y);
+	}
+	return;
 };
 
 
+Teriable.Noise.prototype.Worley2_Get = function(ix, iy){
+			if(typeof this.args.scale !== 'undefined' && this.args.scale != 0){
+				ix = ix/this.args.scale;
+				iy = iy/this.args.scale;
+				if(this.args.scaleFloor == true){
+					ix = Math.floor(ix);	
+					iy = Math.floor(iy);	
+				}
+			}
+	
+		var dist;
+		this.data.normalValues = [];
+		
+		for(var i = 0; i < this.data.keyPoints.length; i++){
+		dist = this[this.args.style](Math.cos(ix) - this.data.keyPoints[i].x, Math.cos(iy) - this.data.keyPoints[i].y);
+		this.data.normalValues.push(dist);
+		}
+		this.data.normalValues.sort(function(a, b){return a-b});
 
-
-
+		this.data.value = ((this.data.normalValues[this.args.n] - this.data.normalValues[0]));
+		
+		var range = this.data.normalValues[this.data.normalValues.length-1] - this.data.normalValues[0];
+		this.data.value = (this.data.value-this.data.normalValues[0])/range;	
+		
+		return this.data.value;
+};
 
 
 Teriable.Noise.prototype.Poorly2_Get = function(ix, iy){
@@ -779,11 +861,17 @@ Teriable.Noise.prototype.chebyshevish4 = function(dx,dy){
 
 //I made these ones up...
 Teriable.Noise.prototype.valentine = function(dx, dy){
-	return Math.min((dx/dy),(dy/dx))/Math.max((dx/dy),(dy/dx));
+	return Math.cos(Math.max((dx*dy),(dy*dx)));
 }
 
 Teriable.Noise.prototype.valentine2 = function(dx, dy){
-	return Math.abs(Math.min((dx/-dy),(dy/-dx))/Math.max((dx/-dy),(dy/-dx)));
+	return Math.cos(Math.min((dx/-dy),(dy/-dx))/Math.max((dx/-dy),(dy/-dx)));
+}
+
+Teriable.Noise.prototype.valentine2b = function(dx, dy){
+	var a = Math.min((dx/-dy),(dy/-dx))/Math.max((dx/-dy),(dy/-dx));
+	var b = Math.max((dx/-dy),(dy/-dx))/Math.min((dx/-dy),(dy/-dx));
+	return Math.cos(Math.max(a*b, a/b)/Math.min((a*b, a/b)));
 }
 
 Teriable.Noise.prototype.valentine3 = function(dx, dy){
@@ -805,6 +893,10 @@ Teriable.Noise.prototype.valentine5 = function(dx, dy){
 	var r2 = (1 /(dx+ dy)) * ( 1 / (Math.max(dx,dy)/Math.min(dx,dy)));
 	
 	return 1 / ((dx - r) + (dy - r2));
+}
+
+Teriable.Noise.prototype.rachel = function(dx, dy){
+ return Teriable.Noise.lerp(dx, dy, 1/(dx+dy));
 }
 
 
