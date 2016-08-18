@@ -628,12 +628,12 @@ Teriable.Noise.prototype.Poorly2 = function(){
 	if(typeof this.args.n !== 'undefined'){this.args.n = Math.floor(this.args.n)};
 	if(typeof this.args.n == 'undefined' || this.args.n == 0){ this.args.n = 2;}
 	if(typeof this.args.style == 'undefined'){ this.args.style = 'euclidean';}
-	console.log(this.args);
+	//console.log(this.args);
 	this.data = {keyPoints : [{x:0,y:0}]};
 	
 	this._getKeyPoints();
 	
-	console.log(this);
+	//console.log(this);
 };
 
 Teriable.Noise.prototype._getKeyPoints = function(){
@@ -794,10 +794,17 @@ Teriable.Noise.prototype.valentine3 = function(dx, dy){
 }
 
 Teriable.Noise.prototype.valentine4 = function(dx, dy){
- 	var r = (dx+dy) * Math.cos(Math.min(dx,dy)/Math.max(dx,dy));
-	var r2 = (dx+ dy) * Math.sin(Math.min(dx,dy)/Math.max(dx,dy));
+ 	var r = 1/((1/(dx+dy)) *  (1/(Math.min(dx,dy)/Math.max(dx,dy))));
+	var r2 = 1/((1/(dx+ dy)) * (1/(Math.min(dx,dy)/Math.max(dx,dy))));
 	
-	return Math.abs(Math.min((dx - r) / (dy - r2),(dx + r) / (dy + r2) ));
+	return 1/Math.min((dx - r) / (dy - r2),(dx + r) / (dy + r2));
+}
+
+Teriable.Noise.prototype.valentine5 = function(dx, dy){
+ 	var r = (1 /(dx+dy)) *( 1/ (Math.max(dx,dy)/Math.min(dx,dy)));
+	var r2 = (1 /(dx+ dy)) * ( 1 / (Math.max(dx,dy)/Math.min(dx,dy)));
+	
+	return 1 / ((dx - r) + (dy - r2));
 }
 
 
