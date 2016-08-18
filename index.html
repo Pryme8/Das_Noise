@@ -97,7 +97,7 @@
         <canvas id="Perlin2" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
         <div>
         <h6>Perlin2</h6>
-        <div>Not sure the difference betweem this and Simple</div>
+       
         <div class='code'>('Perlin2','SeedMe', {})</div>
         </div>
     </div>
@@ -107,8 +107,18 @@
         <canvas id="Perlin2b" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
         <div>
         <h6>Perlin2</h6>
-        <div>Not sure the difference betweem this and Simple</div>
+     
         <div class='code'>('Perlin2','SeedMe', {scale:10})</div>
+        </div>
+    </div>
+    
+     <div class='content-item'>
+    	<div class='c-wrap'>
+        <canvas id="Perlin2c" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
+        <div>
+        <h6>Perlin2</h6>
+        
+        <div class='code'>('Perlin2','SeedMe', {frequency:1, octives:3, scale:20, persistence:0.2, amplitude:0.5})</div>
         </div>
     </div>
    
@@ -117,7 +127,7 @@
         <canvas id="Perlin3" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
         <div>
         <h6>Perlin3</h6>
-        <div>Not sure the difference betweem this and Simple</div>
+        
         <div class='code'>('Perlin3','SeedMe', {})</div>
         </div>
     </div>
@@ -127,7 +137,7 @@
         <canvas id="PSRDnoise" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
         <div>
         <h6>PSRDnoise</h6>
-        <div>First Port from GLSL</div>
+        <div>First Port from GLSL - Broken?</div>
         <div class='code'>('PSRDnoise','', {})</div>
         </div>
     </div>
@@ -274,6 +284,22 @@ setTimeout(function(){
 var noise = new Teriable.Noise('Perlin2','SeedMe', {scale:10});
 
 var c = document.getElementById('Perlin2b');
+var ctx = c.getContext('2d');
+var imageData = ctx.getImageData(0,0,c.width, c.height);
+var data = imageData.data;
+var i=0;
+for (var y = 0; y <  c.height; y++) {
+	for (var x = 0; x <  c.width; x++) {
+	var v = Math.floor(255 * noise.getValue({x:x,y:y}));
+ctx.fillStyle = "rgb("+v+","+v+","+v+")";
+ctx.fillRect(x,y,1,1);
+	}
+}},0);
+
+setTimeout(function(){
+var noise = new Teriable.Noise('Perlin2','SeedMe', {frequency:1, octives:3, scale:20, persistence:0.2, amplitude:0.5});
+
+var c = document.getElementById('Perlin2c');
 var ctx = c.getContext('2d');
 var imageData = ctx.getImageData(0,0,c.width, c.height);
 var data = imageData.data;

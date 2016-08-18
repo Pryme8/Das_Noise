@@ -16,11 +16,12 @@ Teriable.Noise = function(type,seed,args){
 	this._seed = {_initial : seed,
 				  _clean : this._cleanSeed(seed)};
 	this.args = args;
-	console.log("New "+type+" Init: seed._initial-"+this._seed._initial+", seed._clean-"+this._seed._clean);
+	//console.log("New "+type+" Init: seed._initial-"+this._seed._initial+", seed._clean-"+this._seed._clean);
 	
 	switch (this._type) {
 	case "Simple2": this.sP(); break;
 	case "Simple3": this.sP(); break;
+	case "Perlin2": this.sP(); break;
 	case "Perlin3": this.sP(); break;
 	}
 }
@@ -338,7 +339,6 @@ Teriable.Noise.prototype.Perlin2_Get = function(x, y) {
 			}
 	}
     var X = Math.floor(x), Y = Math.floor(y);
-    // Get relative xy coordinates of point within that cell
     x = x - X; y = y - Y;
     X = X & 255; Y = Y & 255;
 
@@ -347,14 +347,17 @@ Teriable.Noise.prototype.Perlin2_Get = function(x, y) {
     var n10 = this.gradP[X+1+this.perm[Y]].dot2(x-1, y);
     var n11 = this.gradP[X+1+this.perm[Y+1]].dot2(x-1, y-1);
 
+	var fade =  Teriable.Noise.fade;
+	var lerp = Teriable.Noise.lerp;
+
     // Compute the fade curve value for x
-    var u = this.fade(x);
+    var u = fade(x);
 
     // Interpolate the four results
-    return this.lerp(
-        this.lerp(n00, n10, u),
-        this.lerp(n01, n11, u),
-       this.fade(y));
+    return lerp(
+        lerp(n00, n10, u),
+        lerp(n01, n11, u),
+       fade(y));
   };
 
 Teriable.Noise.prototype.Perlin3_Get = function(x, y, z) {
@@ -384,20 +387,22 @@ Teriable.Noise.prototype.Perlin3_Get = function(x, y, z) {
     var n101 = this.gradP[X+1+this.perm[Y+  this.perm[Z+1]]].dot3(x-1,   y, z-1);
     var n110 = this.gradP[X+1+this.perm[Y+1+this.perm[Z  ]]].dot3(x-1, y-1,   z);
     var n111 = this.gradP[X+1+this.perm[Y+1+this.perm[Z+1]]].dot3(x-1, y-1, z-1);
-
+	
+	var fade =  Teriable.Noise.fade;
+	var lerp = Teriable.Noise.lerp;
     // Compute the fade curve value for x, y, z
-    var u = this.fade(x);
-    var v = this.fade(y);
-    var w = this.fade(z);
+    var u = fade(x);
+    var v = fade(y);
+    var w = fade(z);
 
     // Interpolate
-    return this.lerp(
-        this.lerp(
-          this.lerp(n000, n100, u),
-          this.lerp(n001, n101, u), w),
-        this.lerp(
-          this.lerp(n010, n110, u),
-          this.lerp(n011, n111, u), w),
+    return lerp(
+        lerp(
+         lerp(n000, n100, u),
+          lerp(n001, n101, u), w),
+        lerp(
+         lerp(n010, n110, u),
+          lerp(n011, n111, u), w),
        v);
   };
   
