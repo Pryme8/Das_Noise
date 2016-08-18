@@ -631,7 +631,126 @@ ctx.fillRect(x,y,1,1);
     </div>
     
 </div>
-    
+<h4>Mixing</h4>
+<div class='content col-4'>
+<div class='content-item'>
+    	<div class='c-wrap'>
+        <canvas id="Mix" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
+        <div>
+        <h6>Mix</h6>
+        <div class='code'>noiseA = Noise('Simple2','SeedMe', {scale:20}) <BR />noiseB = Noise('Simple2','SeedMe2', {scale:20}) <BR />Mix(noiseA, noiseB, 0.75)</div>
+        </div><script>
+		setTimeout(function(){
+		var noiseA = new Teriable.Noise('Simple2','SeedMe', {scale:20});
+		var noiseB = new Teriable.Noise('Simple2','SeedMe2', {scale:20});
+			var c = document.getElementById('Mix');
+			var ctx = c.getContext('2d');
+			var imageData = ctx.getImageData(0,0,c.width, c.height);
+			var data = imageData.data;
+			var i=0;
+			for (var y = 0; y <  c.height; y++) {
+				for (var x = 0; x <  c.width; x++) {
+				var v = Math.floor(255 * Teriable.Mix(noiseA.getValue({x:x,y:y}), noiseB.getValue({x:x,y:y}), 0.75 ));
+				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
+				ctx.fillRect(x,y,1,1);
+				}
+			}},0);</script>
+    </div>
+<div class='content-item'>
+    	<div class='c-wrap'>
+        <canvas id="Multiply" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
+        <div>
+        <h6>Multiply</h6>
+        <div class='code'>noiseA = Noise('Simple2','SeedMe', {scale:20}) <BR />noiseB = Noise('Simple2','SeedMe2', {scale:20}) <BR />Multiply(noiseA, noiseB, amount)</div>
+        </div><script>
+		setTimeout(function(){
+		var noiseA = new Teriable.Noise('Simple2','SeedMe', {scale:20});
+		var noiseB = new Teriable.Noise('Simple2','SeedMe2', {scale:20});
+			var c = document.getElementById('Multiply');
+			var ctx = c.getContext('2d');
+			var imageData = ctx.getImageData(0,0,c.width, c.height);
+			var data = imageData.data;
+			var i=0;
+			for (var y = 0; y <  c.height; y++) {
+				for (var x = 0; x <  c.width; x++) {
+				var v = Math.floor(255 * Teriable.Multiply(noiseA.getValue({x:x,y:y}), noiseB.getValue({x:x,y:y})));
+				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
+				ctx.fillRect(x,y,1,1);
+				}
+			}},0);</script>
+    </div>
+<div class='content-item'>
+    	<div class='c-wrap'>
+        <canvas id="Average_Add" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
+        <div>
+        <h6>Average_Add</h6>
+        <div class='code'>noiseA = Noise('Simple2','SeedMe', {scale:20}) <BR />noiseB = Noise('Simple2','SeedMe2', {scale:20}) <BR />Average_Add(noiseA, noiseB, amount)</div>
+        </div><script>
+		setTimeout(function(){
+		var noiseA = new Teriable.Noise('Simple2','SeedMe', {scale:20});
+		var noiseB = new Teriable.Noise('Simple2','SeedMe2', {scale:20});
+			var c = document.getElementById('Average_Add');
+			var ctx = c.getContext('2d');
+			var imageData = ctx.getImageData(0,0,c.width, c.height);
+			var data = imageData.data;
+			var i=0;
+			for (var y = 0; y <  c.height; y++) {
+				for (var x = 0; x <  c.width; x++) {
+				var v = Math.floor(255 * Teriable.Average_Add(noiseA.getValue({x:x,y:y}), noiseB.getValue({x:x,y:y})));
+				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
+				ctx.fillRect(x,y,1,1);
+				}
+			}},0);</script>
+</div>
+
+<div class='content-item'>
+    	<div class='c-wrap'>
+        <canvas id="Average_Sub" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
+        <div>
+        <h6>Average_Sub</h6>
+        <div class='code'>noiseA = Noise('Simple2','SeedMe', {scale:20}) <BR />noiseB = Noise('Simple2','SeedMe2', {scale:20}) <BR />Average_Sub(noiseA, noiseB, amount)</div>
+        </div><script>
+		setTimeout(function(){
+		var noiseA = new Teriable.Noise('Simple2','SeedMe', {scale:20});
+		var noiseB = new Teriable.Noise('Simple2','SeedMe2', {scale:20});
+			var c = document.getElementById('Average_Sub');
+			var ctx = c.getContext('2d');
+			var imageData = ctx.getImageData(0,0,c.width, c.height);
+			var data = imageData.data;
+			var i=0;
+			for (var y = 0; y <  c.height; y++) {
+				for (var x = 0; x <  c.width; x++) {
+				var v = Math.floor(255 * Teriable.Average_Sub(noiseA.getValue({x:x,y:y}), noiseB.getValue({x:x,y:y})));
+				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
+				ctx.fillRect(x,y,1,1);
+				}
+			}},0);</script>
+</div>
+<BR />
+<div class='content-item'>
+    	<div class='c-wrap'>
+        <canvas id="Divide" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
+        <div>
+        <h6>Divide</h6>
+        <div class='code'>noiseA = Noise('Simple2','SeedMe', {scale:20}) <BR />noiseB = Noise('Simple2','SeedMe2', {scale:20}) <BR />Divide(noiseA, noiseB, amount)</div>
+        </div><script>
+		setTimeout(function(){
+		var noiseA = new Teriable.Noise('Simple2','SeedMe', {scale:20});
+		var noiseB = new Teriable.Noise('Simple2','SeedMe2', {scale:20});
+			var c = document.getElementById('Divide');
+			var ctx = c.getContext('2d');
+			var imageData = ctx.getImageData(0,0,c.width, c.height);
+			var data = imageData.data;
+			var i=0;
+			for (var y = 0; y <  c.height; y++) {
+				for (var x = 0; x <  c.width; x++) {
+				var v = Math.floor(255 * Teriable.Divide(noiseA.getValue({x:x,y:y}), noiseB.getValue({x:x,y:y})));
+				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
+				ctx.fillRect(x,y,1,1);
+				}
+			}},0);</script>
+</div>
+ </div>   
 </div>
 
 

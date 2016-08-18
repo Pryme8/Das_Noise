@@ -801,5 +801,25 @@ Teriable.Noise.prototype.valentine4 = function(dx, dy){
 }
 
 
+Teriable.Mix = function (a, b, p){	
+	return a*(1-p)+b*p;
+};
+Teriable.Multiply = function (a, b){
+	return a*b;
+}
+Teriable.Average_Add = function (a, b){
+	return (a+b)*0.5;
+}
+Teriable.Average_Sub = function (a, b){
+	return (a-b)*0.5;
+}
+Teriable.Divide = function(a,b){
+	var min = Math.min(a, b),
+	 	max = Math.max(a, b);
+		
+		return min/max;
+	
+}
+
 
 
