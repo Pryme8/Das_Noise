@@ -1,14 +1,14 @@
-//Andrew V Butt Sr. - Pryme8@gmail.com
+/************************************************************************
+Andrew V Butt Sr. - Pryme8@gmail.com
+Pryme8.github.io
 //Compilation of Standard Noises for Javascript version 1.1.0;
-//Some of these were for other langues, and some of them I made
-//up so yeah...
-//Pryme8.github.io
-//Special Thanks to Stefan Gustavson (stegu@itn.liu.se),
-//and Peter Eastman (peastman@drizzle.stanford.edu)
-/* Some of this code was placed in the public domain by its original author,
- * Stefan Gustavson. You may use it as you see fit, but
- * attribution is appreciated.*/
-//******************************************************//
+Special Thanks to Stefan Gustavson (stegu@itn.liu.se),
+and Peter Eastman (peastman@drizzle.stanford.edu)
+ Some of this code was placed in the public domain by its original author,
+Stefan Gustavson. You may use it as you see fit, but
+attribution is appreciated.
+*************************************************************************/
+
 
 Teriable = {} || Teriable;
 Teriable.Noise = function(type,seed,args){
