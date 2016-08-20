@@ -105,6 +105,8 @@ Das_Edit.Do = {
 			'<div class="input-small"><span>amplitude:</span><input id="amplitude" type="number" min="0.01"  step="0.01" value="1" /></div><BR />'+
 			'<div class="input-small"><span>octives:</span><input id="octives" type="number" min="1"  step="1" value="1" /></div><BR />'+
 			'<div class="input-small"><span>persistence:</span><input id="persistence" type="number" min="0.01"  step="0.01" value="1" /></div><BR />'+
+			'<div class="input-small"><span>nPoints*:</span><input id="nPoints" type="number" min="4"  step="1" value="12" /></div><BR />'+
+			'<div class="input-small"><span>n*:</span><input id="n" type="number" min="1"  step="1" value="4" /></div><BR />'+
 			'</div>'+
 			'<select id="m-style">'+
 			'<option value="euclidean">euclidean</option>'+
@@ -150,7 +152,7 @@ Das_Edit.Do = {
 			
 			newNoise.find('#noise-seed').change(function(e){
 				noise.seed = $(e.target).val();
-				noise.noise = new Teriable.Noise(noise.type,noise.seed,{scale:noise.settings.scale, scaleFloor: noise.settings.scaleFloor, frequency:noise.settings.frequency, amplitude:noise.settings.amplitude, octives:noise.settings.octives, persistence:noise.settings.persistence, style:noise.settings.style});
+				noise.noise = new Teriable.Noise(noise.type,noise.seed,{scale:noise.settings.scale, scaleFloor: noise.settings.scaleFloor, frequency:noise.settings.frequency, amplitude:noise.settings.amplitude, octives:noise.settings.octives, persistence:noise.settings.persistence, style:noise.settings.style, nPoints:noise.settings.nPoints, n:noise.settings.n});
 				parent.redraw = true;
 			});
 
@@ -208,25 +210,25 @@ Das_Edit.Do = {
 			case '#Poorly2D':
 			console.log("make Poorly2D");
 			obj.type = "Poorly2"
-			obj.noise = new Teriable.Noise(obj.type,obj.seed,{scale:obj.settings.scale, scaleFloor: obj.settings.scaleFloor, frequency:obj.settings.frequency, amplitude:obj.settings.amplitude, octives:obj.settings.octives, persistence:obj.settings.persistence, style:obj.settings.style});
+			obj.noise = new Teriable.Noise(obj.type,obj.seed,{scale:obj.settings.scale, scaleFloor: obj.settings.scaleFloor, frequency:obj.settings.frequency, amplitude:obj.settings.amplitude, octives:obj.settings.octives, persistence:obj.settings.persistence, style:obj.settings.style, nPoints:obj.settings.nPoints, n:obj.settings.n});
 			break;
 		
 			case '#Poorly2Db':
 			console.log("make Poorly2Db");
 			obj.type = "Poorly2b"
-			obj.noise = new Teriable.Noise(obj.type,obj.seed,{scale:obj.settings.scale, scaleFloor: obj.settings.scaleFloor, frequency:obj.settings.frequency, amplitude:obj.settings.amplitude, octives:obj.settings.octives, persistence:obj.settings.persistence, style:obj.settings.style});
+			obj.noise = new Teriable.Noise(obj.type,obj.seed,{scale:obj.settings.scale, scaleFloor: obj.settings.scaleFloor, frequency:obj.settings.frequency, amplitude:obj.settings.amplitude, octives:obj.settings.octives, persistence:obj.settings.persistence, style:obj.settings.style, nPoints:obj.settings.nPoints, n:obj.settings.n});
 			break;
 			
 			case '#Poorly2Dc':
 			console.log("make Poorly2Dc");
 			obj.type = "Poorly2c"
-			obj.noise = new Teriable.Noise(obj.type,obj.seed,{scale:obj.settings.scale, scaleFloor: obj.settings.scaleFloor, frequency:obj.settings.frequency, amplitude:obj.settings.amplitude, octives:obj.settings.octives, persistence:obj.settings.persistence, style:obj.settings.style});
+			obj.noise = new Teriable.Noise(obj.type,obj.seed,{scale:obj.settings.scale, scaleFloor: obj.settings.scaleFloor, frequency:obj.settings.frequency, amplitude:obj.settings.amplitude, octives:obj.settings.octives, persistence:obj.settings.persistence, style:obj.settings.style, nPoints:obj.settings.nPoints, n:obj.settings.n});
 			break;
 			
 			case '#Worley2D':
 			console.log("make Worley2D");
 			obj.type = "Worley2"
-			obj.noise = new Teriable.Noise(obj.type,obj.seed,{scale:obj.settings.scale, scaleFloor: obj.settings.scaleFloor, frequency:obj.settings.frequency, amplitude:obj.settings.amplitude, octives:obj.settings.octives, persistence:obj.settings.persistence, style:obj.settings.style});
+			obj.noise = new Teriable.Noise(obj.type,obj.seed,{scale:obj.settings.scale, scaleFloor: obj.settings.scaleFloor, frequency:obj.settings.frequency, amplitude:obj.settings.amplitude, octives:obj.settings.octives, persistence:obj.settings.persistence, style:obj.settings.style, nPoints:obj.settings.nPoints, n:obj.settings.n});
 			break;
 		}
 		
