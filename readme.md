@@ -16,15 +16,15 @@ Coming Soon:
 
 Free to use, but please at least post some credits to =>
 ```
-/************************************************************************/n/r
-Andrew V Butt Sr. - Pryme8@gmail.com/n/r
-Pryme8.github.io/n/r
-//Compilation of Standard Noises for Javascript version 1.1.0;/n/r
-Special Thanks to Stefan Gustavson (stegu@itn.liu.se),/n/r
-and Peter Eastman (peastman@drizzle.stanford.edu)/n/r
- Some of this code was placed in the public domain by its original author,/n/r
-Stefan Gustavson. You may use it as you see fit, but/n/r
-attribution is appreciated./n/r
-*************************************************************************//n/r
+/************************************************************************
+Andrew V Butt Sr. - Pryme8@gmail.com
+Pryme8.github.io
+//Compilation of Standard Noises for Javascript version 1.1.0;
+Special Thanks to Stefan Gustavson (stegu@itn.liu.se),
+and Peter Eastman (peastman@drizzle.stanford.edu)
+ Some of this code was placed in the public domain by its original author,
+Stefan Gustavson. You may use it as you see fit, but
+attribution is appreciated.
+*************************************************************************/
 ```
 Started 8-16-2016
