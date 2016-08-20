@@ -100,7 +100,7 @@ Das_Edit.Do = {
 			'<div class="input-small"><span>Floor Scale:</span><input id="scaleFloor" type="checkbox" /></div><BR />'+
 			'<div class="input-small"><span>frequency:</span><input id="frequency" type="number" min="0.01"  step="0.01" value="1" /></div><BR />'+
 			'<div class="input-small"><span>amplitude:</span><input id="amplitude" type="number" min="0.01"  step="0.01" value="1" /></div><BR />'+
-			'<div class="input-small"><span>octives:</span><input id="octives" type="number" min="0.01"  step="1" value="1" /></div><BR />'+
+			'<div class="input-small"><span>octives:</span><input id="octives" type="number" min="1"  step="1" value="1" /></div><BR />'+
 			'<div class="input-small"><span>persistence:</span><input id="persistence" type="number" min="0.01"  step="0.01" value="1" /></div><BR />'+
 			'</div>'+
 			'<select id="m-style">'+
