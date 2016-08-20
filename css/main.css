@@ -22,95 +22,72 @@ html, html *, body, body *, *::before, *::after{
 	right:0;
 	bottom:0;
 	z-index:0;
-	overflow:hidden;
+	overflow-y:auto;
 }
 
-.canvas-wrap{
+.page-wrap{
+	display:block;
 	position:absolute;
-	width:calc(100% - 200px);
-	height:100%;
-	left:0;
+	width:100%;
+	max-width:800px;
+	height:auto;
 	top:0;
-}
-
-#noiseCanvas{
-	position:absolute;
 	left:50%;
-	top:50%;
-	transform:translate(-50%,-50%);	
+	transform:translateX(-50%);	
 }
 
-.stack{
-	position:absolute;
-	width:199px;
-	height:100%;
-	right:0;
-	top:0;
-	background:#DDD;
-	border-left:1px solid black;
+.content{
+	display: block;
+	position: relative;	
 }
 
-.bottom-menu{
-	position: absolute;
-	width:450px;
-	height: 80px;
-	bottom:0.5em;
-	background: white;
-	left:50%;
-	transform:translateX(-50%);
+.content > div{
+	padding-bottom: 0.5em;
 }
 
-.color-block{
+.col-4{
+	text-align: center;
+	white-space: nowrap;
+}
+.col-4 > div {
+	font-size:14px;
 	position: relative;
+	width:calc(25% - 1em);
 	display: inline-block;
-	width:64px;
-	height: 64px;
-	border: 1px solid black;
+	border:1px solid #333;
+	padding:0.8em 0.5em;
+	text-align: left;
+	min-height:260px;
+	vertical-align:top;
+	margin-bottom:0.2em;
 }
 
-.input-small{
+.c-wrap {
+text-align: center;
+}
+
+.col-4 > div h6 {
+font-size:1em;
+margin-top: 0.2em;
+margin-bottom: 0.2em;
+	text-decoration: underline;
+	font-variant-caps: petite-caps;
+}
+
+div > div > div{
+	font-size: 1em;
+	white-space: normal;
+}
+
+.label{
 	display: inline-block;
-	vertical-align: top;
-}
-.input-small input{
-	background: transparent;
-	border: 1px solid black;
-	width:46px;
-	font-size:12px;
+	width:4em;
+  text-align: right;
+	padding-right:0.5em;
 }
 
-.input-small > span{
-	max-width:32px;
-	text-align:right;
-	padding-right:0.2em;
-}
-
-.menu-pane{
-	padding: 0.5em;
-	font-size: 12px;
-	display: none;
-}
-
-.menu-sub-pane{
-	padding: 0.0em;
-	font-size: 10px;
-	display: block;
-	text-align: right;
-}
-
-.menu-pane.active{
-	display: block;
-}
-
-.input-large{
-	text-align: right;
-	padding-bottom: 0.2em;
-}
-
-.input-large input{
-	height: 1.5em;
-}
-
-.selectable.selected{
-	border:1px solid #CF6;	
+.code{
+	color:darkolivegreen;
+	font-style: italic;
+	font-size: 0.8em;
 }
