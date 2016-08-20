@@ -6,6 +6,7 @@ Das_Edit = function(){
 	this.redraw = true;
 	this.autoRedraw = true;
 	this.activeOut = null;
+	//this.selected = null;
 	this.canvas = document.getElementById('noiseCanvas');
 }
 
@@ -72,6 +73,8 @@ Das_Edit.prototype.Start = function(){
 
 this._int = setInterval(this._run, 0);	
 }
+
+
 Das_Edit.Do = {
 	setBgColor : function(){
 		$('.canvas-wrap').css('background-color', 'rgba('+$('#bg-r').val()+','+$('#bg-g').val()+','+$('#bg-b').val()+','+$('#bg-a').val()+')');
@@ -79,7 +82,7 @@ Das_Edit.Do = {
 	createNewNoise : function(parent){
 		    parent.noises.push(new Das_Edit.Noise());
 			var newNoise =
-			$('<div class="item">'+
+			$('<div class="item selectable">'+
 			'<div class="input-large"><span>Name:</span><span><input id="noise-name" type="text" value="New Noise" /></span></div>'+
 			'<div class="input-large"><span>Seed:</span><span><input id="noise-seed" type="text" value="New Seed" /></span></div>'+
 			'<div class="input-large"><span>Type:</span><span>'+
@@ -126,48 +129,65 @@ Das_Edit.Do = {
 			
 			$('#noise-list').append(newNoise);
 			var noise = parent.noises[parent.noises.length-1];
-			Das_Edit.Do.createNewOutput(noise);
+			var newOut = Das_Edit.Do.createNewOutput(noise);
 			Das_Edit.Do.makeNoise('#Simple2D', noise, parent);
 			
 			if(Das_Edit.Do.checkActive()){
 				
-				}else{
-			$('#out-list').find('div#'+noise.name.replace(" ", "_")).find('input#active-noise').prop('checked', true);
+			}else{
+			$('#out-list').find('div#'+noise.name.replace(" ", "_")+' input[type="radio"]').click();
 			parent.redraw = true;
 			parent.activeOut = noise;
 			parent.Start();			
 			}
 			
-
-			$('#noise-settings input').change(function(e){
+			newNoise.find('#noise-name').change(function(e){
+				noise.name = $(e.target).val();
+				newOut.attr('id',noise.name.replace(" ", "_"));
+				newOut.find('#name-span').text(noise.name);
 				
+			});
+			
+			newNoise.find('#noise-seed').change(function(e){
+				noise.seed = $(e.target).val();
+				noise.noise = new Teriable.Noise(noise.type,noise.seed,{scale:noise.settings.scale, scaleFloor: noise.settings.scaleFloor, frequency:noise.settings.frequency, amplitude:noise.settings.amplitude, octives:noise.settings.octives, persistence:noise.settings.persistence, style:noise.settings.style});
+				parent.redraw = true;
+			});
+
+			newNoise.find('#noise-settings input').change(function(e){
 				noise.settings[$(e.target).attr('id')] = $(e.target).val();
 				noise.noise.args[$(e.target).attr('id')] = $(e.target).val();
 				parent.redraw = true;
-			
 			});
 			
-			$('select#noise-type').change(function(e){
+			newNoise.find('select#noise-type').change(function(e){
 				var type = $(e.target).val();
 				Das_Edit.Do.makeNoise(type, noise, parent);
 				parent.redraw = true;			
 			});
 			
-			$('select#m-style').change(function(e){
+			newNoise.find('select#m-style').change(function(e){
 				var style = $(e.target).val();
 				noise.settings.style = $(e.target).val();
 				noise.noise.args.style = $(e.target).val();
 				parent.redraw = true;			
 			});
 			
+			newOut.find('input[type="radio"]').on('click', function(){
+				parent.activeOut = noise;
+				parent.redraw = true;		
+			});
+						
 	},
 	createNewOutput : function(noise){
 		    var newOut =
 			$('<div class="item out" id="'+noise.name.replace(" ", "_")+'">'+
-			'<div class="input-large"><span>'+noise.name+'</span></div>'+
-			'<div class="input-large"><span>Active:</span><span><input id="active-noise" type="checkbox"/></span></div>'+	
+			'<div class="input-large"><span id="name-span">'+noise.name+'</span></div>'+
+			'<div class="input-large"><span>Active:</span><span><input id="'+noise.name.replace(" ", "_")+'" name="active-noise" type="radio"/></span></div>'+	
 			'</div><hr />');
 			$('#out-list').append(newOut);
+			return newOut;
+			
 			
 	},
 	makeNoise : function(type, obj, parent){
@@ -212,10 +232,10 @@ Das_Edit.Do = {
 		
 	},
 	checkActive : function(){
-		if($('#animation-run').not('checked')){
+		if($('#auto-out').not(':checked')){
 			return false;
 		}
-		if($('.item.out').find('input#active-noise[checked="true"]').length){
+		if($('.item.out').find('input[type="radio"]:checked').length){
 			return true;
 		}else{
 			return false;	

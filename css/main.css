@@ -110,3 +110,7 @@ html, html *, body, body *, *::before, *::after{
 .input-large input{
 	height: 1.5em;
 }
+
+.selectable.selected{
+	border:1px solid #CF6;	
+}
