@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Pryme8's Noise Functions</title>
+
+
+<link href="./css/main.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="./js/jquery.js"></script>
+<script type="text/javascript" src="./js/teriable-noise.js"></script>
+<script type="text/javascript" src="./js/main.js"></script>
+
+
+</head>
+<body>
+<div class='wrap-fix'>
+<div class=canvas-wrap><canvas id="noiseCanvas"></canvas> </div>
+
+<div class='stack'>
+<div style="text-align:center;" id='top-menu'><a href='#' t='#bg-settings'>bg</a>&nbsp;|&nbsp;<a href='#' t='#noise-make'>noises</a>&nbsp;|&nbsp;<a href='#' t='#mixer'>mixing</a>&nbsp;|&nbsp;<a href='#' t='#noise-out'>output</a></div>
+<hr/>
+<div class='menu-pane active' id='bg-settings'>
+Background Settings:
+<hr />
+<span>
+<div class='input-small'><span>R:</span><input id='bg-r' type='number' min="0" max="255" step="1" value="255" onchange="Das_Edit.Do.setBgColor();"/></div><BR />
+<div class='input-small'><span>G:</span><input id='bg-g' type='number' min="0" max="255" step="1" value="255" onchange="Das_Edit.Do.setBgColor();"/></div><BR />
+<div class='input-small'><span>B:</span><input id='bg-b' type='number' min="0" max="255" step="1" value="255" onchange="Das_Edit.Do.setBgColor();"/></div><BR />
+<div class='input-small'><span>A:</span><input id='bg-a' type='number' min="0" max="1" step="0.01" value="1"  onchange="Das_Edit.Do.setBgColor();"/></div>
+</span>
+Size Settings:
+<hr />
+<span>
+<div class='input-small'><span>100%:</span><input type='radio' name="size" value="100"/ checked="checked"></div><BR />
+<div class='input-small'><span>1024:</span><input type='radio' name="size" value="1024"/></div><BR />
+<div class='input-small'><span>512:</span><input type='radio' name="size" value="512"/></div><BR />
+<div class='input-small'><span>256:</span><input type='radio' name="size" value="256"/></div><BR/>
+<div class='input-small'><span>Custom:</span><input type='radio' name="size" value="custom"/></div><BR/>
+<div class='input-small'><span>width:</span><input id='can-width' type='number' min="0" step="1" value="64" /></div><BR />
+<div class='input-small'><span>height:</span><input id='can-height' type='number' min="0" step="1" value="64" /></div>
+</span>
+
+</div>
+
+<div class='menu-pane' id='noise-make'>
+Noise Maker:
+<hr />
+<div id='noise-list'></div>
+
+<div class='button-a'><a href='#' onclick="Das_Edit.Do.createNewNoise(editor);">Create Noise</a></div>
+
+</div>
+
+<div class='menu-pane' id='mixer'>
+Mixer:
+<hr />
+<span>
+
+</span>
+
+</div>
+
+<div class='menu-pane' id='noise-out'>
+Output:
+<hr />
+<div id='out-list'></div>
+<hr />
+<span>Autoupdate</span><input type="checkbox" checked="checked" id='auto-out' />
+<hr />
+Animation Settings:
+<div class='input-small'><span>FPS:</span><input id='fps-set' type='number' min="1" max="60" step="1" value="30" /></div><BR />
+<span>Run</span><input type="checkbox" id='animation-run' />
+</div>
+
+</div>
+</div>
+<script>$(function() {
+  var resize = function(v){
+	 	 		if(v!="custom" && v!="100"){
+					$('#noiseCanvas').attr('width',v);
+					$('#noiseCanvas').attr('height',v).css("border", "1px solid black");
+				}else if(v=="100"){
+					$('#noiseCanvas').attr('width',$('#noiseCanvas').parent().width()).attr('height',$('#noiseCanvas').parent().height()).css('border', 'none');
+				}else{
+					$('#noiseCanvas').attr('width',$('#can-width').val()).attr('height',$('#can-height').val()).css("border", "1px solid black");
+				}
+			};
+			
+			resize("256");
+			$('input[type="radio"][name="size"][value="256"]').click();
+			
+   			window.addEventListener('resize', function() {
+			resize($('input[type="radio"][name="size"][checked="true"]').val());
+   			});
+   
+  editor = new Das_Edit();
+   
+   $('#top-menu a').click(function(e){
+		$('.menu-pane').removeClass('active');
+		$($(e.target).attr('t')).addClass('active');
+	});
+	
+	$('input[type="radio"][name="size"]').bind('click', function(e){
+		var v = $(e.target).val();
+		resize(v);
+	})
+   
+});</script>
+</body>
+</html>
