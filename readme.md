@@ -15,7 +15,7 @@ Coming Soon:
 - More modes of distance.
 
 Free to use, but please at least post some credits to =>
-/n/r
+```
 /************************************************************************/n/r
 Andrew V Butt Sr. - Pryme8@gmail.com/n/r
 Pryme8.github.io/n/r
@@ -26,5 +26,5 @@ and Peter Eastman (peastman@drizzle.stanford.edu)/n/r
 Stefan Gustavson. You may use it as you see fit, but/n/r
 attribution is appreciated./n/r
 *************************************************************************//n/r
-
+```
 Started 8-16-2016
