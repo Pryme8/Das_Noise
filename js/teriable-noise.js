@@ -23,8 +23,12 @@ Teriable.Noise = function(type,seed,args){
 	{this.sP();}
 	else if(this._type == "Poorly2" || this._type == "Poorly2b" || this._type == "Poorly2c" ){
 	this.Poorly2();
-	}else if(this._type == "Worley2"){
-	this.Worley2();
+	}else if(this._type == "Poorly2d"){
+	this.Poorly2d();
+	}else if(this._type == "Tiley2"){
+	this.Tiley2();
+	}else if(this._type == "Test"){
+	this.Test();
 	}
 }
 
@@ -69,7 +73,13 @@ Teriable.Noise.prototype.getValue = function(args){
 	var value = 0;
 	var freq = this.args.frequency, amp = this.args.amplitude, oct = this.args.octives, pers = this.args.persistence;
 	
-
+	if(typeof this.args.output == 'undefined'){this.args.output = {}};
+	if(typeof this.args.output.type == 'undefined'){this.args.output.type = 'number'};
+	if(this.args.output.type != 'number' && this.args.output.type != 'color'){this.args.output.type = 'number'};
+    if(this.args.output.type == 'color' && typeof this.args.output.values == 'undefined'){this.args.output.values = [1,1,1,1]};
+	
+	
+	
 	switch (this._type) {
 	case "Simple2": 
 	if(typeof args.x == 'undefined' || typeof args.y == 'undefined'){return "Error Please input {x:?,y:?}"}
@@ -80,7 +90,7 @@ Teriable.Noise.prototype.getValue = function(args){
         			amp *= pers;
        		 		freq *= 2;
     			}
-				return value;
+				
 	break;
 	case "Simple3": 
 	if(typeof args.x == 'undefined' || typeof args.y == 'undefined' || typeof args.z == 'undefined'){return "Error Please input {x:?,y:?,z:?}"}
@@ -91,7 +101,7 @@ Teriable.Noise.prototype.getValue = function(args){
         			amp *= pers;
        		 		freq *= 2;
     			}
-				return value; 
+				
 	break;
 	case "Perlin2": 
 	if(typeof args.x == 'undefined' || typeof args.y == 'undefined'){return "Error Please input {x:?,y:?}"}
@@ -102,7 +112,7 @@ Teriable.Noise.prototype.getValue = function(args){
         			amp *= pers;
        		 		freq *= 2;
     			}
-				return value;
+				
 	break;
 	case "Perlin3": 
 	if(typeof args.x == 'undefined' || typeof args.y == 'undefined' || typeof args.z == 'undefined'){return "Error Please input {x:?,y:?,z:?}"}
@@ -113,7 +123,7 @@ Teriable.Noise.prototype.getValue = function(args){
         			amp *= pers;
        		 		freq *= 2;
     			}
-				return value;
+				
 	break;
 	case "PSRDnoise2": 
 	if(typeof args.x == 'undefined' || typeof args.y == 'undefined' || typeof args.px == 'undefined' || typeof args.py == 'undefined' || typeof args.r == 'undefined'){return "Error Please input {x:?,y:?,px:?,pz:?,r:?}"}
@@ -129,7 +139,7 @@ Teriable.Noise.prototype.getValue = function(args){
         			amp *= pers;
        		 		freq *= 2;
     			}
-				return value;
+				
 	break;
 	case "Poorly2b": 
 	if(typeof args.x == 'undefined' || typeof args.y == 'undefined'){return "Error Please input {x:?,y:?}"}
@@ -140,7 +150,7 @@ Teriable.Noise.prototype.getValue = function(args){
         			amp *= pers;
        		 		freq *= 2;
     			}
-				return value;
+				
 	break;
 	case "Poorly2c": 
 	if(typeof args.x == 'undefined' || typeof args.y == 'undefined'){return "Error Please input {x:?,y:?}"}
@@ -151,22 +161,48 @@ Teriable.Noise.prototype.getValue = function(args){
         			amp *= pers;
        		 		freq *= 2;
     			}
-				return value;
+				
 	break;
-	case "Worley2": 
+	case "Poorly2d": 
 	if(typeof args.x == 'undefined' || typeof args.y == 'undefined'){return "Error Please input {x:?,y:?}"}
 	for(var i=0;i < oct;i++) {
-        			value += this.Worley2_Get(args.x * freq, args.y * freq) * amp;
+        			value += this.Poorly2_Get(args.x * freq, args.y * freq) * amp;
         			 maxValue += amp;
         
         			amp *= pers;
        		 		freq *= 2;
     			}
-				return value;
+				
+	break;
+	case "Tiley2": 
+	if(typeof args.x == 'undefined' || typeof args.y == 'undefined'){return "Error Please input {x:?,y:?}"}
+	for(var i=0;i < oct;i++) {
+        			value += this.Tiley2_Get(args.x * freq, args.y * freq) * amp;
+        			 maxValue += amp;
+        
+        			amp *= pers;
+       		 		freq *= 2;
+    			}
+				
+	break;
+	
+	case "Test": 
+	if(typeof args.x == 'undefined' || typeof args.y == 'undefined'){return "Error Please input {x:?,y:?}"}
+	for(var i=0;i < oct;i++) {
+        			value += this.Test_Get(args.x * freq, args.y * freq) * amp;
+        			 maxValue += amp;
+        
+        			amp *= pers;
+       		 		freq *= 2;
+    			}
+				
 	break;
 	}
-	
-	
+	if(this.args.output.type == 'color'){
+		return {r:(value*this.args.output.values[0]),g:(value*this.args.output.values[1]),b:(value*this.args.output.values[2]),a:(value*this.args.output.values[3])}
+	}else{
+		return value;
+	}
 };
 
 Teriable.Noise.prototype.sP = function(){
@@ -669,19 +705,19 @@ return x - Math.floor(x * (1.0 / 289.0)) * 289.0;
 
 Teriable.Noise.prototype.Poorly2 = function(){
 	if(typeof this.args.nPoints !== 'undefined'){this.args.nPoints = Math.floor(this.args.nPoints)}
-	if(typeof this.args.nPoints == 'undefined' || this.args.nPoints == 0){ this.args.nPoints = 10;}
+	if(typeof this.args.nPoints == 'undefined' || this.args.nPoints == 0){ this.args.nPoints = 20;}
 	if(typeof this.args.n !== 'undefined'){this.args.n = Math.floor(this.args.n)};
-	if(typeof this.args.n == 'undefined' || this.args.n == 0){ this.args.n = 2;}
+	if(typeof this.args.n == 'undefined' || this.args.n == 0){ this.args.n = 4;}
 	if(typeof this.args.style == 'undefined'){ this.args.style = 'euclidean';}
 	//console.log(this.args);
-	this.data = {keyPoints : [{x:0,y:0}]};
+	this.data = {keyPoints : []};
 	
 	this._getKeyPoints();
 	
 	//console.log(this);
 };
 
-Teriable.Noise.prototype.Worley2 = function(){
+Teriable.Noise.prototype.Poorly2d = function(){
 	if(typeof this.args.nPoints !== 'undefined'){this.args.nPoints = Math.floor(this.args.nPoints)}
 	if(typeof this.args.nPoints == 'undefined' || this.args.nPoints == 0){ this.args.nPoints = 10;}
 	if(typeof this.args.n !== 'undefined'){this.args.n = Math.floor(this.args.n)};
@@ -692,7 +728,26 @@ Teriable.Noise.prototype.Worley2 = function(){
 	if(typeof this.args.height == 'undefined' || this.args.height == 0){ this.args.height = 100;}
 	if(typeof this.args.style == 'undefined'){ this.args.style = 'euclidean';}
 	//console.log(this.args);
-	this.data = {keyPoints : [{x:0,y:0}]};
+	this.data = {keyPoints : []};
+	
+	this._getKeyPoints();
+	this._ApplyKeyPointsToMap();
+	
+	//console.log(this);
+};
+
+Teriable.Noise.prototype.Tiley2 = function(){
+	if(typeof this.args.nPoints !== 'undefined'){this.args.nPoints = Math.floor(this.args.nPoints)}
+	if(typeof this.args.nPoints == 'undefined' || this.args.nPoints == 0){ this.args.nPoints = 10;}
+	if(typeof this.args.n !== 'undefined'){this.args.n = Math.floor(this.args.n)};
+	if(typeof this.args.n == 'undefined' || this.args.n == 0){ this.args.n = 2;}
+	if(typeof this.args.width !== 'undefined'){this.args.width = Math.floor(this.args.width)};
+	if(typeof this.args.width == 'undefined' || this.args.width == 0){ this.args.width = 100;}
+	if(typeof this.args.height !== 'undefined'){this.args.height = Math.floor(this.args.height)};
+	if(typeof this.args.height == 'undefined' || this.args.height == 0){ this.args.height = 100;}
+	if(typeof this.args.style == 'undefined'){ this.args.style = 'euclidean';}
+	//console.log(this.args);
+	this.data = {keyPoints : []};
 	
 	this._getKeyPoints();
 	this._ApplyKeyPointsToMap();
@@ -709,14 +764,14 @@ Teriable.Noise.prototype._getKeyPoints = function(){
 Teriable.Noise.prototype._ApplyKeyPointsToMap = function(){
 	
 	 for(var i = 0; i < this.data.keyPoints.length; i++){
-		 this.data.keyPoints[i].x = (this.args.width*-0.5)+(this.args.width * this.data.keyPoints[i].x);
-		 this.data.keyPoints[i].y = (this.args.height*-0.5)+(this.args.height * this.data.keyPoints[i].y);
-	}
+		this.data.keyPoints[i].x = (this.args.width * this.data.keyPoints[i].x);
+		this.data.keyPoints[i].y = (this.args.height * this.data.keyPoints[i].y);
+	 }
 	return;
 };
 
 
-Teriable.Noise.prototype.Worley2_Get = function(ix, iy){
+Teriable.Noise.prototype.Poorly2d_Get = function(ix, iy){
 			if(typeof this.args.scale !== 'undefined' && this.args.scale != 0){
 				ix = ix/this.args.scale;
 				iy = iy/this.args.scale;
@@ -738,7 +793,34 @@ Teriable.Noise.prototype.Worley2_Get = function(ix, iy){
 		this.data.value = ((this.data.normalValues[this.args.n] - this.data.normalValues[0]));
 		
 		var range = this.data.normalValues[this.data.normalValues.length-1] - this.data.normalValues[0];
-		this.data.value = (this.data.value-this.data.normalValues[0])/range;	
+		this.data.value = (this.data.value)/range;	
+		
+		return this.data.value;
+};
+
+Teriable.Noise.prototype.Tiley2_Get = function(ix, iy){
+			if(typeof this.args.scale !== 'undefined' && this.args.scale != 0){
+				ix = ix/this.args.scale;
+				iy = iy/this.args.scale;
+				if(this.args.scaleFloor == true){
+					ix = Math.floor(ix);	
+					iy = Math.floor(iy);	
+				}
+			}
+	
+		var dist;
+		this.data.normalValues = [];
+		
+		for(var i = 0; i < this.data.keyPoints.length; i++){
+		dist = this[this.args.style](Math.tan(ix) - this.data.keyPoints[i].x, Math.tan(iy) - this.data.keyPoints[i].y);
+		this.data.normalValues.push(dist);
+		}
+		this.data.normalValues.sort(function(a, b){return a-b});
+
+		this.data.value = ((this.data.normalValues[this.args.n] - this.data.normalValues[0]));
+		
+		var range = this.data.normalValues[this.data.normalValues.length-1] - this.data.normalValues[0];
+		this.data.value = (this.data.value)/range;	
 		
 		return this.data.value;
 };
@@ -766,7 +848,7 @@ Teriable.Noise.prototype.Poorly2_Get = function(ix, iy){
 		this.data.value = ((this.data.normalValues[this.args.n] - this.data.normalValues[0]));
 		
 		var range = this.data.normalValues[this.data.normalValues.length-1] - this.data.normalValues[0];
-		this.data.value = (this.data.value-this.data.normalValues[0])/range;	
+		this.data.value = (this.data.value)/range;	
 		
 		return this.data.value;
 };
@@ -820,25 +902,34 @@ Teriable.Noise.prototype.Poorly2c_Get = function(ix, iy){
 		this.data.value = ((this.data.normalValues[this.args.n] - this.data.normalValues[0]));
 		
 		var range = this.data.normalValues[this.data.normalValues.length-1] - this.data.normalValues[0];
-		this.data.value = (this.data.value-this.data.normalValues[0])/range;	
+		this.data.value = (this.data.value)/range;	
 		
 		return this.data.value;
 };
 
-
 Teriable.Noise.prototype.euclidean = function(dx, dy){
+	return Math.sqrt(Math.pow(dy - dx, 2));
+}
+
+Teriable.Noise.prototype.manhattan = function(dx, dy){
+	var max = Math.max(dx,dy);
+	var min = Math.min(dx,dy)
+	return (max - min) * (max - min);
+}
+
+Teriable.Noise.prototype.badclidean = function(dx, dy){
 	return Math.abs(Math.sqrt((dy - dx) * (dy - dx)));	
 }
 
-Teriable.Noise.prototype.manhattan = function(dx, dy) {
+Teriable.Noise.prototype.badhattan = function(dx, dy) {
     return Math.abs(dx) + Math.abs(dy);
 }
 
-Teriable.Noise.prototype.manhattan2 = function(dx, dy){
+Teriable.Noise.prototype.badhattan2 = function(dx, dy){
 	return Math.abs(dx) - Math.abs(dy);	
 }
 
-Teriable.Noise.prototype.euclidean2 = function(dx, dy){
+Teriable.Noise.prototype.badclidean2 = function(dx, dy){
 	return dx * dx - dy * dy;	
 }
 
@@ -898,6 +989,13 @@ Teriable.Noise.prototype.valentine5 = function(dx, dy){
 Teriable.Noise.prototype.rachel = function(dx, dy){
  return Teriable.Noise.lerp(dx, dy, 1/(dx+dy));
 }
+Teriable.Noise.prototype.pythagorean  = function(dx, dy){
+ return Math.sqrt(((dx*dx)+(dy*dy)));
+}
+
+Teriable.Noise.prototype.pi  = function(dx, dy){
+ return 1/(360/(((dx*dx)+(dy*dy))/Math.PI));
+}
 
 
 Teriable.Mix = function (a, b, p){	
@@ -919,6 +1017,88 @@ Teriable.Divide = function(a,b){
 		return min/max;
 	
 }
+
+
+Teriable.Noise.prototype.Test = function(){
+	if(typeof this.args.nPoints !== 'undefined'){this.args.nPoints = Math.floor(this.args.nPoints)}
+	if(typeof this.args.nPoints == 'undefined' || this.args.nPoints == 0){ this.args.nPoints = 10;}
+	if(typeof this.args.n !== 'undefined'){this.args.n = Math.floor(this.args.n)};
+	if(typeof this.args.n == 'undefined' || this.args.n == 0){ this.args.n = 2;}
+	if(typeof this.args.width !== 'undefined'){this.args.width = Math.floor(this.args.width)};
+	if(typeof this.args.width == 'undefined' || this.args.width == 0){ this.args.width = 100;}
+	if(typeof this.args.height !== 'undefined'){this.args.height = Math.floor(this.args.height)};
+	if(typeof this.args.height == 'undefined' || this.args.height == 0){ this.args.height = 100;}
+	if(typeof this.args.style == 'undefined'){ this.args.style = 'euclidean';}
+	
+	this.data = {keyPoints : []};
+	this._getKeyPoints();
+	this._ApplyKeyPointsToMap();	
+}
+
+
+Teriable.Noise.prototype.Test_Get = function(ix, iy){
+			if(typeof this.args.scale !== 'undefined' && this.args.scale != 0){
+				ix = ix/this.args.scale;
+				iy = iy/this.args.scale;
+				if(this.args.scaleFloor == true){
+					ix = Math.floor(ix);	
+					iy = Math.floor(iy);	
+				}
+			}
+	
+		var dn10, dn00, dn01, dm10, dm00, dm01, ds10, ds00, ds01;
+		this.data.normalValues = [];
+		var offsets = {};
+		offsets.n10 = {x:(Math.floor(ix/this.args.width)*this.args.width)-this.args.width,
+					   y:(Math.floor(iy/this.args.height)*this.args.height)+this.args.height};
+		offsets.n00 = {x:(Math.floor(ix/this.args.width)*this.args.width),
+					   y:(Math.floor(iy/this.args.height)*this.args.height)+this.args.height};
+		offsets.n01 = {x:(Math.floor(ix/this.args.width)*this.args.width)+this.args.width,
+					   y:(Math.floor(iy/this.args.height)*this.args.height)+this.args.height};
+		offsets.m10 = {x:(Math.floor(ix/this.args.width)*this.args.width)-this.args.width,
+					   y:(Math.floor(iy/this.args.height)*this.args.height)};
+		offsets.m00 = {x:(Math.floor(ix/this.args.width)*this.args.width),
+					   y:(Math.floor(iy/this.args.height)*this.args.height)};
+		offsets.m01 = {x:(Math.floor(ix/this.args.width)*this.args.width)+this.args.width,
+					   y:(Math.floor(iy/this.args.height)*this.args.height)};
+		offsets.s10 = {x:(Math.floor(ix/this.args.width)*this.args.width)-this.args.width,
+					   y:(Math.floor(iy/this.args.height)*this.args.height)-this.args.height};
+		offsets.s00 = {x:(Math.floor(ix/this.args.width)*this.args.width),
+					   y:(Math.floor(iy/this.args.height)*this.args.height)-this.args.height};
+		offsets.s01 = {x:(Math.floor(ix/this.args.width)*this.args.width)+this.args.width,
+					   y:(Math.floor(iy/this.args.height)*this.args.height)-this.args.height};
+		//console.log(offsets);
+		
+					   
+		for(var i = 0; i < this.data.keyPoints.length; i++){
+		
+		dn10 = this[this.args.style](ix - (this.data.keyPoints[i].x+offsets.n10.x), iy - (this.data.keyPoints[i].y+offsets.n10.y));
+		dn00 = this[this.args.style](ix - (this.data.keyPoints[i].x+offsets.n00.x), iy - (this.data.keyPoints[i].y+offsets.n00.y));
+		dn01 = this[this.args.style](ix - (this.data.keyPoints[i].x+offsets.n01.x), iy - (this.data.keyPoints[i].y+offsets.n01.y));
+		dm10 = this[this.args.style](ix - (this.data.keyPoints[i].x+offsets.m10.x), iy - (this.data.keyPoints[i].y+offsets.m10.y));
+		dm00 = this[this.args.style](ix - (this.data.keyPoints[i].x+offsets.m00.x), iy - (this.data.keyPoints[i].y+offsets.m00.y));
+		dm01 = this[this.args.style](ix - (this.data.keyPoints[i].x+offsets.m01.x), iy - (this.data.keyPoints[i].y+offsets.m01.y));
+		ds10 = this[this.args.style](ix - (this.data.keyPoints[i].x+offsets.s10.x), iy - (this.data.keyPoints[i].y+offsets.s10.y));
+		ds00 = this[this.args.style](ix - (this.data.keyPoints[i].x+offsets.s00.x), iy - (this.data.keyPoints[i].y+offsets.s00.y));
+		ds01 = this[this.args.style](ix - (this.data.keyPoints[i].x+offsets.s01.x), iy - (this.data.keyPoints[i].y+offsets.s01.y));
+	
+		this.data.normalValues.push(dn10, dn00, dn01, dm10, dm00, dm01, ds10, ds00, ds01);
+
+		}
+		this.data.normalValues.sort(function(a, b){return a-b});
+		
+		this.data.value = ((this.data.normalValues[this.args.n] - this.data.normalValues[0]));
+		
+		var range = this.data.normalValues[this.data.normalValues.length-1] - this.data.normalValues[0];
+		this.data.value = (this.data.value/range);
+		
+		//console.log(this.data.value);	
+		
+		return this.data.value;
+};
+
+
+
 
 
 

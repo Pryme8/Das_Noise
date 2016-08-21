@@ -92,7 +92,9 @@ Das_Edit.Do = {
 			'<option value="#Poorly2D">Poorly 2D</option>'+
 			'<option value="#Poorly2Db">Poorly 2Db</option>'+
 			'<option value="#Poorly2Dc">Poorly 2Dc</option>'+
-			'<option value="#Worley2D">Worley 2D</option>'+
+			'<option value="#Poorly2Dd">Poorly 2Dd</option>'+
+			'<option value="#Tiley2">Tiley2</option>'+
+			'<option value="#Test">Test</option>'+
 			
 			//'<option value="#Simple3D">Simple 3D</option>'+
 			//'<option value="#Perlin3D">Perlin 3D</option>'+
@@ -107,12 +109,16 @@ Das_Edit.Do = {
 			'<div class="input-small"><span>persistence:</span><input id="persistence" type="number" min="0.01"  step="0.01" value="1" /></div><BR />'+
 			'<div class="input-small"><span>nPoints*:</span><input id="nPoints" type="number" min="4"  step="1" value="12" /></div><BR />'+
 			'<div class="input-small"><span>n*:</span><input id="n" type="number" min="1"  step="1" value="4" /></div><BR />'+
+			'<div class="input-small"><span>width*:</span><input id="width" type="number" min="1"  step="1" value="100" /></div><BR />'+
+			'<div class="input-small"><span>height*:</span><input id="height" type="number" min="1"  step="1" value="100" /></div><BR />'+
 			'</div>'+
 			'<select id="m-style">'+
 			'<option value="euclidean">euclidean</option>'+
-			'<option value="euclidean2">euclidean2</option>'+
 			'<option value="manhattan">manhattan</option>'+
-			'<option value="manhattan2">manhattan2</option>'+
+			'<option value="badclidean">badclidean</option>'+
+			'<option value="badclidean2">badclidean2</option>'+
+			'<option value="badhattan">badhattan</option>'+
+			'<option value="badhattan2">badhattan2</option>'+
 			'<option value="chebyshevish">chebyshevish</option>'+
 			'<option value="chebyshevish2">chebyshevish2</option>'+
 			'<option value="chebyshevish3">chebyshevish3</option>'+
@@ -123,7 +129,8 @@ Das_Edit.Do = {
 			'<option value="valentine4">valentine4</option>'+
 			'<option value="valentine5">valentine5</option>'+
 			'<option value="rachel">rachel</option>'+
-			
+			'<option value="pythagorean">pythagorean</option>'+
+			'<option value="pi">pi</option>'+
 			'</select>'+
 			
 			'<hr />');
@@ -152,11 +159,12 @@ Das_Edit.Do = {
 			
 			newNoise.find('#noise-seed').change(function(e){
 				noise.seed = $(e.target).val();
-				noise.noise = new Teriable.Noise(noise.type,noise.seed,{scale:noise.settings.scale, scaleFloor: noise.settings.scaleFloor, frequency:noise.settings.frequency, amplitude:noise.settings.amplitude, octives:noise.settings.octives, persistence:noise.settings.persistence, style:noise.settings.style, nPoints:noise.settings.nPoints, n:noise.settings.n});
+				noise.noise = new Teriable.Noise(noise.type,noise.seed,{scale:noise.settings.scale, scaleFloor: noise.settings.scaleFloor, frequency:noise.settings.frequency, amplitude:noise.settings.amplitude, octives:noise.settings.octives, persistence:noise.settings.persistence, style:noise.settings.style, nPoints:noise.settings.nPoints, n:noise.settings.n, width:noise.settings.width, height:noise.settings.height});
 				parent.redraw = true;
 			});
 
 			newNoise.find('#noise-settings input').change(function(e){
+				console.log($(e.target));
 				noise.settings[$(e.target).attr('id')] = $(e.target).val();
 				noise.noise.args[$(e.target).attr('id')] = $(e.target).val();
 				parent.redraw = true;
@@ -225,10 +233,22 @@ Das_Edit.Do = {
 			obj.noise = new Teriable.Noise(obj.type,obj.seed,{scale:obj.settings.scale, scaleFloor: obj.settings.scaleFloor, frequency:obj.settings.frequency, amplitude:obj.settings.amplitude, octives:obj.settings.octives, persistence:obj.settings.persistence, style:obj.settings.style, nPoints:obj.settings.nPoints, n:obj.settings.n});
 			break;
 			
-			case '#Worley2D':
-			console.log("make Worley2D");
-			obj.type = "Worley2"
-			obj.noise = new Teriable.Noise(obj.type,obj.seed,{scale:obj.settings.scale, scaleFloor: obj.settings.scaleFloor, frequency:obj.settings.frequency, amplitude:obj.settings.amplitude, octives:obj.settings.octives, persistence:obj.settings.persistence, style:obj.settings.style, nPoints:obj.settings.nPoints, n:obj.settings.n});
+			case '#Poorly2Dd':
+			console.log("make Poorly2d");
+			obj.type = "Poorly2d"
+			obj.noise = new Teriable.Noise(obj.type,obj.seed,{scale:obj.settings.scale, scaleFloor: obj.settings.scaleFloor, frequency:obj.settings.frequency, amplitude:obj.settings.amplitude, octives:obj.settings.octives, persistence:obj.settings.persistence, style:obj.settings.style, nPoints:obj.settings.nPoints, n:obj.settings.n, width:obj.settings.width, height:obj.settings.height });
+			break;
+			
+			case '#Tiley2':
+			console.log("make Tiley");
+			obj.type = "Tiley2"
+			obj.noise = new Teriable.Noise(obj.type,obj.seed,{scale:obj.settings.scale, scaleFloor: obj.settings.scaleFloor, frequency:obj.settings.frequency, amplitude:obj.settings.amplitude, octives:obj.settings.octives, persistence:obj.settings.persistence, style:obj.settings.style, nPoints:obj.settings.nPoints, n:obj.settings.n, width:obj.settings.width, height:obj.settings.height });
+			break;
+			
+			case '#Test':
+			console.log("make Test");
+			obj.type = "Test"
+			obj.noise = new Teriable.Noise(obj.type,obj.seed,{scale:obj.settings.scale, scaleFloor: obj.settings.scaleFloor, frequency:obj.settings.frequency, amplitude:obj.settings.amplitude, octives:obj.settings.octives, persistence:obj.settings.persistence, style:obj.settings.style, nPoints:obj.settings.nPoints, n:obj.settings.n, width:obj.settings.width, height:obj.settings.height });
 			break;
 		}
 		
