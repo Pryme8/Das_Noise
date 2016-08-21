@@ -915,10 +915,11 @@ Teriable.Noise.prototype.manhattan = function(dx, dy){
 	var max = Math.max(dx,dy);
 	var min = Math.min(dx,dy)
 	return (max - min) * (max - min);
+	
 }
 
 Teriable.Noise.prototype.badclidean = function(dx, dy){
-	return Math.abs(Math.sqrt((dy - dx) * (dy - dx)));	
+	return Math.abs(Math.sqrt((dy - dx)) * Math.sqrt((dy - dx)));	
 }
 
 Teriable.Noise.prototype.badhattan = function(dx, dy) {
@@ -1023,7 +1024,7 @@ Teriable.Noise.prototype.Test = function(){
 	if(typeof this.args.nPoints !== 'undefined'){this.args.nPoints = Math.floor(this.args.nPoints)}
 	if(typeof this.args.nPoints == 'undefined' || this.args.nPoints == 0){ this.args.nPoints = 10;}
 	if(typeof this.args.n !== 'undefined'){this.args.n = Math.floor(this.args.n)};
-	if(typeof this.args.n == 'undefined' || this.args.n == 0){ this.args.n = 2;}
+	if(typeof this.args.n == 'undefined' || this.args.n == 0){ this.args.n = 6;}
 	if(typeof this.args.width !== 'undefined'){this.args.width = Math.floor(this.args.width)};
 	if(typeof this.args.width == 'undefined' || this.args.width == 0){ this.args.width = 100;}
 	if(typeof this.args.height !== 'undefined'){this.args.height = Math.floor(this.args.height)};
