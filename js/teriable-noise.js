@@ -29,6 +29,8 @@ Teriable.Noise = function(type,seed,args){
 	this.Tiley2();
 	}else if(this._type == "Test"){
 	this.Test();
+	}else if(this._type == "Cellular2"){
+	this.Cellular2();
 	}
 }
 
@@ -190,6 +192,18 @@ Teriable.Noise.prototype.getValue = function(args){
 	if(typeof args.x == 'undefined' || typeof args.y == 'undefined'){return "Error Please input {x:?,y:?}"}
 	for(var i=0;i < oct;i++) {
         			value += this.Test_Get(args.x * freq, args.y * freq) * amp;
+        			 maxValue += amp;
+        
+        			amp *= pers;
+       		 		freq *= 2;
+    			}
+				
+	break;
+	
+	case "Cellular2": 
+	if(typeof args.x == 'undefined' || typeof args.y == 'undefined'){return "Error Please input {x:?,y:?}"}
+	for(var i=0;i < oct;i++) {
+        			value += this._Cellular2_Get(args.x * freq, args.y * freq) * amp;
         			 maxValue += amp;
         
         			amp *= pers;
@@ -1098,6 +1112,99 @@ Teriable.Noise.prototype.Test_Get = function(ix, iy){
 		return this.data.value;
 };
 
+
+Teriable.Noise.prototype.Cellular2 = function() {
+	if(typeof this.args.nPoints !== 'undefined'){this.args.nPoints = Math.floor(this.args.nPoints)}
+	if(typeof this.args.nPoints == 'undefined' || this.args.nPoints == 0){ this.args.nPoints = 6;}
+	if(typeof this.args.n !== 'undefined'){this.args.n = Math.floor(this.args.n)};
+	if(typeof this.args.n == 'undefined' || this.args.n == 0){ this.args.n = 2;}
+	if(typeof this.args.width !== 'undefined'){this.args.width = Math.floor(this.args.width)};
+	if(typeof this.args.width == 'undefined' || this.args.width == 0){ this.args.width = 100;}
+	if(typeof this.args.height !== 'undefined'){this.args.height = Math.floor(this.args.height)};
+	if(typeof this.args.height == 'undefined' || this.args.height == 0){ this.args.height = 100;}
+	if(typeof this.args.style == 'undefined'){ this.args.style = 'euclidean';}
+	this._Cellular2_init();
+
+}
+
+Teriable.Noise.prototype._Cellular2_init = function () {
+	var i;
+	this.data ={};
+    this._points = [];
+
+    for (i = 0; i < this.args.nPoints; ++i) {
+        var x = Math.sin(i + 1) * this._seed._clean,
+            y = Math.cos(i + 1) * this._seed._clean;
+        this._points.push({
+            x: x - Math.floor(x),
+            y: y - Math.floor(y)
+        });
+}
+console.log(this._points);
+
+};
+
+Teriable.Noise.prototype._Cellular2_Get = function (x, y) {
+		if(typeof this.args.scale !== 'undefined' && this.args.scale != 0){
+				x = x/this.args.scale;
+				y = y/this.args.scale;
+				if(this.args.scaleFloor == true){
+					x = Math.floor(x);	
+					y = Math.floor(y);	
+				}
+			}
+	
+
+	
+	var temp = [];
+	var offsets = {};
+		//offsets.n10 = {x:(Math.floor(x/this.args.width)*this.args.width)-this.args.width,
+					  // y:(Math.floor(y/this.args.height)*this.args.height)+this.args.height};
+		//offsets.n00 = {x:(Math.floor(x/this.args.width)*this.args.width),
+					 //  y:(Math.floor(y/this.args.height)*this.args.height)+this.args.height};
+		//offsets.n01 = {x:(Math.floor(x/this.args.width)*this.args.width)+this.args.width,
+					 //  y:(Math.floor(y/this.args.height)*this.args.height)+this.args.height};
+		//offsets.m10 = {x:(Math.floor(x/this.args.width)*this.args.width)-this.args.width,
+					 //  y:(Math.floor(y/this.args.height)*this.args.height)};
+		offsets.m00 = {x:(Math.floor(x/this.args.width)*this.args.width),
+					   y:(Math.floor(y/this.args.height)*this.args.height)};
+		//offsets.m01 = {x:(Math.floor(x/this.args.width)*this.args.width)+this.args.width,
+					 //  y:(Math.floor(y/this.args.height)*this.args.height)};
+		//offsets.s10 = {x:(Math.floor(x/this.args.width)*this.args.width)-this.args.width,
+					//   y:(Math.floor(y/this.args.height)*this.args.height)-this.args.height};
+		//offsets.s00 = {x:(Math.floor(x/this.args.width)*this.args.width),
+					//   y:(Math.floor(y/this.args.height)*this.args.height)-this.args.height};
+		//offsets.s01 = {x:(Math.floor(x/this.args.width)*this.args.width)+this.args.width,
+					//   y:(Math.floor(y/this.args.height)*this.args.height)-this.args.height};
+	
+    for (var i = 0; i < this.args.nPoints; ++i) {
+		//dn10 = this[this.args.style](x - (this._points[i].x+offsets.n10.x), y - (this._points[i].y+offsets.n10.y));
+		//dn00 = this[this.args.style](x - (this._points[i].x+offsets.n00.x), y - (this._points[i].y+offsets.n00.y));
+		//dn01 = this[this.args.style](x - (this._points[i].x+offsets.n01.x), y - (this._points[i].y+offsets.n01.y));
+		//dm10 = this[this.args.style](x - (this._points[i].x+offsets.m10.x), y - (this._points[i].y+offsets.m10.y));
+		dm00 = this[this.args.style](x - (this._points[i].x-offsets.m00.x), y - (this._points[i].y-offsets.m00.y));
+		//dm01 = this[this.args.style](x - (this._points[i].x+offsets.m01.x), y - (this._points[i].y+offsets.m01.y));
+		//ds10 = this[this.args.style](x - (this._points[i].x+offsets.s10.x), y - (this._points[i].y+offsets.s10.y));
+		//ds00 = this[this.args.style](x - (this._points[i].x+offsets.s00.x), y - (this._points[i].y+offsets.s00.y));
+		//ds01 = this[this.args.style](x - (this._points[i].x+offsets.s01.x), y - (this._points[i].y+offsets.s01.y));
+	
+		temp.push(dm00);
+	}
+	
+		temp.sort(function(a, b){return a-b});
+		
+		//console.log(temp);
+		this.data.value = ((temp[this.args.n] - temp[0]));
+		
+		var range = temp[temp.length-1] - temp[0];
+		this.data.value = (this.data.value/range);
+		
+		//console.log(this.data.value);	
+		
+		return this.data.value; 
+	
+   
+};
 
 
 

@@ -95,6 +95,7 @@ Das_Edit.Do = {
 			'<option value="#Poorly2Dd">Poorly 2Dd</option>'+
 			'<option value="#Tiley2">Tiley2</option>'+
 			'<option value="#Test">Test</option>'+
+			'<option value="#Cellular2">Cellular2</option>'+
 			
 			//'<option value="#Simple3D">Simple 3D</option>'+
 			//'<option value="#Perlin3D">Perlin 3D</option>'+
@@ -132,7 +133,15 @@ Das_Edit.Do = {
 			'<option value="pythagorean">pythagorean</option>'+
 			'<option value="pi">pi</option>'+
 			'</select>'+
+			'<div id="ouptput-settings" class="menu-sub-pane">'+
+			'<div class="input-small"><span>Value:</span><input name="out-put" type="radio" id="value-out" checked/></div><BR />'+
+			'<div class="input-small"><span>Color:</span><input name="out-put" type="radio" id="color-out" /></div><BR />'+
+			'<div class="input-small"><span>r:</span><input id="red" type="number" min="0" max="1" step="0.01" value="1" /></div><BR />'+
+			'<div class="input-small"><span>b:</span><input id="blue" type="number" min="0" max="1" step="0.01" value="1" /></div><BR />'+
+			'<div class="input-small"><span>g:</span><input id="green" type="number" min="0" max="1" step="0.01" value="1" /></div><BR />'+
+			'<div class="input-small"><span>a:</span><input id="alpha" type="number" min="0" max="1" step="0.01" value="1" /></div><BR />'+
 			
+			'</div>'+
 			'<hr />');
 			
 			
@@ -248,6 +257,12 @@ Das_Edit.Do = {
 			case '#Test':
 			console.log("make Test");
 			obj.type = "Test"
+			obj.noise = new Teriable.Noise(obj.type,obj.seed,{scale:obj.settings.scale, scaleFloor: obj.settings.scaleFloor, frequency:obj.settings.frequency, amplitude:obj.settings.amplitude, octives:obj.settings.octives, persistence:obj.settings.persistence, style:obj.settings.style, nPoints:obj.settings.nPoints, n:obj.settings.n, width:obj.settings.width, height:obj.settings.height });
+			break;
+			
+			case '#Cellular2':
+			console.log("make Cellular");
+			obj.type = "Cellular2"
 			obj.noise = new Teriable.Noise(obj.type,obj.seed,{scale:obj.settings.scale, scaleFloor: obj.settings.scaleFloor, frequency:obj.settings.frequency, amplitude:obj.settings.amplitude, octives:obj.settings.octives, persistence:obj.settings.persistence, style:obj.settings.style, nPoints:obj.settings.nPoints, n:obj.settings.n, width:obj.settings.width, height:obj.settings.height });
 			break;
 		}
