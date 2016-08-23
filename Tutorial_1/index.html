@@ -1,0 +1,884 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Let's make some Noise!</title>
+
+
+<link href="./css/main.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="./js/jquery.js"></script>
+<script type="text/javascript" src="./js/main.js"></script>
+
+</head>
+<body>
+<div class='wrap-fix'>
+   <div class='page-wrap'>
+         <h1>Lets Make Some Noise!</h1>
+         <h2>Getting Started...</h2>
+       
+     <div class='section'>    
+     <p>So lately, I have been very interested in producing more efficient methods for procedural content.  As of recently problems with the way I was generating Worley or Cellular Noise is most certainly lacking.  I was hoping to use this page to document the process and research behind working with these types of functions.  I'm hopping that through this I can both learn and teach some things about seeded pxl manipulation.  The final product hopefully being an efficient Worley Generator with Seed functions and possibly Delta Animations.  **DISCLAIMER, totally not doing this the way you are supposed to I suspect... so do not take this as the authority or even a true example of Worley Noise.</p>
+         <h2>Research</h2>
+     <p>
+     To get started a little bit of <a href='http://www.rhythmiccanvas.com/research/papers/worley.pdf' target="_blank">reading</a> is required to get familiar with the process behind creating Worley Noise.  A lot of the math terms are over my head but what I am able to decode are these key points:<BR />
+     <ol>
+     <li>Must Establish a underlying grid/lattice</li>
+     <li>The coordinates must be restricted to each zone</li>
+     <li>Need a predictable random seed function</li>
+     <li>Must Identify each zone in real time and manipulate the lattice if the zones change</li>
+     <li>Measurements should "bleed" into the adjacent zones</li>
+     <li>Methods for distance Calculations</li>
+     </ol>
+     </p>
+     <p>A few things that I require for this generator to be applicable, for my future projects (TERIABLE);  I will need to construct this function as an object that first initializes itself and stores all the creation parameters, and then has a function to GET the value of a certain pxl according to its location.  We will be strictly dealing in 2D as my requirements for a 3D generator and not needed at this time, due to the main purpose of this is to help with terrain generation.
+       </div>
+     
+     <hr />
+     <h2>Part 1</h2>
+     <h3>The Page</h3>
+       <div class='section'>
+
+     <p>First we need a way to output what is happening, simplest way to do that is set up a canvas.  You could just look at the output values which at some points is necessary, but a lot of this is visual so having a canvas element is kinda required.</p>
+       
+<pre title="index.html">
+<xmp><!DOCTYPE html PUBLIC>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Let's Make Some Noise!</title>
+<link href="./css/main.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="./js/jquery.js"></script>
+<script type="text/javascript" src="./js/main.js"></script>
+
+</head>
+<body>
+<center><canvas id='myCanvas' width='500px' height='500px'></canvas></center>
+</body>
+</html>
+</xmp>
+</pre>
+     </p>
+     <p>If you do not have jQuery go ahead and download the version I have <a href='./js/jquery.js' target="new">here</a>.  And then go ahead and make yourself a css folder and file.  You can skip these steps or have them inline/served from a CDN if you want but this structure is simple to keep organized.</p>
+       <h2>The Code - Step 1</h2>
+     <p>Right away in order to conform with the rules we set up let's get our JS object Constructor ready. Then establish some prototypes for the noise seeding and then make sure we have all valid arguments set up for our Constructor.  There are definitely way better ways to do this, but I am self taught and so the way I construct an object might be a little different but it works for my means.</p>
+<pre title="main.js">
+<xmp>Worley = function(args){
+console.log('Worley Created');
+};
+</xmp>
+</pre>
+    <p>With this line of code we have set up our object, in order to call it we now would simply put "new Worley({});", and this would create a new instance of our noise.  Its at this point of the script we would set our arguments that never change, like the number of points to be generated per zone, the target point, and any arrays that will be used in the process.</p>
+    <p>Lets now test this and see if we get output to our console by placing the next line of script under our canvas object on the main page.</p>
+<pre title="index.html">
+<xmp><script>$(function() { var newNoise = new Worley({}); });</script>
+</xmp>
+</pre>
+    <p>If when you refresh your page you get output to your console and no errors you are on the right track!</p>
+    <h2>The Code - Step 2</h2>
+    <p>Now that we have our initial object being able to be created, it's time to make the first prototype of the noise function a Seeding function.  This needs to be something predictable that can be fed any kind of string.  We make this possible by first parsing whatever string we are given into a numerical amount then we feed that to a Math.sin function and normalize it to a value between 0 and 1.  This will be important in being able to generate constant pseudo random numbers in order to manipulate our lattice points.</p>
+<pre title="main.js">
+<xmp>Worley.prototype._Seed = function(s){
+    var t=0; //Total of the seeds character values.
+    s+=""; //Converts whatever the seed is into a string.
+    for(var i = 0; i < s.length; i++){
+    t+= s.charCodeAt(i); //Add to the total depending on the character code value.
+    }    
+    s = Math.sin(t) * 10000; //gets a Random Number that is predictable.
+    return parseFloat(s - Math.floor(s)); //Returns the fractional part of this number to normalize it between 0-1.
+};
+</xmp>
+</pre>
+<p>With this line of code we are able to parse nearly any seed we get, I'm sure it has it's limits but truthfully I've never tried to break it or push it to its limits and for all general purposes works.</p>
+<p>In order to test this we will change our main Worley function to see if the args has the value of seed set, and if it does then use that value to generate a base seed for this Noise object.</p>
+<pre title="main.js">
+<xmp>Worley = function(args){    
+console.log('Worley Created');
+if(typeof args.seed == 'undefined' || args.seed == 0){args.seed = 1;}
+this._seed = this._Seed(args.seed);
+console.log(this._seed);
+};
+</xmp>
+</pre>
+<p>If you have been following along the output should be 0.3251950204885361, for the seed unless by some odd reason your computer does sin differently?  Anyways as long as you have an output for your seed in our range of 0 to 1 then you're good to go!</p>
+</div>
+    <hr />
+<h2>The Meat and Beans</h2>  
+<h3>The Code - Step 3</h3>
+  <div class='section'>
+
+    <p>With our random function in place, it's time to make sure that any variable we are going to need later on are passed to the constructor or manually set to default values.  Once we do that, we can generate our base "Map" which will be used for all later grid references.  This information will be stored inside the JS Object and will allow multiple instances to be created that do not interfere with each other.</p>
+    <p>Starting with our defaults, we create an _init prototype function to keep things organized.</p>
+<pre title="main.js">
+<xmp>Worley.prototype._init = function(args){
+    if(typeof args.seed == 'undefined' || args.seed == 0){args.seed = 1;}    
+    if(typeof args.width !== 'undefined' && typeof args.width == 'number'){args.width = Math.floor(args.width)};
+    if(typeof args.width == 'undefined' || args.width < 1 || typeof args.width != 'number'){ args.width = 100;}
+    if(typeof args.height !== 'undefined' && typeof args.height == 'number'){args.height = Math.floor(args.height)};
+    if(typeof args.height == 'undefined' || args.height < 1 || typeof args.height != 'number'){ args.height = 100;}    
+    if(typeof args.nPoints !== 'undefined' && typeof args.nPoints == 'number'){args.nPoints = Math.floor(args.nPoints)}
+    if(typeof args.nPoints == 'undefined' || args.nPoints < 2 || typeof args.nPoints != 'number' ){ args.nPoints = 6;}
+    if(typeof args.n !== 'undefined' && typeof args.n == 'number'){args.n = Math.floor(args.n)};
+    if(typeof args.n == 'undefined' || args.n < 1 || typeof args.n != 'number'){ args.n = 2;}
+    if(args.style != 'euclidean'){ args.style = 'euclidean';}
+    
+    this._seed = this._Seed(args.seed);
+    this._args = {
+        width: args.width,
+        height: args.height,
+        nPoints : args.nPoints,
+        n : args.n,
+        style : args.style,
+    };
+    console.log("_init Complete");
+}
+</xmp>
+</pre>     
+ <p>Then we change our main object to look like this:</p>
+ <pre title="main.js">
+<xmp>Worley = function(args){    
+    this._init(args);
+};
+</xmp>
+</pre>
+<p>I'm sure by now some of you are yelling, THAT'S NOT HOW YOU DEFINE A CONSTFUCTORASDKFLK... and some of you have never done a prototype before so let's break down really quick what's going on.</p> 
+<p>First, we define our function under the same namespace as the Worley function, making it a prototype lets it access whatever variables we declared under this, and can also change them. Basically it become an extension of the original function.  Like I said with no traditional training this is how I have learned to construct an Object and restrict the expected input.</p>
+<p>With things that need to be and expected type like a number, we first check to see if it is not undefined and if it is a number, for if the user has input a valid number and then floor it to keep it as a whole number.  After we check if the number is defined, if its not less than 1 and and that it is a number, if it does not meet any of these 3 conditions we set it our default.  This process is repeated and tailored for all needed default variables.</p>      
+<h2>The Grid - Step 4</h2>
+<p>Now that we have all of our defaults we can take a look at defining a function to describe our initial grid. My idea to keep things organic will be to rearrange the grid depending on its location with the seed function or a simplified version of it.  The way we will go about this is first make a new function that first makes the "map" and then a second one to "normalize" it for its area.  So the first step is to identify the zone that the point are in.  This is done simply by a floor calculation.  We can demonstrate this simply visually by the following example:</p>
+<p><div class='c-wrap'><canvas width='500px' height="500px" id='cvas1'></canvas><div id='cvas1_time'></div></div></p>
+<script>setTimeout(function(){    
+var cvas = document.getElementById('cvas1');
+var ctx = cvas.getContext('2d');
+var tick = (new Date).getTime();
+for (var y = 0; y <  cvas.height; y++) {
+   for (var x = 0; x <  cvas.width; x++) {
+           //This resets the value between 0 and 100... 100 would be our width and height of our size of our Worley noise grid.
+        //We would split up this calculation to determine what grid the points lie in and their value through the grid.
+        //This is also the same method of identifying the latices or grid points besides the point we are checking.
+        var nx = x - (Math.floor(x/100)*100),
+            ny = y - (Math.floor(y/100)*100);
+                
+        var vx = nx/255,
+            vy = ny/255;
+            
+        var r = Math.floor(255 * vx),
+            g = Math.floor(255 * vy),
+            b = Math.floor(255),
+            a = Math.floor(1);
+        
+            ctx.fillStyle = "rgba("+r+","+g+","+b+","+a+")";
+            ctx.fillRect(x,y,1,1);
+    }
+}
+tick = (new Date).getTime() - tick;
+$('#cvas1_time').text("Generated in: "+tick+"ms.");
+},0); </script>
+
+ <p>This was done by changing our index.html to just test the output with this code: **note my canvas has a different name do not worry about that just use the id you set up for yours.</p>
+ <pre title="index.html">
+<xmp><script>setTimeout(function(){    
+var cvas = document.getElementById('cvas1');
+var ctx = cvas.getContext('2d');
+for (var y = 0; y <  cvas.height; y++) {
+   for (var x = 0; x <  cvas.width; x++) {
+           //This resets the value between 0 and 100... 100 would be our width and height of our size of our Worley noise grid.
+        //We would split up this calculation to determine what grid the points lie in and their value through the grid.
+        //This is also the same method of identifying the latices or grid points besides the point we are checking.
+        var nx = x - (Math.floor(x/100)*100),
+            ny = y - (Math.floor(y/100)*100);
+                
+        var vx = nx/255,
+            vy = ny/255;
+            
+        var r = Math.floor(255 * vx),
+            g = Math.floor(255 * vy),
+            b = Math.floor(255),
+            a = Math.floor(1);
+        
+            ctx.fillStyle = "rgba("+r+","+g+","+b+","+a+")";
+            ctx.fillRect(x,y,1,1);
+    }
+}
+},0); </script>
+</xmp>
+</pre>
+
+<h2>The Output Tests - Step 5</h2>
+<p>It's at this point we should do some performance checks to see how we are going to actually output to the canvas.  I can think of three ways, one being what we just did which is prolly the least efficient.  Two would be the same method but make it a recursive loop, the benefit of that would be it would not freeze the browser during calculations and you would see each pxl being processed and output, which depending on the effect you are going for might be cool.  The last being a loop over the data array and adjusting the context, I'm thinking this will be the fastest way, but let's test it to make sure.</p>
+<div class='col2'>
+<div class="c-wrap">
+<div>By Pxl</div>
+<canvas width='300px' height="300px" id='cvas2'></canvas>
+<div id='cvas2_time'></div>
+<div><a href='#' onclick="test1();">Generate!</a></div>
+</div>
+<div class="c-wrap">
+<div>By Datacontext</div>
+<canvas width='300px' height="300px" id='cvas3'></canvas>
+<div id='cvas3_time'></div>
+<div><a href='#' onclick="test2();">Generate!</a></div>
+</div>
+</div>
+<script>
+function test1(){
+setTimeout(function(){    
+var cvas = document.getElementById('cvas2');
+var ctx = cvas.getContext('2d');
+var tick = (new Date).getTime();
+for (var y = 0; y <  cvas.height; y++) {
+   for (var x = 0; x <  cvas.width; x++) {
+           //This resets the value between 0 and 100... 100 would be our width and height of our size of our worley noise grid.
+        //We would split up this calculation to determine what grid the points lie in and their value through the grid.
+        //This is also the same method of identifying the latices or grid points besides the point we are checking.
+        var nx = x - (Math.floor(x/100)*100),
+            ny = y - (Math.floor(y/100)*100);
+                
+        var vx = nx/255,
+            vy = ny/255;
+            
+        var r = Math.floor(255 * vx),
+            g = Math.floor(255 * vy),
+            b = Math.floor(255),
+            a = Math.floor(1);
+        
+            ctx.fillStyle = "rgba("+r+","+g+","+b+","+a+")";
+            ctx.fillRect(x,y,1,1);
+    }
+}
+tick = (new Date).getTime() - tick;
+$('#cvas2_time').text("Generated in: "+tick+"ms.");
+},0);    
+}
+
+function test2(){
+setTimeout(function(){    
+var cvas = document.getElementById('cvas3');
+var ctx = cvas.getContext('2d');
+ctx.fillRect(0,0,cvas.width,cvas.height);
+var imageData = new ImageData(cvas.width, cvas.height);
+var data = imageData.data;
+var tick = (new Date).getTime();
+var x=0,y=0;
+var r,g,b,a;
+for (var i = 0; i < data.length; i += 4) {
+    var nx = x - (Math.floor(x/100)*100),
+            ny = y - (Math.floor(y/100)*100);
+                
+    var vx = nx/255,
+        vy = ny/255;
+    r = Math.floor(255 * vx),
+    g = Math.floor(255 * vy),
+    b = Math.floor(255),
+    a = Math.floor(255);    
+    
+      data[i]     = r; // red
+      data[i + 1] = g; // green
+      data[i + 2] = b; // blue
+      data[i + 3] = a;//alpha
+     
+     // console.log(data[i]+":"+data[i+1]);
+     
+      x++;
+      if(x>cvas.width){
+          y++;
+        x=1;
+        continue;
+      }
+    }
+ctx.putImageData(imageData, 0, 0, 0, 0, cvas.width, cvas.height);
+tick = (new Date).getTime() - tick;
+$('#cvas3_time').text("Generated in: "+tick+"ms.");
+},0);    
+}
+</script>
+<p>This test pretty much proves that doing a putImageData is way faster then by pxl manipulation... which I find interesting because the putImageData function itself is doing what we did in the first example, so huh you got me.  Anyways with that established we now know how we will output out data to the canvas.</p>
+<p>There are a few differences is the way that we have to output our data then due to the fact we want the most diverse ability to use the output as possible.  To make sure we compile to the most instances we will always output a value between 1 and 0, or an array of 4 with the order [r,b,g,a] also restricted to 0-1.  After we have the output being processed we can even add an argument to scale the output ranges so an output scale of a number like 255, or an array like [255,100,50,1] which will shift the output to whatever range the user needs.</p>
+
+</div>
+<hr />
+<h2>Back to the Code</h2>
+  <h3>Making the Map - Step 6</h3>
+  <div class='section'>
+  <p>So now we have a choice to make when deciding how we are going to implement the map.  One option would be to make a new function that is called by the worley noise function and sets the base map or the one that will be used at the zone 0,0.  The other and more simple way to approach this would be to just extend the _init function a little bit more to assign a this.map array and set all the initial values.</p>
+  <p>One key factor of the map is we will not be storing direct pxl positions but rather a percentage of where it lies in that zone, this way when we move to a new zone we can add the zones id's value like we did with a seed to the value of the first map to get our additional zones when needed.</p>
+<pre title="main.js">
+<xmp>Worley.prototype._init = function(args){
+    if(typeof args.seed == 'undefined' || args.seed == 0){args.seed = 1;}    
+    if(typeof args.width !== 'undefined' && typeof args.width == 'number'){args.width = Math.floor(args.width)};
+    if(typeof args.width == 'undefined' || args.width < 1 || typeof args.width != 'number'){ args.width = 100;}
+    if(typeof args.height !== 'undefined' && typeof args.height == 'number'){args.height = Math.floor(args.height)};
+    if(typeof args.height == 'undefined' || args.height < 1 || typeof args.height != 'number'){ args.height = 100;}    
+    if(typeof args.nPoints !== 'undefined' && typeof args.nPoints == 'number'){args.nPoints = Math.floor(args.nPoints)}
+    if(typeof args.nPoints == 'undefined' || args.nPoints < 2 || typeof args.nPoints != 'number' ){ args.nPoints = 6;}
+    if(typeof args.n !== 'undefined' && typeof args.n == 'number'){args.n = Math.floor(args.n)};
+    if(typeof args.n == 'undefined' || args.n < 1 || typeof args.n != 'number'){ args.n = 2;}
+    if(args.style != 'euclidean'){ args.style = 'euclidean';}
+    
+    this._seed = this._Seed(args.seed);
+    this._args = {
+        width: args.width,
+        height: args.height,
+        nPoints : args.nPoints,
+        n : args.n,
+        style : args.style,
+    };
+    
+    this.map = new Array(this._args.nPoints);
+    for(var i=0; i<this.map.length; i++){
+        this.map[i] = [this._Seed(this._seed+((1+i)*0.96)),this._Seed(this._seed+((1+i)*0.95))];
+    }
+    console.log(JSON.stringify(this.map));
+}
+</xmp>
+</pre>
+<p>Whenever we are generating new randoms, we want to use our seed and then some sort of simple calculation on the index of the loop, so that way we can get a controlled set of predictable randoms based on the original seed. this.map should now resemble this:</p>
+<p>[[0.9962758419260354,0.6522966301217821],[0.9677870481618811,0.9327826843218645],[0.8123552493552779,0.49303719686668046],[0.49303719686668046,0.38782531393098907],[0.9677870481618811,0.6209953138259152],[0.8123552493552779,0.22191120923525887]]</p>
+<p>If you noticed, our seed function can also handle arrays, isn't that nifty? Anyways now that we have our basic map it's time to start locating the points inside the zones.  This will be accomplished with a new prototype that returns an array of all the nPoints in that current and adjacent zones.</p>
+<pre title="main.js">
+<xmp>Worley.prototype._NormalMap = function(zone){//zone is an array [x,y];
+    var nMap = [];
+    var zN10 = [zone[0]-1,zone[1]-1]; //NorthWest
+    var zN00 = [zone[0],zone[1]-1]; //North
+    var zN01 = [zone[0]+1,zone[1]-1]; //NorthEast
+    var zM10 = [zone[0]-1,zone[1]];
+    var zM00 = [zone[0],zone[1]];
+    var zM01 = [zone[0]+1,zone[1]];
+    var zS10 = [zone[0]-1,zone[1]+1];
+    var zS00 = [zone[0],zone[1]+1];
+    var zS01 = [zone[0]+1,zone[1]+1];
+}
+</xmp>
+</pre>
+<p>This function once fed an array of [x,y] will identify the Nine zones that need to be registered.  From this point we need to get the actual pxl locations of all the points.  Just for trouble shooting and to make things simple from the start let's just focus on one zone and get the output correct.</p>
+<pre title="main.js">
+<xmp>Worley = function(args){    
+    this._init(args);
+    this._NormalMap([2,-2]);
+};
+
+Worley.prototype._NormalMap = function(zone){//zone is an array [x,y];
+    var nMap = [];
+    var zN10 = [zone[0]-1,zone[1]-1]; //NorthWest
+    var zN00 = [zone[0],zone[1]-1]; //North
+    var zN01 = [zone[0]+1,zone[1]-1]; //NorthEast
+    var zM10 = [zone[0]-1,zone[1]];
+    var zM00 = [zone[0],zone[1]];
+    var zM01 = [zone[0]+1,zone[1]];
+    var zS10 = [zone[0]-1,zone[1]+1];
+    var zS00 = [zone[0],zone[1]+1];
+    var zS01 = [zone[0]+1,zone[1]+1];
+    
+    zM00 = this._normalizeZone(zM00);
+    console.log(zM00);
+    
+}
+
+Worley.prototype._normalizeZone = function(zone){
+    var zWidth = this._args.width, zHeight = this._args.height;
+    var zX = zone[0], zY = zone[1];
+    var xOffset = zX*zWidth, yOffset = zY*zHeight;
+    var nMap = [];
+    for(var i=0; i< this.map.length; i++){ //you can do map length or nPoints it does not matter they are the same.
+        nMap[i] =
+        [
+            this._Seed(this.map[i][0]+zone[0])*zWidth,
+            this._Seed(this.map[i][1]+zone[1])*zHeight
+        ]
+        
+    //Add offsets and check if zone is negative.
+        if(zone[0]<0){
+        nMap[i][0]*=-1;
+        nMap[i][0]+=xOffset;
+        }else{
+        nMap[i][0]+=xOffset;
+        }
+        
+        if(zone[1]<0){
+        nMap[i][1]*=-1;
+        nMap[i][1]+=yOffset;
+        }else{
+        nMap[i][1]+=yOffset;
+        }
+    }
+    return nMap;
+}
+</xmp>
+</pre>
+<p>With these prototypes now made we should get an output in for the normal map where all the points are in the [200:300, -200:-300] range because we asked it for the normal map at [2,-2].</p>
+<p>Now let's take it a step farther and do it for all the zones needed, then pass the values back to a single array that is sorted and returned to the function that called it.  Hopefully if everything is correct, the values for whatever zone should always be the same even if the zone that we call the function on changes.</p>
+</div>
+<pre title="main.js">
+<xmp>Worley.prototype._NormalMap = function(zone){//zone is an array [x,y];
+    var nMap = [];
+    var zN10 = this._normalizeZone([zone[0]-1,zone[1]-1]); //NorthWest
+    var zN00 = this._normalizeZone([zone[0],zone[1]-1]); //North
+    var zN01 = this._normalizeZone([zone[0]+1,zone[1]-1]); //NorthEast
+    var zM10 = this._normalizeZone([zone[0]-1,zone[1]]);
+    var zM00 = this._normalizeZone([zone[0],zone[1]]);
+    var zM01 = this._normalizeZone([zone[0]+1,zone[1]]);
+    var zS10 = this._normalizeZone([zone[0]-1,zone[1]+1]);
+    var zS00 = this._normalizeZone([zone[0],zone[1]+1]);
+    var zS01 = this._normalizeZone([zone[0]+1,zone[1]+1]);
+    
+    nMap = zN10.concat(zN00,zN01,zM10,zM00,zM01,zS10,zS00,zS01);
+    console.log(nMap);
+}
+</xmp>
+</pre>
+<h2>Measurements - Step 7</h2>
+<p>Now we decide if we want to measure the distances now and grab the target n and the shortest distance or we could just sort it and measure the distances later.  I think it would be smarter to just return it and then do our calculations on the getValue function that we will be scripting. This way the function will have access to whatever arguments we want to pass it specifically the location.</p>
+<pre title="main.js">
+<xmp>Worley.prototype._getValue = function(pos){
+    var zWidth = this._args.width, zHeight = this._args.height;
+    var x = pos[0], y = pos[1];
+    var zID =
+    [
+        this._Seed([this.map[i][0],zone])*zWidth,
+        this._Seed([this.map[i][1],zone])*zHeight
+    ]
+    
+    var nMap = this._NormalMap(zID);
+    for(var i=0; i<nMap.length; i++){
+        nMap[i] = Worley.Distance[this._args.style](pos,nMap[i]);
+    }
+    nMap.sort(function(a, b){return a-b}); //Sorts Array;
+    var minDist = nMap[0];
+    var nDist = nMap[this._args.n];
+    var range = nDist - minDist;
+    return (minDist)/range;    
+}
+
+Worley.Distance = {
+    euclidean : function(x,y){
+        return ((y[0]-x[0])*(y[0]-x[0]))+((y[1]-x[1])*(y[1]-x[1]));
+    }
+};
+</xmp>
+</pre>
+<h2>First Test Run - Step 8</h2>
+<p>At this point we have all the makings to have this things work (I think). What we need to do now is set up our canvas loop to output what's happening. ** THIS IS GOING TO HANG YOUR BROWSER ONLY CLICK GENERATE IF YOU'RE WILLING TO CLICK CONTINUE A FEW TIMES AND WAIT.</p>
+<div class="c-wrap">
+<div>First Test</div>
+<canvas width='200px' height="200px" id='cvas4'></canvas>
+<div id='cvas4_time'></div>
+<div><a href='#' onclick="test3();">Generate!</a></div>
+</div>
+<script>
+function test3(){
+setTimeout(function(){    
+var cvas = document.getElementById('cvas4');
+var ctx = cvas.getContext('2d');
+ctx.fillRect(0,0,cvas.width,cvas.height);
+var imageData = new ImageData(cvas.width, cvas.height);
+var data = imageData.data;
+var tick = (new Date).getTime();
+var x=1,y=1;
+var r,g,b,a,v;
+var noise = new Worley({});
+for (var i = 0; i < data.length; i += 4) {
+    v = noise._getValue([x,y]);
+    r = Math.floor(255 * v),
+    g = Math.floor(255 * v),
+    b = Math.floor(255 * v),
+    a = Math.floor(255);    
+    
+      data[i]     = r; // red
+      data[i + 1] = g; // green
+      data[i + 2] = b; // blue
+      data[i + 3] = a;//alpha
+     
+      x++;
+      if(x>cvas.width){
+          y++;
+        x=1;
+        continue;
+      }
+    }
+ctx.putImageData(imageData, 0, 0, 0, 0, cvas.width, cvas.height);
+tick = (new Date).getTime() - tick;
+$('#cvas4_time').text("Generated in: "+tick+"ms.");
+},0);    
+}
+</script>
+
+
+<pre title="index.html">
+<xmp><script>
+function test3(){
+setTimeout(function(){    
+var cvas = document.getElementById('cvas4');
+var ctx = cvas.getContext('2d');
+ctx.fillRect(0,0,cvas.width,cvas.height);
+var imageData = new ImageData(cvas.width, cvas.height);
+var data = imageData.data;
+var tick = (new Date).getTime();
+var x=0,y=0;
+var r,g,b,a,v;
+var noise = new Worley({});
+for (var i = 0; i < data.length; i += 4) {
+    v = noise._getValue([x,y]);
+    r = Math.floor(255 * v),
+    g = Math.floor(255 * v),
+    b = Math.floor(255 * v),
+    a = Math.floor(255);    
+    
+      data[i]     = r; // red
+      data[i + 1] = g; // green
+      data[i + 2] = b; // blue
+      data[i + 3] = a;//alpha
+     
+      x++;
+      if(x>cvas.width){
+          y++;
+        x=1;
+        continue;
+      }
+    }
+ctx.putImageData(imageData, 0, 0, 0, 0, cvas.width, cvas.height);
+tick = (new Date).getTime() - tick;
+$('#cvas4_time').text("Generated in: "+tick+"ms.");
+},0);    
+}
+</script>
+</xmp>
+</pre>
+<p>This works but it's way way way to slow... infact your browser might even hang it it could say that the script is unresponsive.  That's why I dropped it down to 200 by 200 pxls... The script though is functioning, now it's time to make it useable.  The main hitch is in the multiple calculations of the normal maps.  One solution would be the cache the zones on that object, or even redo the way that we calculate them.  But before that let's see what happens when we just calculate one zone per getValue and what kind of effect that makes.</p>
+<p>For this test we commented out all the zones, and set the normal map to just the zone we are in.</p>
+<pre title="main.js">
+<xmp>Worley.prototype._NormalMap = function(zone){//zone is an array [x,y];
+    var nMap = [];
+    /*var zN10 = this._normalizeZone([zone[0]-1,zone[1]-1]); //NorthWest
+    var zN00 = this._normalizeZone([zone[0],zone[1]-1]); //North
+    var zN01 = this._normalizeZone([zone[0]+1,zone[1]-1]); //NorthEast
+    var zM10 = this._normalizeZone([zone[0]-1,zone[1]]);
+    var zM00 = this._normalizeZone([zone[0],zone[1]]);
+    var zM01 = this._normalizeZone([zone[0]+1,zone[1]]);
+    var zS10 = this._normalizeZone([zone[0]-1,zone[1]+1]);
+    var zS00 = this._normalizeZone([zone[0],zone[1]+1]);
+    var zS01 = this._normalizeZone([zone[0]+1,zone[1]+1]);*/
+    
+    nMap = this._normalizeZone([zone[0],zone[1]]);
+ 
+   return nMap;
+}
+</xmp>
+</pre>
+<p>If you make your script look like this you will notice that this is a lot faster but is definitely not a usable model.  I will not make the demo of it on here but if you are following along you will see that it makes identifiable blocks, and we will see that the zones do not shift as much as I had hoped... so let's see what we can do about that.</p>
+<pre title="main.js">
+<xmp>
+_init Function:
+this.map[i] = [this._Seed(this._seed+((1+i)*0.96)),this._Seed(this._seed*((1+i)*0.12))];
+Normal Function:
+nMap.push(
+[this.map[i][0]*zWidth,
+this.map[i][1]*zHeight]]);
+</xmp>
+</pre>
+<p>Just changing our script to not do the _Seed function causes a huge jump in performance.  As seen in the demo below this becomes a usable model, and could infact be what you go with if you want a pattern that is a little more predictable.  But what I want is chaos pure chaos, and to achieve that we need to apply some sort of new seeding calculation to the zones before they pass to the normalize function. </p>
+<div class="c-wrap">
+<div>Second Test</div>
+<canvas width='500px' height="500px" id='cvas5'></canvas>
+<div id='cvas5_time'></div>
+<div><a href='#' onclick="test4();">Generate!</a></div>
+<script>
+function test4(){
+setTimeout(function(){    
+var cvas = document.getElementById('cvas5');
+var ctx = cvas.getContext('2d');
+ctx.fillRect(0,0,cvas.width,cvas.height);
+var imageData = new ImageData(cvas.width, cvas.height);
+var data = imageData.data;
+var tick = (new Date).getTime();
+var x=1,y=1;
+var r,g,b,a,v;
+var noise = new Worley({});
+for (var i = 0; i < data.length; i += 4) {
+    v = noise._getValue2([x,y]);
+    r = Math.floor(255 * v),
+    g = Math.floor(255 * v),
+    b = Math.floor(255 * v),
+    a = Math.floor(255);    
+    
+      data[i]     = r; // red
+      data[i + 1] = g; // green
+      data[i + 2] = b; // blue
+      data[i + 3] = a;//alpha
+     
+      x++;
+      if(x>cvas.width){
+          y++;
+        x=1;
+        continue;
+      }
+    }
+ctx.putImageData(imageData, 0, 0, 0, 0, cvas.width, cvas.height);
+tick = (new Date).getTime() - tick;
+$('#cvas5_time').text("Generated in: "+tick+"ms.");
+},0);    
+}
+</script>
+</div>
+<hr />
+<h2>Real Noise</h2>
+<h3>Getting Random - Step 9</h3>
+<div class='section'>
+     <p>So we want to get this to be a lot more random, and to do that I think we will try doing a simplified version of our seed function embedded in the calculation function.  Hopefully this will not impact performance much but will mix things up quite a bit.</p>
+<div class="c-wrap">
+<div>Third Test - is a Charm?</div>
+<canvas width='500px' height="500px" id='cvas6'></canvas>
+<div id='cvas6_time'></div>
+<div><a href='#' onclick="test5();">Generate!</a></div>
+</div>
+<script>
+function test5(){
+setTimeout(function(){    
+var cvas = document.getElementById('cvas6');
+var ctx = cvas.getContext('2d');
+ctx.fillRect(0,0,cvas.width,cvas.height);
+var imageData = new ImageData(cvas.width, cvas.height);
+var data = imageData.data;
+var tick = (new Date).getTime();
+var x=1,y=1;
+var r,g,b,a,v;
+var noise = new Worley({n:12});
+for (var i = 0; i < data.length; i += 4) {
+    v = noise._getValue3([x,y]);
+    r = Math.floor(255 * v),
+    g = Math.floor(255 * v),
+    b = Math.floor(255 * v),
+    a = Math.floor(255);    
+    
+      data[i]     = r; // red
+      data[i + 1] = g; // green
+      data[i + 2] = b; // blue
+      data[i + 3] = a;//alpha
+     
+      x++;
+      if(x>cvas.width){
+          y++;
+        x=1;
+        continue;
+      }
+    }
+ctx.putImageData(imageData, 0, 0, 0, 0, cvas.width, cvas.height);
+tick = (new Date).getTime() - tick;
+$('#cvas6_time').text("Generated in: "+tick+"ms.");
+},0);    
+}
+</script>
+
+<p>Would you look at that? What a difference some randomness makes.  And with very little impact on the script I think this may be the keeper.  To get this look all I had to do is send the argument {n:12}, to the noise when we first create it making this effect way smoother. Otherwise the noise is very sharp and looks like the second test with its saturation values.</p>
+<pre title="main.js - normalizeZone">
+<xmp>for(var i=0; i< this.map.length; i++){ //you can do map length or nPoints it does not matter they are the same.
+        var tx = Math.cos(this.map[i][0]+((zone[0]*0.35)+(zone[1]*0.25)));
+        tx-=Math.floor(tx);
+        var ty = Math.cos(this.map[i][1]+((zone[0]*0.45)+(zone[1]*0.15)));
+        ty-=Math.floor(ty);
+        nMap.push(
+        [tx*zWidth,
+        ty*zHeight]
+        );
+        
+    //Add offsets and check if zone is negative.
+        if(zone[0]<0){
+        nMap[i][0]*=-1;
+        nMap[i][0]+=xOffset;
+        }else{
+        nMap[i][0]+=xOffset;
+        }
+        
+        if(zone[1]<0){
+        nMap[i][1]*=-1;
+        nMap[i][1]+=yOffset;
+        }else{
+        nMap[i][1]+=yOffset;
+        }
+    }
+    return nMap;
+    
+</xmp>
+</pre>
+
+<p>Just changing the operation for what makes the randomness (sin, cos, tan...) it really makes a drastic effect.  I am leaning to cos because of how evenly it looks to distribute, but if you want to have more control over your noise you could pass an additional argument that changes the way it calculates the randomness</p>
+<p>Experiment with how you make your randomness, it might look a little crazy but I found that the following changes gives a nice distribution.  Changing any of the Number drastically changes the look, I would stay clean of division and multiplication of the id's or position, because there are going to be 0's and that makes a real problem in the noise.  Unless that is the look you are going for!
+<pre title="main.js">
+<xmp>this.map = new Array(this._args.nPoints);
+for(var i=0; i<this.map.length; i++){
+    this.map[i] = [this._Seed(this._seed+((1+i)*2.96)),this._Seed(this._seed+((1+i)*4.52))];
+}
+
+--- AND
+
+var tx = Math.cos(this.map[i][0]+((0.5+(zone[0]*0.35)+1.35)+(0.2+(zone[1]*0.25))+0.65));
+tx-=Math.floor(tx);
+var ty = Math.cos(this.map[i][1]+((0.35+(zone[0]*0.65)+1.15)+(0.1+(zone[1]*0.85))+0.25));
+ty-=Math.floor(ty);
+</xmp>
+</pre>
+</div>
+<h2>Wrapping up...</h2>
+<h3>More Measurements!- Step 10</h3>
+<div class='section'>
+ 
+  <p>Now that we have a functional Cellular Noise Generator, it is time to go back and add a few more ways to calculate distance.</p>
+  <ol>
+  <li>euclidean</li>
+  <li>manhattan</li>
+  <li>chebyshev</li>
+  </ol>
+  <p>There are more, but these are the basic ones... if you experiment a little you can come up with your own and make some really cool effects, just be careful at how much time the distance calc impacts the whole script.
+<pre title="main.js">
+<xmp>Worley.Distance = {
+    euclidean : function(x,y){
+        return Math.sqrt(Math.pow((x[0]-y[0]),2) +  Math.pow((x[1]-y[1]),2))
+    },
+    manhattan :  function(x,y){
+        return Math.abs(x[0]-y[0])+Math.abs(x[1]-y[1]);
+    },
+    chebyshev : function(x,y){
+        return Math.max(Math.abs(x[0]-y[0]), Math.abs(x[1]-y[1]));
+    }
+};
+</xmp>
+</pre>
+<p>Lets see what kind of effect this has on the noise, we will keep all the arguments default but set the n value to 10 and change the calculation method on each example.  Make sure on your _init function you include the new types for the style default argument.</p>
+<div class="col3">
+<div class="c-wrap">
+<div>euclidean</div>
+<canvas width='300px' height="500px" id='cvas_A'></canvas>
+<div id='cvas_A_time'></div>
+<div><a href='#' onclick="styleA();">Generate!</a></div>
+</div>
+<div class="c-wrap">
+<div>manhattan</div>
+<canvas width='300px' height="500px" id='cvas_B'></canvas>
+<div id='cvas_B_time'></div>
+<div><a href='#' onclick="styleB();">Generate!</a></div>
+</div>
+<div class="c-wrap">
+<div>chebyshev</div>
+<canvas width='300px' height="500px" id='cvas_C'></canvas>
+<div id='cvas_C_time'></div>
+<div><a href='#' onclick="styleC();">Generate!</a></div>
+</div>
+</div>
+<script>
+function styleA(){
+setTimeout(function(){    
+var cvas = document.getElementById('cvas_A');
+var ctx = cvas.getContext('2d');
+ctx.fillRect(0,0,cvas.width,cvas.height);
+var imageData = new ImageData(cvas.width, cvas.height);
+var data = imageData.data;
+var tick = (new Date).getTime();
+var x=1,y=1;
+var r,g,b,a,v;
+var noise = new Worley({n:10, style:'euclidean'});
+for (var i = 0; i < data.length; i += 4) {
+    v = noise._getValue3([x,y]);
+    r = Math.floor(255 * v),
+    g = Math.floor(255 * v),
+    b = Math.floor(255 * v),
+    a = Math.floor(255);    
+    
+      data[i]     = r; // red
+      data[i + 1] = g; // green
+      data[i + 2] = b; // blue
+      data[i + 3] = a;//alpha
+     
+      x++;
+      if(x>cvas.width){
+          y++;
+        x=1;
+        continue;
+      }
+    }
+ctx.putImageData(imageData, 0, 0, 0, 0, cvas.width, cvas.height);
+tick = (new Date).getTime() - tick;
+$('#cvas_A_time').text("Generated in: "+tick+"ms.");
+},0);    
+}
+
+function styleB(){
+setTimeout(function(){    
+var cvas = document.getElementById('cvas_B');
+var ctx = cvas.getContext('2d');
+ctx.fillRect(0,0,cvas.width,cvas.height);
+var imageData = new ImageData(cvas.width, cvas.height);
+var data = imageData.data;
+var tick = (new Date).getTime();
+var x=1,y=1;
+var r,g,b,a,v;
+var noise = new Worley({n:10, style:'manhattan'});
+for (var i = 0; i < data.length; i += 4) {
+    v = noise._getValue3([x,y]);
+    r = Math.floor(255 * v),
+    g = Math.floor(255 * v),
+    b = Math.floor(255 * v),
+    a = Math.floor(255);    
+    
+      data[i]     = r; // red
+      data[i + 1] = g; // green
+      data[i + 2] = b; // blue
+      data[i + 3] = a;//alpha
+     
+      x++;
+      if(x>cvas.width){
+          y++;
+        x=1;
+        continue;
+      }
+    }
+ctx.putImageData(imageData, 0, 0, 0, 0, cvas.width, cvas.height);
+tick = (new Date).getTime() - tick;
+$('#cvas_B_time').text("Generated in: "+tick+"ms.");
+},0);    
+}
+
+function styleC(){
+setTimeout(function(){    
+var cvas = document.getElementById('cvas_C');
+var ctx = cvas.getContext('2d');
+ctx.fillRect(0,0,cvas.width,cvas.height);
+var imageData = new ImageData(cvas.width, cvas.height);
+var data = imageData.data;
+var tick = (new Date).getTime();
+var x=1,y=1;
+var r,g,b,a,v;
+var noise = new Worley({n:10, style:'chebyshev'});
+for (var i = 0; i < data.length; i += 4) {
+    v = noise._getValue3([x,y]);
+    r = Math.floor(255 * v),
+    g = Math.floor(255 * v),
+    b = Math.floor(255 * v),
+    a = Math.floor(255);    
+    
+      data[i]     = r; // red
+      data[i + 1] = g; // green
+      data[i + 2] = b; // blue
+      data[i + 3] = a;//alpha
+     
+      x++;
+      if(x>cvas.width){
+          y++;
+        x=1;
+        continue;
+      }
+    }
+ctx.putImageData(imageData, 0, 0, 0, 0, cvas.width, cvas.height);
+tick = (new Date).getTime() - tick;
+$('#cvas_C_time').text("Generated in: "+tick+"ms.");
+},0);    
+}
+
+</script>
+</div>
+<p>There you have it! From here it would just be finishing things up like persistence, octaves, amplitude, scale, etc... but I will leave that for a second part.  Also though we started with the idea of having this animatable it seems the lattice calculations are not fast enough.  Perhaps the stripped down version we did where there was only one zone being calculated would work for animating, but even at that I would have to most likely set up web workers which I am not too savvy in as of yet.  I will be able to do a second tutorial here soon hopefully, that will continue this and refine it, but for now I leave this in your hands. Till next time... <a href='http://Pryme8.github.io/Das_Noise/editor.html'>TO THE EDITOR!</a></p>
+
+</div>
+</body>
+</html>
+
+
