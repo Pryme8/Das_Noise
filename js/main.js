@@ -1,4 +1,4 @@
-Teriable = Teriable;
+
 Das_Edit = function(){
 	this._fps = 30;
 	Das_Edit.Do.setBgColor();

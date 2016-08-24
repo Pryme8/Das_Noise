@@ -4,9 +4,13 @@ html, body{
 	height:100%;
 	min-height:100%;
 	overflow:hidden;
-	background:#E0D6FE;
+	background:#eee;
 	border:0;
 	padding:0;
+	font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	text-shadow:0px 1px #FFF;
+	
+	
 }
 
 html, html *, body, body *, *::before, *::after{
@@ -22,72 +26,240 @@ html, html *, body, body *, *::before, *::after{
 	right:0;
 	bottom:0;
 	z-index:0;
-	overflow-y:auto;
+	overflow-y: auto;
 }
 
 .page-wrap{
-	display:block;
-	position:absolute;
-	width:100%;
-	max-width:800px;
-	height:auto;
-	top:0;
+	width: 960px;
+	position: absolute;
 	left:50%;
-	transform:translateX(-50%);	
+	top:0;
+	transform: translateX(-50%);
+	font-size:18px;	
 }
 
-.content{
-	display: block;
-	position: relative;	
+
+pre{
+  font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
+  margin:0.5em;
+	padding: 0.5em;
+}
+xmp{
+	padding: 0.5em;
+	margin: 0;
+	background:#ffe;
 }
 
-.content > div{
-	padding-bottom: 0.5em;
-}
-
-.col-4{
-	text-align: center;
-	white-space: nowrap;
-}
-.col-4 > div {
-	font-size:14px;
-	position: relative;
-	width:calc(25% - 1em);
-	display: inline-block;
-	border:1px solid #333;
-	padding:0.8em 0.5em;
-	text-align: left;
-	min-height:260px;
-	vertical-align:top;
-	margin-bottom:0.2em;
-}
-
-.c-wrap {
-text-align: center;
-}
-
-.col-4 > div h6 {
-font-size:1em;
-margin-top: 0.2em;
-margin-bottom: 0.2em;
+h1,h2,h3,h4,h5,h6{
 	text-decoration: underline;
 	font-variant-caps: petite-caps;
 }
 
-div > div > div{
-	font-size: 1em;
+h1{font-size:2.5em;}
+h2{font-size:1.5em;}
+h3{font-size:1.2em;}
+h4{font-size:1.00em;}
+h5{font-size:0.85em;}
+h6{font-size:0.65em;}
+p{font-size:0.9em; }
+h1,h2,h3,h4,h5,h5,p{margin: 0; padding: 3px;  line-height:1.35em;}
+xmp{
+	width:100%;
+	height: auto;
+	overflow-x: auto;
+}
+
+pre::before{
+	display:block;
+	content:attr(title);
+	width:100%;
+	background: #999;
+	color:white;
+	text-shadow:0px 1px #000;
+	padding: 0.2em;
+	font-size:0.85em;
+	padding-left: 1em;
+}
+
+.c-wrap{
+text-align:center;
+}
+
+.c-wrap canvas{
+border:1px dashed #555;
+}
+
+.col2{
+	white-space: nowrap;
+}
+
+.col2 > div{
+display:inline-block;
+	width:50%;
+}
+
+.col3{
+	white-space: nowrap;
+}
+
+.col3 > div{
+display:inline-block;
+	width:32%;
+}
+
+.header{
+border-bottom:1px solid #666;
+padding-bottom:1em;
+}
+
+.header h1 img{
+margin-bottom: -60px;
+}
+
+.header h2{
+	margin-left:120px;
+	margin-top: -0.5em;
+	text-decoration: none;
+	font-style:italic;
+	font-weight:500;
+}
+
+#git-link{
+	padding-left: 35px;
+}
+
+.head-menu{
+	position:absolute;
+	right:0;
+	top:1em;
+}
+
+.left-menu{
+	position: relative;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	font-size: 16px;
+	white-space: nowrap;
+}
+
+.left-menu .menu{
+	display: inline-block;
+	width:200px;
+	border-right: 1px dashed #666;
+	font-size: 14px;
+	vertical-align: top;
+}
+
+.left-menu .menu ul{
+ list-style: none;
+	padding: 0;
+	padding-left: 1em;
+}
+
+.left-menu .menu h3{
+ list-style: none;
+	padding: 0;
+	padding-left: 0.5em;
+	margin-bottom: -0.8em;
+}
+
+.left-menu .menu ul li a::before{
+content:'- ';
+}
+
+.left-menu .menu a{
+	color:#444;
+	text-decoration: none;
+}
+
+.left-menu .menu a:hover, .left-menu .menu a:active{
+	color:#666;
+	text-decoration: underline;
+}
+
+.left-menu .menu a:hover:before, .left-menu .menu a:active:before{
+content:'>';
+}
+
+.left-menu > div:nth-of-type(2){
+		display: inline-block;
+	width:calc(100% - 200px);
+	vertical-align: top;
+	height: auto;
+}
+
+.menu-section{
+border-left: 1px dashed #666;
+	padding-left:0.5em;
+	margin-left: -0.35em;
 	white-space: normal;
 }
 
-.label{
-	display: inline-block;
-	width:4em;
-  text-align: right;
-	padding-right:0.5em;
+.menu-section .section{
+display:none;
 }
 
-.code{
-	color:darkolivegreen;
-	font-style: italic;
-	font-size: 0.8em;
+.menu-section .active{
+display:block;
+}
+
+.menu-section .disabled{
+	pointer-events:none;
+	opacity:0.5;
+}
+
+.menu-section .disabled::before{
+content:'*disabled temporarly';
+position:relative;
+}
+
+.footer{
+	height: 140px;
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#4b5759+0,4b5759+100&0+0,1+31 */
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#4b5759+0,4b5759+100&0+0,1+2 */
+background: -moz-linear-gradient(top,  rgba(75,87,89,0) 0%, rgba(75,87,89,1) 2%, rgba(75,87,89,1) 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top,  rgba(75,87,89,0) 0%,rgba(75,87,89,1) 2%,rgba(75,87,89,1) 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom,  rgba(75,87,89,0) 0%,rgba(75,87,89,1) 2%,rgba(75,87,89,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#004b5759', endColorstr='#4b5759',GradientType=0 ); /* IE6-9 */
+}
+
+.footer .credits{
+	position: absolute;
+	color:#eee;
+	text-shadow: none;
+	bottom:0.5em;
+	right:0.5em;
+}
+
+.footer .credits a{
+	color:#999;
+}
+
+.menu-section .item{
+	display: block;
+	position: relative;
+	margin-bottom: 1em;
+	border-bottom: 1px dotted #aaa;
+	white-space: normal;
+	padding: 0.5em;
+}
+
+.menu-section .item .title{
+	margin-left: 0.5em;
+	display: block;
+	font-weight: bold;
+}
+
+.menu-section .item .types{
+	margin-left: 1.5em;
+	display: block;
+	font-style:italic;
+	color:#444;
+}
+
+.menu-section .item .description{
+	margin-left: 1.5em;
+	display: block;
+	
 }

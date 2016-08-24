@@ -775,7 +775,7 @@ var data = imageData.data;
 var tick = (new Date).getTime();
 var x=1,y=1;
 var r,g,b,a,v;
-var noise = new Worley({n:10, style:'euclidean'});
+var noise = new Worley({n:10, style:'braycurtis'});
 for (var i = 0; i < data.length; i += 4) {
     v = noise._getValue3([x,y]);
     r = Math.floor(255 * v),

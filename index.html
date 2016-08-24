@@ -8,946 +8,500 @@
 <link href="./css/main.css" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript" src="./js/jquery.js"></script>
-<script type="text/javascript" src="./js/teriable-noise.js"></script>
+<script type="text/javascript" src="./js/dN.1.2.1.js"></script>
 <script type="text/javascript" src="./js/main.js"></script>
 
 </head>
 <body>
 <div class='wrap-fix'>
 <div class='page-wrap'>
-<h2>Pryme8's Noise</h2>
-<a href='http://github.com/Pryme8/Das_Noise'>git-hub</a><BR />
-<div class='content'>
-<div class='content-item'>This is a project to get all the fancy noises out there under one roof... I was getting super annoyed having to call different noises with different constructors, so I figured lets make this conform to my head.&nbsp;&nbsp;Most are based off of others public examples I'll make sure to credit them, but for the most part this is a whole new reworking.&nbsp;&nbsp;Quite a few bugs for right now, and Im sure the way doing the seed calculations is pretty hacky... Umm a few of the calculations are my own so my bad if they syck?&nbsp;&nbsp;Once the project is done, there will be a ton of different ways to generate noise, and I will be porting a bunch of GLSL noises I did over as well along with my Worley System and others that I can find.<BR /><BR />
-Look at the examples for how to work these buggers...</div>
-<div class='content-item'><i>var noise = new Teriable.Noise(type => string ,seed => string, args => {});<BR />
-noise.getValue(args =>{});</i>
-</div>
-</div>
-<h4>Examples</h4>
+<div class='header'>
+<h1><span><img src="imgs/logo1.png" /></span>Das Noise!</h1>
+<h2>A Javascript Noise Library</h2>
 
-<div class='content col-4'>
-	<div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Simple2" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Simple2</h6>
-        <div class='code'>('Simple2','SeedMe', {})</div>
-        </div>
-        <script>
-		setTimeout(function(){
-		var noise = new Teriable.Noise('Simple2','SeedMe', {});
-
-			var c = document.getElementById('Simple2');
-			var ctx = c.getContext('2d');
-			var imageData = ctx.getImageData(0,0,c.width, c.height);
-			var data = imageData.data;
-			var i=0;
-			for (var y = 0; y <  c.height; y++) {
-			for (var x = 0; x <  c.width; x++) {
-			var v = Math.floor(255 * noise.getValue({x:x,y:y}));
-			ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-			ctx.fillRect(x,y,1,1);
-				}
-		}},0);
-        </script>
-    </div>
-    
-    <div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Simple2b" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Simple2</h6>
-        <div class='code'>('Simple2','@#$%@K#$N', {})</div>
-        </div>
-         <script>
-		setTimeout(function(){
-		var noise = new Teriable.Noise('Simple2','@#$%@K#$N', {});
-
-			var c = document.getElementById('Simple2b');
-			var ctx = c.getContext('2d');
-			var imageData = ctx.getImageData(0,0,c.width, c.height);
-			var data = imageData.data;
-			var i=0;
-			for (var y = 0; y <  c.height; y++) {
-			for (var x = 0; x <  c.width; x++) {
-			var v = Math.floor(255 * noise.getValue({x:x,y:y}));
-			ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-			ctx.fillRect(x,y,1,1);
-				}
-		}},0);
-        </script>
-    </div>
-    
-	<div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Simple2c" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Simple2</h6>
-        <div class='code'>('Simple2','SeedMe', {scale:10})</div>
-        </div>
-        <script>
-		setTimeout(function(){
-		var noise = new Teriable.Noise('Simple2','SeedMe', {scale:10});
-
-			var c = document.getElementById('Simple2c');
-			var ctx = c.getContext('2d');
-			var imageData = ctx.getImageData(0,0,c.width, c.height);
-			var data = imageData.data;
-			var i=0;
-			for (var y = 0; y <  c.height; y++) {
-			for (var x = 0; x <  c.width; x++) {
-			var v = Math.floor(255 * noise.getValue({x:x,y:y}));
-			ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-			ctx.fillRect(x,y,1,1);
-				}
-		}},0);
-        </script>
-    </div>
-    
-    <div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Simple2c2" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Simple2</h6>
-        <div class='code'>('Simple2','SeedMe', {scale:10, scaleFloor:true})</div>
-        </div>
-        <script>
-        setTimeout(function(){
-var noise = new Teriable.Noise('Simple2','SeedMe', {scale:10, scaleFloor:true});
-
-var c = document.getElementById('Simple2c2');
-var ctx = c.getContext('2d');
-var imageData = ctx.getImageData(0,0,c.width, c.height);
-var data = imageData.data;
-var i=0;
-for (var y = 0; y <  c.height; y++) {
-	for (var x = 0; x <  c.width; x++) {
-	var v = Math.floor(255 * noise.getValue({x:x,y:y}));
-ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-ctx.fillRect(x,y,1,1);
-	}
-}},0);
-</script>
-    </div>
-    
-     <BR />
-        <div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Simple2d" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Simple2</h6>
-        <div class='code'>('Simple2','SeedMe',<BR /> {frequency:2, octives:3, scale:20, persistence:0.2})</div>
-        </div>
-        <script>
-		setTimeout(function(){
-var noise = new Teriable.Noise('Simple2','SeedMe', {frequency:2, octives:3, scale:20, persistence:0.2});
-
-var c = document.getElementById('Simple2d');
-var ctx = c.getContext('2d');
-var imageData = ctx.getImageData(0,0,c.width, c.height);
-var data = imageData.data;
-var i=0;
-for (var y = 0; y <  c.height; y++) {
-	for (var x = 0; x <  c.width; x++) {
-	var v = Math.floor(255 * noise.getValue({x:x,y:y}));
-ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-ctx.fillRect(x,y,1,1);
-	}
-}},0);</script>
-    </div>
-    
-    <div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Simple2d2" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Simple2</h6>
-        <div class='code'>('Simple2','SeedMe',<BR /> {frequency:2, octives:3, scale:20, persistence:0.2, amplitude:2})</div>
-        </div><script>
-		setTimeout(function(){
-var noise = new Teriable.Noise('Simple2','SeedMe', {frequency:2, octives:3, scale:20, persistence:0.2, amplitude:2});
-
-var c = document.getElementById('Simple2d2');
-var ctx = c.getContext('2d');
-var imageData = ctx.getImageData(0,0,c.width, c.height);
-var data = imageData.data;
-var i=0;
-for (var y = 0; y <  c.height; y++) {
-	for (var x = 0; x <  c.width; x++) {
-	var v = Math.floor(255 * noise.getValue({x:x,y:y}));
-ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-ctx.fillRect(x,y,1,1);
-	}
-}},0);
-</script>
-    </div>
-    
-    
-    <div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Simple3" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Simple3</h6>
-        <div>the z is set to x+y cause its a 2d thing right now...</div>
-        <div class='code'>('Simple3','SeedMe', {})</div>
-        </div><script>
-		setTimeout(function(){
-var noise = new Teriable.Noise('Simple3','SeedMe', {});
-
-var c = document.getElementById('Simple3');
-var ctx = c.getContext('2d');
-var imageData = ctx.getImageData(0,0,c.width, c.height);
-var data = imageData.data;
-var i=0;
-for (var y = 0; y <  c.height; y++) {
-	for (var x = 0; x <  c.width; x++) {
-	var v = Math.floor(255 * noise.getValue({x:x,y:y,z:(x+y)}));
-ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-ctx.fillRect(x,y,1,1);
-	}
-}},0);</script>
-    </div>
-   
-    <div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Perlin2" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Perlin2</h6>
-       
-        <div class='code'>('Perlin2','SeedMe', {})</div>
-        </div>
-        <script>
-		setTimeout(function(){
-var noise = new Teriable.Noise('Perlin2','SeedMe', {});
-
-var c = document.getElementById('Perlin2');
-var ctx = c.getContext('2d');
-var imageData = ctx.getImageData(0,0,c.width, c.height);
-var data = imageData.data;
-var i=0;
-for (var y = 0; y <  c.height; y++) {
-	for (var x = 0; x <  c.width; x++) {
-	var v = Math.floor(255 * noise.getValue({x:x,y:y}));
-ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-ctx.fillRect(x,y,1,1);
-	}
-}},0);</script>
-    </div>
-    
-      <BR />
-      
-    <div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Perlin2b" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Perlin2</h6>
-     
-        <div class='code'>('Perlin2','SeedMe', {scale:10})</div>
-        </div><script>
-		setTimeout(function(){
-var noise = new Teriable.Noise('Perlin2','SeedMe', {scale:10});
-
-var c = document.getElementById('Perlin2b');
-var ctx = c.getContext('2d');
-var imageData = ctx.getImageData(0,0,c.width, c.height);
-var data = imageData.data;
-var i=0;
-for (var y = 0; y <  c.height; y++) {
-	for (var x = 0; x <  c.width; x++) {
-	var v = Math.floor(255 * noise.getValue({x:x,y:y}));
-ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-ctx.fillRect(x,y,1,1);
-	}
-}},0);</script>
-    </div>
-    
-     <div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Perlin2c" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Perlin2</h6>
-        
-        <div class='code'>('Perlin2','SeedMe', {frequency:1, octives:3, scale:20, persistence:0.2, amplitude:0.5})</div>
-        </div><script>
-		setTimeout(function(){
-var noise = new Teriable.Noise('Perlin2','SeedMe', {frequency:1, octives:3, scale:20, persistence:0.2, amplitude:0.5});
-
-var c = document.getElementById('Perlin2c');
-var ctx = c.getContext('2d');
-var imageData = ctx.getImageData(0,0,c.width, c.height);
-var data = imageData.data;
-var i=0;
-for (var y = 0; y <  c.height; y++) {
-	for (var x = 0; x <  c.width; x++) {
-	var v = Math.floor(255 * noise.getValue({x:x,y:y}));
-ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-ctx.fillRect(x,y,1,1);
-	}
-}},0);
-		</script>
-    </div>
-   
-    <div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Perlin3" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Perlin3</h6>
-        
-        <div class='code'>('Perlin3','SeedMe', {})</div>
-        </div><script>
-		setTimeout(function(){
-var noise = new Teriable.Noise('Perlin3','SeedMe', {});
-
-var c = document.getElementById('Perlin3');
-var ctx = c.getContext('2d');
-var imageData = ctx.getImageData(0,0,c.width, c.height);
-var data = imageData.data;
-var i=0;
-for (var y = 0; y <  c.height; y++) {
-	for (var x = 0; x <  c.width; x++) {
-	var v = Math.floor(255 * noise.getValue({x:x,y:y,z:0}));
-ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-ctx.fillRect(x,y,1,1);
-	}
-}},0);
-		</script>
-    </div>
-    
-    <div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Poorly2" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Poorly2</h6>
-        <div class='code'>('Poorly2','', {})</div>
-        </div><script>
-		setTimeout(function(){
-		var noise = new Teriable.Noise('Poorly2','SeedMe', {});
-
-			var c = document.getElementById('Poorly2');
-			var ctx = c.getContext('2d');
-			var imageData = ctx.getImageData(0,0,c.width, c.height);
-			var data = imageData.data;
-			var i=0;
-			for (var y = 0; y <  c.height; y++) {
-				for (var x = 0; x <  c.width; x++) {
-				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
-				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-				ctx.fillRect(x,y,1,1);
-				}
-			}},0);</script>
-    </div>
-    
-     
-     <BR />
-     
-     <div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Poorly2b" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Poorly2b</h6>
-        <div class='code'>('Poorly2b','', {})</div>
-        </div><script>
-		setTimeout(function(){
-		var noise = new Teriable.Noise('Poorly2b','SeedMe', {});
-
-			var c = document.getElementById('Poorly2b');
-			var ctx = c.getContext('2d');
-			var imageData = ctx.getImageData(0,0,c.width, c.height);
-			var data = imageData.data;
-			var i=0;
-			for (var y = 0; y <  c.height; y++) {
-				for (var x = 0; x <  c.width; x++) {
-				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
-				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-				ctx.fillRect(x,y,1,1);
-				}
-			}},0);</script>
-    </div>
-    
-    <div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Poorly2c" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Poorly2c</h6>
-        <div class='code'>('Poorly2c','', {})</div>
-        </div><script>
-		setTimeout(function(){
-		var noise = new Teriable.Noise('Poorly2c','SeedMe', {});
-
-			var c = document.getElementById('Poorly2c');
-			var ctx = c.getContext('2d');
-			var imageData = ctx.getImageData(0,0,c.width, c.height);
-			var data = imageData.data;
-			var i=0;
-			for (var y = 0; y <  c.height; y++) {
-				for (var x = 0; x <  c.width; x++) {
-				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
-				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-				ctx.fillRect(x,y,1,1);
-				}
-			}},0);</script>
-    </div>
-    
-        <div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Poorly2d" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Poorly2</h6>
-        <div class='code'>('Poorly2','', {style:'badhattan'})</div>
-        </div><script>
-		setTimeout(function(){
-		var noise = new Teriable.Noise('Poorly2','SeedMe', {style:'badhattan'});
-
-			var c = document.getElementById('Poorly2d');
-			var ctx = c.getContext('2d');
-			var imageData = ctx.getImageData(0,0,c.width, c.height);
-			var data = imageData.data;
-			var i=0;
-			for (var y = 0; y <  c.height; y++) {
-				for (var x = 0; x <  c.width; x++) {
-				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
-				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-				ctx.fillRect(x,y,1,1);
-				}
-			}},0);</script>
-    </div>
-    
-    <div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Poorly2e" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Poorly2</h6>
-        <div class='code'>('Poorly2','', {style:'badclidean2'})</div>
-        </div><script>
-		setTimeout(function(){
-		var noise = new Teriable.Noise('Poorly2','SeedMe', {style:'badclidean2'});
-
-			var c = document.getElementById('Poorly2e');
-			var ctx = c.getContext('2d');
-			var imageData = ctx.getImageData(0,0,c.width, c.height);
-			var data = imageData.data;
-			var i=0;
-			for (var y = 0; y <  c.height; y++) {
-				for (var x = 0; x <  c.width; x++) {
-				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
-				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-				ctx.fillRect(x,y,1,1);
-				}
-			}},0);</script>
-    </div>
-    
-    <BR />
-     <div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Poorly2f" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Poorly2</h6>
-        <div class='code'>('Poorly2','', {style:'manhattan2'})</div>
-        </div><script>
-		setTimeout(function(){
-		var noise = new Teriable.Noise('Poorly2','SeedMe', {style:'badhattan2'});
-
-			var c = document.getElementById('Poorly2f');
-			var ctx = c.getContext('2d');
-			var imageData = ctx.getImageData(0,0,c.width, c.height);
-			var data = imageData.data;
-			var i=0;
-			for (var y = 0; y <  c.height; y++) {
-				for (var x = 0; x <  c.width; x++) {
-				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
-				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-				ctx.fillRect(x,y,1,1);
-				}
-			}},0);</script>
-    </div>
-    
-    <div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Poorly2g" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Poorly2</h6>
-        <div class='code'>('Poorly2','', {style:'chebyshevish'})</div>
-        </div><script>
-		setTimeout(function(){
-		var noise = new Teriable.Noise('Poorly2','SeedMe', {style:'chebyshevish'});
-
-			var c = document.getElementById('Poorly2g');
-			var ctx = c.getContext('2d');
-			var imageData = ctx.getImageData(0,0,c.width, c.height);
-			var data = imageData.data;
-			var i=0;
-			for (var y = 0; y <  c.height; y++) {
-				for (var x = 0; x <  c.width; x++) {
-				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
-				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-				ctx.fillRect(x,y,1,1);
-				}
-			}},0);</script>
-    </div>
-    
-    <div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Poorly2h" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Poorly2</h6>
-        <div class='code'>('Poorly2','', {style:'chebyshevish2'})</div>
-        </div><script>
-		setTimeout(function(){
-		var noise = new Teriable.Noise('Poorly2','SeedMe', {style:'chebyshevish2'});
-
-			var c = document.getElementById('Poorly2h');
-			var ctx = c.getContext('2d');
-			var imageData = ctx.getImageData(0,0,c.width, c.height);
-			var data = imageData.data;
-			var i=0;
-			for (var y = 0; y <  c.height; y++) {
-				for (var x = 0; x <  c.width; x++) {
-				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
-				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-				ctx.fillRect(x,y,1,1);
-				}
-			}},0);</script>
-    </div>
-    
-     <div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Poorly2i" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Poorly2</h6>
-        <div class='code'>('Poorly2','', {style:'chebyshevish3'})</div>
-        </div><script>
-		setTimeout(function(){
-		var noise = new Teriable.Noise('Poorly2','SeedMe', {style:'chebyshevish3'});
-
-			var c = document.getElementById('Poorly2i');
-			var ctx = c.getContext('2d');
-			var imageData = ctx.getImageData(0,0,c.width, c.height);
-			var data = imageData.data;
-			var i=0;
-			for (var y = 0; y <  c.height; y++) {
-				for (var x = 0; x <  c.width; x++) {
-				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
-				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-				ctx.fillRect(x,y,1,1);
-				}
-			}},0);</script>
-    </div>
-    <BR />
-    <div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Poorly2j" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Poorly2</h6>
-        <div class='code'>('Poorly2','', {style:'chebyshevish4'})</div>
-        </div><script>
-		setTimeout(function(){
-		var noise = new Teriable.Noise('Poorly2','SeedMe', {style:'chebyshevish4'});
-
-			var c = document.getElementById('Poorly2j');
-			var ctx = c.getContext('2d');
-			var imageData = ctx.getImageData(0,0,c.width, c.height);
-			var data = imageData.data;
-			var i=0;
-			for (var y = 0; y <  c.height; y++) {
-				for (var x = 0; x <  c.width; x++) {
-				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
-				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-				ctx.fillRect(x,y,1,1);
-				}
-			}},0);</script>
-    </div>
-    
-    <div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Poorly2k" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Poorly2</h6>
-        <div class='code'>('Poorly2','', {style:'valentine'})</div>
-        </div><script>
-		setTimeout(function(){
-		var noise = new Teriable.Noise('Poorly2','SeedMe', {style:'valentine'});
-
-			var c = document.getElementById('Poorly2k');
-			var ctx = c.getContext('2d');
-			var imageData = ctx.getImageData(0,0,c.width, c.height);
-			var data = imageData.data;
-			var i=0;
-			for (var y = 0; y <  c.height; y++) {
-				for (var x = 0; x <  c.width; x++) {
-				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
-				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-				ctx.fillRect(x,y,1,1);
-				}
-			}},0);</script>
-    </div>
-    
-    <div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Poorly2l" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Poorly2</h6>
-        <div class='code'>('Poorly2','', {style:'valentine2'})</div>
-        </div><script>
-		setTimeout(function(){
-		var noise = new Teriable.Noise('Poorly2','SeedMe', {style:'valentine2'});
-
-			var c = document.getElementById('Poorly2l');
-			var ctx = c.getContext('2d');
-			var imageData = ctx.getImageData(0,0,c.width, c.height);
-			var data = imageData.data;
-			var i=0;
-			for (var y = 0; y <  c.height; y++) {
-				for (var x = 0; x <  c.width; x++) {
-				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
-				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-				ctx.fillRect(x,y,1,1);
-				}
-			}},0);</script>
-    </div>
-    
-    <div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Poorly2m" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Poorly2</h6>
-        <div class='code'>('Poorly2','', {style:'valentine3'})</div>
-        </div><script>
-		setTimeout(function(){
-		var noise = new Teriable.Noise('Poorly2','SeedMe', {style:'valentine3'});
-
-			var c = document.getElementById('Poorly2m');
-			var ctx = c.getContext('2d');
-			var imageData = ctx.getImageData(0,0,c.width, c.height);
-			var data = imageData.data;
-			var i=0;
-			for (var y = 0; y <  c.height; y++) {
-				for (var x = 0; x <  c.width; x++) {
-				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
-				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-				ctx.fillRect(x,y,1,1);
-				}
-			}},0);</script>
-    </div>
-    <BR/>
-    <div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Poorly2n" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Poorly2</h6>
-        <div class='code'>('Poorly2','', {style:'valentine4'})</div>
-        </div><script>
-		setTimeout(function(){
-		var noise = new Teriable.Noise('Poorly2','SeedMe', {style:'valentine4'});
-
-			var c = document.getElementById('Poorly2n');
-			var ctx = c.getContext('2d');
-			var imageData = ctx.getImageData(0,0,c.width, c.height);
-			var data = imageData.data;
-			var i=0;
-			for (var y = 0; y <  c.height; y++) {
-				for (var x = 0; x <  c.width; x++) {
-				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
-				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-				ctx.fillRect(x,y,1,1);
-				}
-			}},0);</script>
-    </div>
-    
-        <div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Poorly2o" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Poorly2</h6>
-        <div class='code'>('Poorly2','', {style:'valentine5'})</div>
-        </div><script>
-		setTimeout(function(){
-		var noise = new Teriable.Noise('Poorly2','SeedMe', {style:'valentine5'});
-
-			var c = document.getElementById('Poorly2o');
-			var ctx = c.getContext('2d');
-			var imageData = ctx.getImageData(0,0,c.width, c.height);
-			var data = imageData.data;
-			var i=0;
-			for (var y = 0; y <  c.height; y++) {
-				for (var x = 0; x <  c.width; x++) {
-				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
-				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-				ctx.fillRect(x,y,1,1);
-				}
-			}},0);</script>
-    </div>
-    
-    <div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Test" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Worley2</h6>
-        <div class='code'>('Test','SeedMe', {})</div>
-        </div><script>
-		setTimeout(function(){
-		var noise = new Teriable.Noise('Test','SeedMe', {});
-
-			var c = document.getElementById('Test');
-			var ctx = c.getContext('2d');
-			var imageData = ctx.getImageData(0,0,c.width, c.height);
-			var data = imageData.data;
-			var i=0;
-			for (var y = 0; y <  c.height; y++) {
-				for (var x = 0; x <  c.width; x++) {
-				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
-				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-				ctx.fillRect(x,y,1,1);
-				}
-			}},0);</script>
-    </div>
-    
-            <div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Test2" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Worley2</h6>
-        <div class='code'>('Test','', {style:'badhattan'})</div>
-        </div><script>
-		setTimeout(function(){
-		var noise = new Teriable.Noise('Test','SeedMe', {style:'badhattan'});
-
-			var c = document.getElementById('Test2');
-			var ctx = c.getContext('2d');
-			var imageData = ctx.getImageData(0,0,c.width, c.height);
-			var data = imageData.data;
-			var i=0;
-			for (var y = 0; y <  c.height; y++) {
-				for (var x = 0; x <  c.width; x++) {
-				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
-				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-				ctx.fillRect(x,y,1,1);
-				}
-			}},0);</script>
-    </div>
-    <BR />
-    <div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Test3" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Test</h6>
-        <div class='code'>('Test','', {style:'badclidean2'})</div>
-        </div><script>
-		setTimeout(function(){
-		var noise = new Teriable.Noise('Test','SeedMe', {style:'badclidean2'});
-
-			var c = document.getElementById('Test3');
-			var ctx = c.getContext('2d');
-			var imageData = ctx.getImageData(0,0,c.width, c.height);
-			var data = imageData.data;
-			var i=0;
-			for (var y = 0; y <  c.height; y++) {
-				for (var x = 0; x <  c.width; x++) {
-				var v = Math.floor(255 * noise.getValue({x:x,y:y}));
-				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-				ctx.fillRect(x,y,1,1);
-				}
-			}},0);</script>
-    </div>   
-</div>
-<h4>Mixing</h4>
-<div class='content col-4'>
-<div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Mix" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Mix</h6>
-        <div class='code'>noiseA = Noise('Simple2','SeedMe', {scale:20}) <BR />noiseB = Noise('Simple2','SeedMe2', {scale:20}) <BR />Mix(noiseA, noiseB, 0.75)</div>
-        </div><script>
-		setTimeout(function(){
-		var noiseA = new Teriable.Noise('Simple2','SeedMe', {scale:20});
-		var noiseB = new Teriable.Noise('Simple2','SeedMe2', {scale:20});
-			var c = document.getElementById('Mix');
-			var ctx = c.getContext('2d');
-			var imageData = ctx.getImageData(0,0,c.width, c.height);
-			var data = imageData.data;
-			var i=0;
-			for (var y = 0; y <  c.height; y++) {
-				for (var x = 0; x <  c.width; x++) {
-				var v = Math.floor(255 * Teriable.Mix(noiseA.getValue({x:x,y:y}), noiseB.getValue({x:x,y:y}), 0.75 ));
-				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-				ctx.fillRect(x,y,1,1);
-				}
-			}},0);</script>
-    </div>
-<div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Multiply" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Multiply</h6>
-        <div class='code'>noiseA = Noise('Simple2','SeedMe', {scale:20}) <BR />noiseB = Noise('Simple2','SeedMe2', {scale:20}) <BR />Multiply(noiseA, noiseB, amount)</div>
-        </div><script>
-		setTimeout(function(){
-		var noiseA = new Teriable.Noise('Simple2','SeedMe', {scale:20});
-		var noiseB = new Teriable.Noise('Simple2','SeedMe2', {scale:20});
-			var c = document.getElementById('Multiply');
-			var ctx = c.getContext('2d');
-			var imageData = ctx.getImageData(0,0,c.width, c.height);
-			var data = imageData.data;
-			var i=0;
-			for (var y = 0; y <  c.height; y++) {
-				for (var x = 0; x <  c.width; x++) {
-				var v = Math.floor(255 * Teriable.Multiply(noiseA.getValue({x:x,y:y}), noiseB.getValue({x:x,y:y})));
-				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-				ctx.fillRect(x,y,1,1);
-				}
-			}},0);</script>
-    </div>
-<div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Average_Add" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Average_Add</h6>
-        <div class='code'>noiseA = Noise('Simple2','SeedMe', {scale:20}) <BR />noiseB = Noise('Simple2','SeedMe2', {scale:20}) <BR />Average_Add(noiseA, noiseB, amount)</div>
-        </div><script>
-		setTimeout(function(){
-		var noiseA = new Teriable.Noise('Simple2','SeedMe', {scale:20});
-		var noiseB = new Teriable.Noise('Simple2','SeedMe2', {scale:20});
-			var c = document.getElementById('Average_Add');
-			var ctx = c.getContext('2d');
-			var imageData = ctx.getImageData(0,0,c.width, c.height);
-			var data = imageData.data;
-			var i=0;
-			for (var y = 0; y <  c.height; y++) {
-				for (var x = 0; x <  c.width; x++) {
-				var v = Math.floor(255 * Teriable.Average_Add(noiseA.getValue({x:x,y:y}), noiseB.getValue({x:x,y:y})));
-				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-				ctx.fillRect(x,y,1,1);
-				}
-			}},0);</script>
+<span class='head-menu'><a href='http://github.com/Pryme8/Das_Noise'>git-hub</a> | Examples | <a href='#docs'>Documentation</a> | Downloads | Editor</span>
 </div>
 
-<div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Average_Sub" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Average_Sub</h6>
-        <div class='code'>noiseA = Noise('Simple2','SeedMe', {scale:20}) <BR />noiseB = Noise('Simple2','SeedMe2', {scale:20}) <BR />Average_Sub(noiseA, noiseB, amount)</div>
-        </div><script>
-		setTimeout(function(){
-		var noiseA = new Teriable.Noise('Simple2','SeedMe', {scale:20});
-		var noiseB = new Teriable.Noise('Simple2','SeedMe2', {scale:20});
-			var c = document.getElementById('Average_Sub');
-			var ctx = c.getContext('2d');
-			var imageData = ctx.getImageData(0,0,c.width, c.height);
-			var data = imageData.data;
-			var i=0;
-			for (var y = 0; y <  c.height; y++) {
-				for (var x = 0; x <  c.width; x++) {
-				var v = Math.floor(255 * Teriable.Average_Sub(noiseA.getValue({x:x,y:y}), noiseB.getValue({x:x,y:y})));
-				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-				ctx.fillRect(x,y,1,1);
-				}
-			}},0);</script>
-</div>
 <BR />
-<div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Divide" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Divide</h6>
-        <div class='code'>noiseA = Noise('Simple2','SeedMe', {scale:20}) <BR />noiseB = Noise('Simple2','SeedMe2', {scale:20}) <BR />Divide(noiseA, noiseB, amount)</div>
-        </div><script>
-		setTimeout(function(){
-		var noiseA = new Teriable.Noise('Simple2','SeedMe', {scale:20});
-		var noiseB = new Teriable.Noise('Simple2','SeedMe2', {scale:20});
-			var c = document.getElementById('Divide');
-			var ctx = c.getContext('2d');
-			var imageData = ctx.getImageData(0,0,c.width, c.height);
-			var data = imageData.data;
-			var i=0;
-			for (var y = 0; y <  c.height; y++) {
-				for (var x = 0; x <  c.width; x++) {
-				var v = Math.floor(255 * Teriable.Divide(noiseA.getValue({x:x,y:y}), noiseB.getValue({x:x,y:y})));
-				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-				ctx.fillRect(x,y,1,1);
-				}
-			}},0);</script>
+<div class='content'>
+
+<div class='content-item'>This is a project to get all the fancy noises out there under one roof... I was getting super annoyed having to call different noises with different constructors, so I figured lets make this conform to my head.&nbsp;&nbsp;Most are based off of others public examples I'll make sure to credit them, but for the most part this is a whole new reworking.&nbsp;&nbsp;Quite a few bugs for right now, and Im sure the way doing the seed calculations is pretty hacky... Umm a few of the calculations are my own so my bad if they syck?&nbsp;&nbsp;Once the project is done, there will be a ton of different ways to generate noise, and I will be porting a bunch of GLSL noises I did over as well along with my Worley System and others that I can find.<BR /><BR />
+A Bunch of Noises and functions are turned off for now, while I make changes to the script, currently active: Simple2D, Simple3D, Perlin2D, Perlin3D<BR />
 </div>
+<hr />
 
 <div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="MultiMix" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>MultiMix</h6>
-        <div class='code'>noiseA = Noise('Simple2','SeedMe', {scale:20}) <BR />noiseB = Noise('Perlin2','SeedMe2', {scale:20})<BR />noiseC = Noise('Poorly2','SeedMe3', {scale:20}) <BR />Mix(Divide(noiseB, noiseC), 0.65)</div>
-        </div><script>
-		setTimeout(function(){
-		var noiseA = new Teriable.Noise('Simple2','SeedMe', {scale:20});
-		var noiseB = new Teriable.Noise('Perlin2','SeedMe2', {scale:20});
-		var noiseC = new Teriable.Noise('Poorly2','SeedMe3', {scale:20});
-			var c = document.getElementById('MultiMix');
-			var ctx = c.getContext('2d');
-			var imageData = ctx.getImageData(0,0,c.width, c.height);
-			var data = imageData.data;
-			var i=0;
-			for (var y = 0; y <  c.height; y++) {
-				for (var x = 0; x <  c.width; x++) {
-				var v = Math.floor(255 * Teriable.Mix(noiseA.getValue({x:x,y:y}) ,Teriable.Divide(noiseB.getValue({x:x,y:y}), noiseC.getValue({x:x,y:y})), 0.65));
-				ctx.fillStyle = "rgb("+v+","+v+","+v+")";
-				ctx.fillRect(x,y,1,1);
-				}
-			}},0);</script>
+	<div class='left-menu' id='docs'>
+		<div class='menu'>
+<h2>Library Contents:</h2>
+<h3><a href='#noise-types' >Noise Types</a></h3>
+<ul>
+<li><a href='#Simple2D' >Simple 2D</a></li>
+<li><a href='#Simple3D'>Simple 3D</a></li>
+<li><a href='#Perlin2D'>Perlin 2D</a></li>
+<li><a href='#Perlin3D'>Perlin 3D</a></li>
+<li><a href='#Poorly2D'>Poorly 2D</a></li>
+<li><a href='#Tiley2D'>Tiley 2D</a></li>
+<li><a href='#Worley2D'>Worley 2D</a></li>
+</ul>
+<h3><a href='#mix-types'>Mixing Types</a></h3>
+<ul>
+<li><a href='mix-Mix' >Mix</a></li>
+<li><a href='#mix-Multiply'>Multiply</a></li>
+<li><a href='#mix-Divide'>Divide</a></li>
+<li><a href='#mix-Average_Add'>Average_Add</a></li>
+<li><a href='#mix-Average_Sub'>Average_Sub</a></li>
+</ul>
 </div>
-</div> 
-<h4>Colors</h4>
-<div class='content col-4'>
-<div class='content-item'>
-    	<div class='c-wrap'>
-        <canvas id="Color1" width="150" height="150" style="border:1px solid #000000;"></canvas></div>	
-        <div>
-        <h6>Color</h6>
-        <div class='code'>('Simple2','SeedMe', {scale:10, output:{type:'color', values:[1,0,0,1]}})</div>
-        </div>
-        <script>
-		setTimeout(function(){
-		var noise = new Teriable.Noise('Simple2','SeedMe', {scale:10, output:{type:'color', values:[1,0,0,1]}});
+<div class='menu-section'>
 
-			var c = document.getElementById('Color1');
-			var ctx = c.getContext('2d');
-			var imageData = ctx.getImageData(0,0,c.width, c.height);
-			var data = imageData.data;
-			var i=0;
-			for (var y = 0; y <  c.height; y++) {
-			for (var x = 0; x <  c.width; x++) {
-			var v = noise.getValue({x:x,y:y});
-			var r = Math.floor(255 * v.r),
-				g = Math.floor(255 * v.g);
-				b = Math.floor(255 * v.b);
-				a = Math.floor(255 * v.a);
-			ctx.fillStyle = "rgba("+r+","+g+","+b+","+a+")";
-			ctx.fillRect(x,y,1,1);
-				}
-		}},0);
-        </script>
+<div class='section active' id='home'>
+	<div class='content-item'>
+<pre title="Basic Noise:"><xmp>var noise = new dN(type => string ,seed => string, args => {});
+noise.getValue(args =>{});
+</xmp></pre>
+	</div>
+</div>
+
+<div class='section' id='Simple2D'>
+<div class='content-item'>
+<pre title="Simple2D:"><xmp>var noise = new dN('Simple2' ,seed => string, args => {});
+noise.getValue(args =>{});
+</xmp></pre>
+	This is the quickest to compute, and is based off of Stefan Gustavson Noise Calculations.
+	</div>
+    <hr />
+    <h4>Arguments</h4>
+    <div class='content-item'>
+    <div class='item'>
+    <span class='title'>frequency</span>
+    <span class='types'>oftype === number > 0</span>
+    <span class='description'>frequency refers to the period or phase at which data is sampled.</span>
     </div>
+    <div class='item'>
+    <span class='title'>amplitude</span>
+    <span class='types'>oftype === number > 0</span>
+    <span class='description'>amplitude refers to the range that the current octave at which the result can be in.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>octave</span>
+    <span class='types'>oftype === int >= 1</span>
+    <span class='description'>Each octave has less influence on the final result. Each octave adds a linear increase in code execution time, do not use more than a few octaves if not preprocessed.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>persistence</span>
+    <span class='types'>oftype === number > 0</span>
+    <span class='description'>The influence should each successive octave have, quantitatively.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>scale</span>
+    <span class='types'>oftype === number > 0</span>
+    <span class='description'>This will Multipy the x,y input on the ._getValue() method.  Effectivly sizing up the noise. *A scale of 1 is effectivly random noise</span>
+    </div>
+    <div class='item'>
+    <span class='title'>scaleFloor</span>
+    <span class='types'>oftype === bool</span>
+    <span class='description'>Floors the scaling of the noise to whole numbers.  This is good for a pixlated look.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>output</span>
+    <span class='types'>oftype === {type: oftype === (string => 'number' || 'color' ), values: oftype === (Array(4) => [0<=>1,0<=>1,0<=>1,0<=>1])}</span>
+    <span class='description'>In order to change the output from a single value to a color you must include this object as and argument.  If you are simply returning a value do not worry about this argument.  If you do include it the value array is structured as R,G,B,A and their return value will be multiplied by the respective value.</span>
+    </div>
+    </div>
+    <h4>Methods</h4>
+    <div class='content-item'>
+    <div class='item'>
+    <span class='title'>._getValue(args)</span>
+    <span class='types'>args === {x:#,y:#}</span>
+    <span class='description'>Returns the Value of the noise according to the set output Parameters. Requires a Object with x and y keyvalues.</span>
+    </div>
+	</div>
+</div>  
+
+<div class='section' id='Simple3D'>
+<div class='content-item'>
+<pre title="Simple3D:"><xmp>var noise = new dN('Simple3' ,seed => string, args => {});
+noise.getValue(args =>{});
+</xmp></pre>
+	This is the quickest to compute, and is based off of Stefan Gustavson Noise Calculations.
+	</div>
+    <hr />
+    <h4>Arguments</h4>
+    <div class='content-item'>
+    <div class='item'>
+    <span class='title'>frequency</span>
+    <span class='types'>oftype === number > 0</span>
+    <span class='description'>frequency refers to the period or phase at which data is sampled.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>amplitude</span>
+    <span class='types'>oftype === number > 0</span>
+    <span class='description'>amplitude refers to the range that the current octave at which the result can be in.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>octave</span>
+    <span class='types'>oftype === int >= 1</span>
+    <span class='description'>Each octave has less influence on the final result. Each octave adds a linear increase in code execution time, do not use more than a few octaves if not preprocessed.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>persistence</span>
+    <span class='types'>oftype === number > 0</span>
+    <span class='description'>The influence should each successive octave have, quantitatively.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>scale</span>
+    <span class='types'>oftype === number > 0</span>
+    <span class='description'>This will Multipy the x,y input on the ._getValue() method.  Effectivly sizing up the noise. *A scale of 1 is effectivly random noise</span>
+    </div>
+    <div class='item'>
+    <span class='title'>scaleFloor</span>
+    <span class='types'>oftype === bool</span>
+    <span class='description'>Floors the scaling of the noise to whole numbers.  This is good for a pixlated look.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>output</span>
+    <span class='types'>oftype === {type: oftype === (string => 'number' || 'color' ), values: oftype === (Array(4) => [0<=>1,0<=>1,0<=>1,0<=>1])}</span>
+    <span class='description'>In order to change the output from a single value to a color you must include this object as and argument.  If you are simply returning a value do not worry about this argument.  If you do include it the value array is structured as R,G,B,A and their return value will be multiplied by the respective value.</span>
+    </div>
+    </div>
+    <h4>Methods</h4>
+    <div class='content-item'>
+    <div class='item'>
+    <span class='title'>._getValue(args)</span>
+    <span class='types'>args === {x:#,y:#,z:#}</span>
+    <span class='description'>Returns the Value of the noise according to the set output Parameters. Requires a Object with x, y and z keyvalues.</span>
+    </div>
+	</div>
+</div>  
+
+<div class='section' id='Perlin2D'>
+<div class='content-item'>
+<pre title="Perlin2D:"><xmp>var noise = new dN('Perlin2' ,seed => string, args => {});
+noise.getValue(args =>{});
+</xmp></pre>
+	Based off of Stefan Gustavson Noise Calculations.
+	</div>
+    <hr />
+    <h4>Arguments</h4>
+    <div class='content-item'>
+    <div class='item'>
+    <span class='title'>frequency</span>
+    <span class='types'>oftype === number > 0</span>
+    <span class='description'>frequency refers to the period or phase at which data is sampled.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>amplitude</span>
+    <span class='types'>oftype === number > 0</span>
+    <span class='description'>amplitude refers to the range that the current octave at which the result can be in.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>octave</span>
+    <span class='types'>oftype === int >= 1</span>
+    <span class='description'>Each octave has less influence on the final result. Each octave adds a linear increase in code execution time, do not use more than a few octaves if not preprocessed.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>persistence</span>
+    <span class='types'>oftype === number > 0</span>
+    <span class='description'>The influence should each successive octave have, quantitatively.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>scale</span>
+    <span class='types'>oftype === number > 0</span>
+    <span class='description'>This will Multipy the x,y input on the ._getValue() method.  Effectivly sizing up the noise. *A scale of 10 is recomended for good output.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>scaleFloor</span>
+    <span class='types'>oftype === bool</span>
+    <span class='description'>Floors the scaling of the noise to whole numbers.  This is good for a pixlated look.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>output</span>
+    <span class='types'>oftype === {type: oftype === (string => 'number' || 'color' ), values: oftype === (Array(4) => [0<=>1,0<=>1,0<=>1,0<=>1])}</span>
+    <span class='description'>In order to change the output from a single value to a color you must include this object as and argument.  If you are simply returning a value do not worry about this argument.  If you do include it the value array is structured as R,G,B,A and their return value will be multiplied by the respective value.</span>
+    </div>
+    </div>
+    <h4>Methods</h4>
+    <div class='content-item'>
+    <div class='item'>
+    <span class='title'>._getValue(args)</span>
+    <span class='types'>args === {x:#,y:#}</span>
+    <span class='description'>Returns the Value of the noise according to the set output Parameters. Requires a Object with x and y keyvalues.</span>
+    </div>
+	</div>
+</div>
+
+<div class='section' id='Perlin3D'>
+<div class='content-item'>
+<pre title="Perlin3D:"><xmp>var noise = new dN('Perlin3' ,seed => string, args => {});
+noise.getValue(args =>{});
+</xmp></pre>
+	Based off of Stefan Gustavson Noise Calculations.
+	</div>
+    <hr />
+    <h4>Arguments</h4>
+    <div class='content-item'>
+    <div class='item'>
+    <span class='title'>frequency</span>
+    <span class='types'>oftype === number > 0</span>
+    <span class='description'>frequency refers to the period or phase at which data is sampled.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>amplitude</span>
+    <span class='types'>oftype === number > 0</span>
+    <span class='description'>amplitude refers to the range that the current octave at which the result can be in.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>octave</span>
+    <span class='types'>oftype === int >= 1</span>
+    <span class='description'>Each octave has less influence on the final result. Each octave adds a linear increase in code execution time, do not use more than a few octaves if not preprocessed.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>persistence</span>
+    <span class='types'>oftype === number > 0</span>
+    <span class='description'>The influence should each successive octave have, quantitatively.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>scale</span>
+    <span class='types'>oftype === number > 0</span>
+    <span class='description'>This will Multipy the x,y input on the ._getValue() method.  Effectivly sizing up the noise. *A scale of 10 is recomended for good output.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>scaleFloor</span>
+    <span class='types'>oftype === bool</span>
+    <span class='description'>Floors the scaling of the noise to whole numbers.  This is good for a pixlated look.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>output</span>
+    <span class='types'>oftype === {type: oftype === (string => 'number' || 'color' ), values: oftype === (Array(4) => [0<=>1,0<=>1,0<=>1,0<=>1])}</span>
+    <span class='description'>In order to change the output from a single value to a color you must include this object as and argument.  If you are simply returning a value do not worry about this argument.  If you do include it the value array is structured as R,G,B,A and their return value will be multiplied by the respective value.</span>
+    </div>
+    </div>
+    <h4>Methods</h4>
+    <div class='content-item'>
+    <div class='item'>
+    <span class='title'>._getValue(args)</span>
+    <span class='types'>args === {x:#,y:#,z:#}</span>
+    <span class='description'>Returns the Value of the noise according to the set output Parameters. Requires a Object with x , y and z keyvalues.</span>
+    </div>
+	</div>
+</div>    
+
+<div class='section disabled' id='Poorly2D'>
+<div class='content-item'>
+<pre title="Poorly2D:"><xmp>var noise = new dN('Poorly2' ,seed => string, args => {});
+noise.getValue(args =>{});
+</xmp></pre>
+	My janky version of worley noise, before I really did some research.  Produces some cool geometric effects.
+	</div>
+    <hr />
+    <h4>Arguments</h4>
+    <div class='content-item'>
+    <div class='item'>
+    <span class='title'>frequency</span>
+    <span class='types'>oftype === number > 0</span>
+    <span class='description'>frequency refers to the period or phase at which data is sampled.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>amplitude</span>
+    <span class='types'>oftype === number > 0</span>
+    <span class='description'>amplitude refers to the range that the current octave at which the result can be in.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>octave</span>
+    <span class='types'>oftype === int >= 1</span>
+    <span class='description'>Each octave has less influence on the final result. Each octave adds a linear increase in code execution time, do not use more than a few octaves if not preprocessed.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>persistence</span>
+    <span class='types'>oftype === number > 0</span>
+    <span class='description'>The influence should each successive octave have, quantitatively.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>scale</span>
+    <span class='types'>oftype === number > 0</span>
+    <span class='description'>This will Multipy the x,y input on the ._getValue() method.  Effectivly sizing up the noise. *A scale of 10 is recomended for good output.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>scaleFloor</span>
+    <span class='types'>oftype === bool</span>
+    <span class='description'>Floors the scaling of the noise to whole numbers.  This is good for a pixlated look.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>output</span>
+    <span class='types'>oftype === {type: oftype === (string => 'number' || 'color' ), values: oftype === (Array(4) => [0<=>1,0<=>1,0<=>1,0<=>1])}</span>
+    <span class='description'>In order to change the output from a single value to a color you must include this object as and argument.  If you are simply returning a value do not worry about this argument.  If you do include it the value array is structured as R,G,B,A and their return value will be multiplied by the respective value.</span>
+    </div>
+    </div>
+    <h4>Methods</h4>
+    <div class='content-item'>
+    <div class='item'>
+    <span class='title'>._getValue(args)</span>
+    <span class='types'>args === {x:#,y:#</span>
+    <span class='description'>Returns the Value of the noise according to the set output Parameters. Requires a Object with x and y keyvalues.</span>
+    </div>
+	</div>
+</div>
+
+<div class='section disabled' id='Tiley2D'>
+<div class='content-item'>
+<pre title="Poorly2D:"><xmp>var noise = new dN('Tiley2' ,seed => string, args => {});
+noise.getValue(args =>{});
+</xmp></pre>
+	A Variation of my Poorly System, creates Tile like structures.  Will be adding a lot more functionality to this one.
+	</div>
+    <hr />
+    <h4>Arguments</h4>
+    <div class='content-item'>
+    <div class='item'>
+    <span class='title'>frequency</span>
+    <span class='types'>oftype === number > 0</span>
+    <span class='description'>frequency refers to the period or phase at which data is sampled.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>amplitude</span>
+    <span class='types'>oftype === number > 0</span>
+    <span class='description'>amplitude refers to the range that the current octave at which the result can be in.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>octave</span>
+    <span class='types'>oftype === int >= 1</span>
+    <span class='description'>Each octave has less influence on the final result. Each octave adds a linear increase in code execution time, do not use more than a few octaves if not preprocessed.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>persistence</span>
+    <span class='types'>oftype === number > 0</span>
+    <span class='description'>The influence should each successive octave have, quantitatively.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>scale</span>
+    <span class='types'>oftype === number > 0</span>
+    <span class='description'>This will Multipy the x,y input on the ._getValue() method.  Effectivly sizing up the noise. *A scale of 10 is recomended for good output.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>scaleFloor</span>
+    <span class='types'>oftype === bool</span>
+    <span class='description'>Floors the scaling of the noise to whole numbers.  This is good for a pixlated look.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>output</span>
+    <span class='types'>oftype === {type: oftype === (string => 'number' || 'color' ), values: oftype === (Array(4) => [0<=>1,0<=>1,0<=>1,0<=>1])}</span>
+    <span class='description'>In order to change the output from a single value to a color you must include this object as and argument.  If you are simply returning a value do not worry about this argument.  If you do include it the value array is structured as R,G,B,A and their return value will be multiplied by the respective value.</span>
+    </div>
+    </div>
+    <h4>Methods</h4>
+    <div class='content-item'>
+    <div class='item'>
+    <span class='title'>._getValue(args)</span>
+    <span class='types'>args === {x:#,y:#</span>
+    <span class='description'>Returns the Value of the noise according to the set output Parameters. Requires a Object with x and y keyvalues.</span>
+    </div>
+	</div>
+</div>
+
+<div class='section disabled' id='Worley2D'>
+<div class='content-item'>
+<pre title="Worley2D:"><xmp>var noise = new dN('Worley2' ,seed => string, args => {});
+noise.getValue(args =>{});
+</xmp></pre>
+	My Variation of a Classic Cellular System.  As seen in <a href='./tutorial_1' target="_blank">Tutorial 1</a>.
+	</div>
+    <hr />
+    <h4>Arguments</h4>
+    <div class='content-item'>
+    <div class='item'>
+    <span class='title'>frequency</span>
+    <span class='types'>oftype === number > 0</span>
+    <span class='description'>frequency refers to the period or phase at which data is sampled.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>amplitude</span>
+    <span class='types'>oftype === number > 0</span>
+    <span class='description'>amplitude refers to the range that the current octave at which the result can be in.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>octave</span>
+    <span class='types'>oftype === int >= 1</span>
+    <span class='description'>Each octave has less influence on the final result. Each octave adds a linear increase in code execution time, do not use more than a few octaves if not preprocessed.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>persistence</span>
+    <span class='types'>oftype === number > 0</span>
+    <span class='description'>The influence should each successive octave have, quantitatively.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>scale</span>
+    <span class='types'>oftype === number > 0</span>
+    <span class='description'>This will Multipy the x,y input on the ._getValue() method.  Effectivly sizing up the noise. *A scale of 10 is recomended for good output.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>scaleFloor</span>
+    <span class='types'>oftype === bool</span>
+    <span class='description'>Floors the scaling of the noise to whole numbers.  This is good for a pixlated look.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>output</span>
+    <span class='types'>oftype === {type: oftype === (string => 'number' || 'color' ), values: oftype === (Array(4) => [0<=>1,0<=>1,0<=>1,0<=>1])}</span>
+    <span class='description'>In order to change the output from a single value to a color you must include this object as and argument.  If you are simply returning a value do not worry about this argument.  If you do include it the value array is structured as R,G,B,A and their return value will be multiplied by the respective value.</span>
+    </div>
+    </div>
+    <h4>Methods</h4>
+    <div class='content-item'>
+    <div class='item'>
+    <span class='title'>._getValue(args)</span>
+    <span class='types'>args === {x:#,y:#</span>
+    <span class='description'>Returns the Value of the noise according to the set output Parameters. Requires a Object with x and y keyvalues.</span>
+    </div>
+	</div>
+</div>  
+
+</div>
+</div>
+
+<hr />
+<div class='section' id='tutorials'>
+Also I will be posting tutorials on this website dealing with the development of noises and their uses.  Be Sure to check out the first in the serise!
+<BR />
+<ul>
+<li><a href='./Tutorial_1/' target="_blank">LETS MAKE SOME NOISE!</a></li>
+</ul>
 </div>
 
 
-
-
- 
+<BR />
+<div class='footer'><span class='credits'>2016 Andrew V Butt Sr. aka <a href='mailto:Pryme8@gmail.com'>Pryme8</a></span></div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+</div>
+</div>
+</div>
+<script>
+$(function(){
+	$('.left-menu .menu a').click(function(e){
+		var t = $(e.target).attr('href');
+		$('.menu-section .active').removeClass('active');
+		$('.section'+t).addClass('active');	
+			
+	});
+	
+	function getHash(){
+	var url = window.location.href;
+	var hash = url.substring(url.indexOf("#")+1);
+	if(typeof hash !== 'undefined' || hash != ''){
+		var t = $('.left-menu .menu a[href="#'+hash+'"]');
+		if(t.length){
+			$('.menu-section .active').removeClass('active');
+			$('.section'+t.attr('href')).addClass('active');	
+		}else{
+		var offset = $("#"+hash).offset().top;
+		$('.wrap-fix').animate({scrollTop:offset}, 1500, 'easeInSine');
+		}
+	}
+	}
+	
+	getHash();
+	window.onhashchange = getHash;
+	
+});
 </script>
-</div>
-</div>
 </body>
 </html>

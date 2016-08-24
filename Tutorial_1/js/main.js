@@ -12,7 +12,7 @@ Worley.prototype._init = function(args){
 	if(typeof args.nPoints == 'undefined' || args.nPoints < 2 || typeof args.nPoints != 'number' ){ args.nPoints = 4;}
 	if(typeof args.n !== 'undefined' && typeof args.n == 'number'){args.n = Math.floor(args.n)};
 	if(typeof args.n == 'undefined' || args.n < 1 || typeof args.n != 'number'){ args.n = 2;}
-	if(args.style != 'euclidean' && args.style != 'manhattan' && args.style != 'chebyshev'){ args.style = 'euclidean';}
+	if(args.style != 'euclidean' && args.style != 'manhattan' && args.style != 'chebyshev' && args.style != 'canberra' && args.style != 'braycurtis'){ args.style = 'euclidean';}
 	
 	this._seed = this._Seed(args.seed);
 	this._args = {
@@ -243,6 +243,21 @@ Worley.Distance = {
 	},
 	chebyshev : function(x,y){
 		return Math.max(Math.abs(x[0]-y[0]), Math.abs(x[1]-y[1]));
+	},
+	canberra : function(x,y){
+		var t=0;
+		for(var i=0; i<x.length; i++){
+		 t+=(Math.abs(x[i]-y[i]))/(Math.abs(x[i])+Math.abs(y[i]));
+		}
+		return t;
+	},
+	braycurtis : function(x,y){
+		var t=0, t2=0;
+		for(var i=0; i<x.length; i++){
+		 t+=(x[i]-y[i]);
+		 t2+=(x[i]+y[i]);
+		}
+		return t/t2;
 	}
 };
 
