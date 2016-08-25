@@ -18,7 +18,8 @@ dN = function(type,seed,args){
 	|| type != 'Simple2'
 	|| type != 'Simple3'
 	|| type != 'Perlin2'
-	|| type != 'Perlin3'){this._type = "Simple2"}else{this._type = type};
+	|| type != 'Perlin3'
+	|| type != 'Worley2'){this._type = "Simple2"}else{this._type = type};
 	//INITIALIZE SEED
 		this._seed = {_initial : seed,
 				  _clean : this._Seed(seed)};

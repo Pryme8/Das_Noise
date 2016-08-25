@@ -399,7 +399,7 @@ noise.getValue(args =>{});
 	</div>
 </div>
 
-<div class='section disabled' id='Worley2D'>
+<div class='section' id='Worley2D'>
 <div class='content-item'>
 <pre title="Worley2D:"><xmp>var noise = new dN('Worley2' ,seed => string, args => {});
 noise.getValue(args =>{});
@@ -409,6 +409,26 @@ noise.getValue(args =>{});
     <hr />
     <h4>Arguments</h4>
     <div class='content-item'>
+    <div class='item'>
+    <span class='title'>width && height</span>
+    <span class='types'>oftype === number > 0</span>
+    <span class='description'>This sets the size of the underlying lattice</span>
+    </div>
+    <div class='item'>
+    <span class='title'>n</span>
+    <span class='types'>oftype === number > 0</span>
+    <span class='description'>Target point to do distance mesurements to.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>nPoints</span>
+    <span class='types'>oftype === number > 0</span>
+    <span class='description'>number of points to generate per zone.</span>
+    </div>
+    <div class='item'>
+    <span class='title'>style</span>
+    <span class='types'>oftype === string</span>
+    <span class='description'>The calculations for distance.  See Distances</span>
+    </div>
     <div class='item'>
     <span class='title'>frequency</span>
     <span class='types'>oftype === number > 0</span>

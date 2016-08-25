@@ -26,8 +26,21 @@ html, html *, body, body *, *::before, *::after{
 	right:0;
 	bottom:0;
 	z-index:0;
+	overflow: hidden;
 	overflow-y: auto;
+	
 }
+.wrap-fix::before{
+	content:'';
+	display: block;
+	position: absolute;
+	width:100vw;
+	height: 240px;
+	background-image: url(../imgs/head1.jpg);
+	opacity: 0.5;
+}
+
+
 
 .page-wrap{
 	width: 960px;
@@ -36,8 +49,39 @@ html, html *, body, body *, *::before, *::after{
 	top:0;
 	transform: translateX(-50%);
 	font-size:18px;	
+	padding-top: 240px;
 }
 
+.page-wrap::before, .page-wrap::after{
+	content:'';
+	display:block;
+	position:absolute;
+	top:0;
+	bottom:0;
+	width:calc(100vw - 960px);
+
+	height: 100%;
+}
+.page-wrap::before{
+left:-430px;
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#0a0809+0,0a0e0a+74,6e7774+75,aebcbf+100&1+0,0.75+37,0+91 */
+background: -moz-linear-gradient(left,  rgba(10,8,9,1) 0%, rgba(10,11,10,0.75) 37%, rgba(10,14,10,0.24) 74%, rgba(110,119,116,0.23) 75%, rgba(151,163,164,0) 91%, rgba(174,188,191,0) 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(left,  rgba(10,8,9,1) 0%,rgba(10,11,10,0.75) 37%,rgba(10,14,10,0.24) 74%,rgba(110,119,116,0.23) 75%,rgba(151,163,164,0) 91%,rgba(174,188,191,0) 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to right,  rgba(10,8,9,1) 0%,rgba(10,11,10,0.75) 37%,rgba(10,14,10,0.24) 74%,rgba(110,119,116,0.23) 75%,rgba(151,163,164,0) 91%,rgba(174,188,191,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0a0809', endColorstr='#00aebcbf',GradientType=1 ); /* IE6-9 */
+
+}
+
+.page-wrap::after{
+right:-430px;
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#aebcbf+0,6e7774+25,0a0e0a+26,0a0809+100&0+9,0.75+63,1+100 */
+background: -moz-linear-gradient(left,  rgba(174,188,191,0) 0%, rgba(151,163,164,0) 9%, rgba(110,119,116,0.22) 25%, rgba(10,14,10,0.23) 26%, rgba(10,11,10,0.75) 63%, rgba(10,8,9,1) 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(left,  rgba(174,188,191,0) 0%,rgba(151,163,164,0) 9%,rgba(110,119,116,0.22) 25%,rgba(10,14,10,0.23) 26%,rgba(10,11,10,0.75) 63%,rgba(10,8,9,1) 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to right,  rgba(174,188,191,0) 0%,rgba(151,163,164,0) 9%,rgba(110,119,116,0.22) 25%,rgba(10,14,10,0.23) 26%,rgba(10,11,10,0.75) 63%,rgba(10,8,9,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00aebcbf', endColorstr='#0a0809',GradientType=1 ); /* IE6-9 */
+
+
+}
 
 pre{
   font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
@@ -124,14 +168,11 @@ margin-bottom: -60px;
 	font-weight:500;
 }
 
-#git-link{
-	padding-left: 35px;
-}
 
 .head-menu{
 	position:absolute;
 	right:0;
-	top:1em;
+	top:calc(1em + 240px)
 }
 
 .left-menu{
@@ -215,6 +256,10 @@ position:relative;
 }
 
 .footer{
+height: 140px;
+bottom:0;
+}
+.footer::after, .footer::before{
 	height: 140px;
 	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#4b5759+0,4b5759+100&0+0,1+31 */
 /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#4b5759+0,4b5759+100&0+0,1+2 */
@@ -222,6 +267,20 @@ background: -moz-linear-gradient(top,  rgba(75,87,89,0) 0%, rgba(75,87,89,1) 2%,
 background: -webkit-linear-gradient(top,  rgba(75,87,89,0) 0%,rgba(75,87,89,1) 2%,rgba(75,87,89,1) 100%); /* Chrome10-25,Safari5.1-6 */
 background: linear-gradient(to bottom,  rgba(75,87,89,0) 0%,rgba(75,87,89,1) 2%,rgba(75,87,89,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#004b5759', endColorstr='#4b5759',GradientType=0 ); /* IE6-9 */
+content: '';
+	width:100vw;
+	display: block;
+z-index: -1;
+	position: absolute;
+	bottom:0;
+}
+
+.footer::before{
+left:50%;	
+}
+
+.footer::after{
+right:50%;	
 }
 
 .footer .credits{
