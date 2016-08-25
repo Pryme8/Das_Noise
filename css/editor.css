@@ -24,7 +24,30 @@ html, html *, body, body *, *::before, *::after{
 	z-index:0;
 	text-align:center;
 }
+.under-con{
+	position:fixed;
+	width:100vw;
+	height:100vh;
+	top:0;
+	left:0;
+	background:rgba(120,120,120,0.8);
+	z-index:100001;	
+}
 
+.under-con::after{
+	position:absolute;
+	font-size:10vh;
+	content:'UNDER DEV';
+	left:50%;
+	top:50%;
+	transform:translate(-50%,-50%);
+	color:white;
+	text-shadow:1px 1px #000;
+	font-family:"Arial Black", Gadget, sans-serif;
+	font-variant:small-caps;
+	font-weight:bolder;
+		
+}
 .page-wrap{
 	display:block;
 	text-align:left;
