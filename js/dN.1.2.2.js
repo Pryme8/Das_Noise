@@ -1,7 +1,7 @@
 /************************************************************************
 Andrew V Butt Sr. - Pryme8@gmail.com
 Pryme8.github.io
-//Compilation of Standard Noises for Javascript version 1.2.1;
+//Compilation of Standard Noises for Javascript version 1.2.2;
 Special Thanks to Stefan Gustavson (stegu@itn.liu.se),
 and Peter Eastman (peastman@drizzle.stanford.edu)
  Some of this code was placed in the public domain by its original author,
