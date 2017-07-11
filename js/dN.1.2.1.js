@@ -27,7 +27,8 @@ dN = function(type,seed,args){
 	//CORE ARGUMENTS VALIDATION
 	if(typeof args.frequency == 'undefined' || args.frequency == 0){args.frequency = 1;}
 	if(typeof args.amplitude == 'undefined' || args.amplitude == 0){args.amplitude = 1;}
-	if(typeof args.octave == 'undefined' || args.octave == 0){args.octave = 1;}
+	if(typeof args.octave == 'undefined' || args.octave < 1){args.octave = 1;}
+	args.octave = Math.floor(args.octave);
 	if(typeof args.persistence == 'undefined' || args.persistence == 0){args.persistence = 1;}
 	
 	if(typeof args.output == 'undefined'){args.output = {}};
