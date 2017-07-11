@@ -150,7 +150,7 @@ dN.Grad.prototype.dot3 = function(x, y, z) {
 };
 
 dN._CreateGrad = function(){
-	var Grad = dN.Noise.Grad;
+	var Grad = dN.Grad;
 	return [new Grad(1,1,0),new Grad(-1,1,0),new Grad(1,-1,0),new Grad(-1,-1,0),
                new Grad(1,0,1),new Grad(-1,0,1),new Grad(1,0,-1),new Grad(-1,0,-1),
                new Grad(0,1,1),new Grad(0,-1,1),new Grad(0,1,-1),new Grad(0,-1,-1)];
