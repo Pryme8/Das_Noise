@@ -64,7 +64,7 @@ dN = function(type,seed,args){
 
 }
 /*--SEEDING FUNCTION--*/
-dN._Seed = function(s){
+dN.prototype._Seed = function(s){
 	var t=0; //Total of the seeds charicter values.
 	s+=""; //Converts what ever the seed is into a string.
 	for(var i = 0; i < s.length; i++){
